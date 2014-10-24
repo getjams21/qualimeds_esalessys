@@ -1,0 +1,1 @@
+$(document).ready(function(){$("#verify-password").keyup(function(){var e=$("#password").val(),r=$("#verify-password").val();e==r?($("#alert-verify-password-ok").removeClass("hide"),$("#alert-verify-password-remove").addClass("hide")):($("#alert-verify-password-remove").removeClass("hide"),$("#alert-verify-password-ok").addClass("hide"))})});
