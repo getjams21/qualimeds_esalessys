@@ -11,8 +11,3 @@
 |
 */
 Route::get('/', 'PagesController@home');
-Route::get('tasks', 'TasksController@index');
-Route::get('tasks/{id}', 'TasksController@show');
-Route::get('404', 'PagesController@soft404');
-Route::get('pages/register', 'PagesController@register');
-Route::post('pages/store', 'PagesController@store');
