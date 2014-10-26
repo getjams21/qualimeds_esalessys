@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'learnlaravel',
+			'database'  => 'qualimeds',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',
