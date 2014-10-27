@@ -10,4 +10,18 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-Route::get('/', 'PagesController@home');
+#CSRF protection for all post request
+Route::when('*', 'csrf', array('post'));
+
+
+Route::get('login',['as' => 'login', 'uses' =>'SessionsController@create']);
+Route::get('logout',['as'=>'logout', 'uses' =>'SessionsController@destroy']);
+Route::resource('sessions', 'SessionsController',['only' => ['create','store','destroy']]);
+
+Route::group(["before" => "auth"], function() {
+	Route::get('/', 'PagesController@home');
+	Route::resource('/ProductCategories', 'ProductCategoriesController@index');
+ 	#new product category ajax post
+ 		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
+
+});

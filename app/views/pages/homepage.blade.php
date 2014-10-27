@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('meta-title','Home')
 @section('metatags')
-
 @stop
 <!-- navbar -->
 @section('header')

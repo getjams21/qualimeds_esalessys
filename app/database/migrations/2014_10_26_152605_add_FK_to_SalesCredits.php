@@ -30,7 +30,7 @@ class AddFKToSalesCredits extends Migration {
 	{
 		Schema::table('SalesCredits', function(Blueprint $table)
 		{
-			$table->dropForeign('SalesCredits_ProductNo_foreign');
+			$table->dropForeign('SalesCredits_BranchNo_foreign');
 			$table->dropForeign('SalesCredits_SalesInvoiceNo_foreign');
 		});
 	}

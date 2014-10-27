@@ -3,6 +3,6 @@
 class PagesController extends BaseController {
 
 	public function home(){
-		return View::make('pages.homepage');
+		return View::make('dashboard.index');
 	}
 }

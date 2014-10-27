@@ -1,5 +1,5 @@
 <div class="wrapper" >
-<nav class="navbar navbar-default navbar-fixed-top nav-bg" role="navigation">
+<nav class="navbar navbar-success navbar-fixed-top nav-bg" role="navigation">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -8,16 +8,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand logo" href="/">
+      </button> 
+      <a class="navbar-brand logo" href="/" >
       </a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-align" id="bs-example-navbar-collapse-1">
    
-       <div class="navbar-form navbar-left">
-         
-      </div>
       <ul class="nav navbar-nav navbar-right">
       </ul>
     </div><!-- /.navbar-collapse -->

@@ -66,6 +66,14 @@ App::down(function()
 {
 	return Response::make("Be right back!", 503);
 });
+App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
+{
+	return Redirect::back()->withInput()->withErrors($exception->getErrors());
+});
+App::error(function(Symfony \ Component \ HttpKernel \ Exception \ NotFoundHttpException $exception, $code)
+{
+	return Redirect::to('/404');
+});
 
 /*
 |--------------------------------------------------------------------------
