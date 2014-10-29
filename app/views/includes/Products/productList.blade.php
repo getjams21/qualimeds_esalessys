@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
 		<div class="row">
             <div class="col-md-9">
-              <h4><b>Product</b></h4>
+              <h4><b>Products</b></h4>
            </div>
            <div class="col-md-3">
              <button type="button" class="btn btn-success pull-right square" style="white-space: normal;" id="addProduct"><i class="fa fa-plus-square" ></i> <b> New Product</b></button>

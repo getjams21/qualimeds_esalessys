@@ -11,9 +11,9 @@
       </button>
       <a class="navbar-brand logo-sm" href="/">
       </a> 
-      <a class="navbar-brand logo-text" href="/">
+      <!-- <a class="navbar-brand logo-text" href="/">
       	<font size="6" color="white"><b> ualimeds</b></font>
-      </a>
+      </a> -->
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-align" id="bs-example-navbar-collapse-1">

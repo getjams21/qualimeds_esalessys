@@ -28,4 +28,16 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
  	Route::resource('/Products', 'ProductsController');
  		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
+ 	#banks library
+ 		Route::resource('/banks', 'BanksController');
+ 		Route::get('/toEditBank','BanksController@toEditBank');
+ 		Route::get('delete-bank/{id}', 'BanksController@destroy');
+ 	#branch library
+ 		Route::resource('/branches', 'BranchesController');
+ 		Route::get('/toEditBranch','BranchesController@toEditBranch');
+ 		Route::get('delete-branch/{id}', 'BranchesController@destroy');
+ 	#customer library
+ 		Route::resource('/customers', 'CustomersController');
+ 		Route::get('/toEditCustomer','CustomersController@toEditCustomer');
+ 		Route::get('delete-customer/{id}', 'CustomersController@destroy');
 });

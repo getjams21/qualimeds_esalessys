@@ -5,9 +5,142 @@ $(function() {
         }
     });
 });
+//edit-delte bank
+function triggerEdit(id){
+	$.get('toEditBank',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+  			$('.bankForm div')
+			.find('div')
+			.remove()
+			.end();
+  			$.each(data, function(key,value) {
+  				$('.bankForm div')
+  				.append('
+			<form method="GET" action="http://qualimeds.com/banks/'+id+'/edit" accept-charset="UTF-8" id="bankForm">\
+			<div class="form-group">\
+				<input class="form-control name" type="text" name="name" value="'+value.BankName+'" required>\
+			</div>\
+			<div class="form-group">\
+				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
+				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
+			</div>\
+			<div class="form-group">\
+				<center>\
+					<button class="btn btn-primary action" type="submit">Update</button>\
+					<a href="/delete-bank/'+id+'"><button class="btn btn-danger" type="button" id="bank-delete">Delete</button></a>\
+					<br>\
+					<br>\
+					<hr class="style-fade">
+					<i>or</i>
+				</center>\
+				<center>\
+					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Bank</button>\
+				</center>	
+			</div>	
+			');
+			});
+  		}
+  	});
+}
+//edit-delete branch
+function triggerEditBranch(id){
+	$.get('toEditBranch',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+  			$('.branchForm div')
+			.find('div')
+			.remove()
+			.end();
+  			$.each(data, function(key,value) {
+  				$('.branchForm div')
+  				.append('
+			<form method="GET" action="http://qualimeds.com/branches/'+id+'/edit" accept-charset="UTF-8">\
+			<div class="form-group">\
+				<input class="form-control name" type="text" name="name" value="'+value.BranchName+'" required>\
+			</div>\
+			<div class="form-group">\
+				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
+				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
+			</div>\
+			<div class="form-group">\
+				<center>\
+					<button class="btn btn-primary action" type="submit">Update</button>\
+					<a href="/delete-branch/'+id+'"><button class="btn btn-danger" type="button" id="bank-delete">Delete</button></a>\
+					<br>\
+					<br>\
+					<hr class="style-fade">
+					<i>or</i>
+				</center>\
+				<center>\
+					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Branch</button>\
+				</center>	
+			</div>	
+			');
+			});
+  		}
+  	});
+}
+//edit-delete branch
+function triggerEditCustomer(id){
+	$.get('toEditCustomer',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+  			$('.customerForm div')
+			.find('div')
+			.remove()
+			.end();
+  			$.each(data, function(key,value) {
+  				$('.customerForm div')
+  				.append('
+			<form method="GET" action="http://qualimeds.com/customers/'+id+'/edit" accept-charset="UTF-8">\
+			<div class="form-group">\
+				<input class="form-control name" type="text" name="name" value="'+value.CustomerName+'" required>\
+			</div>\
+			<div class="form-group">\
+				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.Address+'</textarea>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control telephone1" type="text" name="telephone1" id="telephone1" value="'+value.Telephone1+'" required>\
+				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control telephone2" type="text" name="telephone2" id="telephone2" value="'+value.Telephone2+'">\
+				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control contact-person" type="text" name="contact-person" id="contact-person" value="'+value.ContactPerson+'" required>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control credit-limit type="text" name="credit-limit" id="contact-person" value="'+value.CreditLimit+'" required>\
+			</div>\
+			<div class="form-group">\
+				<center>\
+					<button class="btn btn-primary action" type="submit">Update</button>\
+					<a href="/delete-customer/'+id+'"><button class="btn btn-danger" type="button" id="customer-delete">Delete</button></a>\
+					<br>\
+					<br>\
+					<hr class="style-fade">
+					<i>or</i>
+				</center>\
+				<center>\
+					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Customer</button>\
+				</center>	
+			</div>	
+			');
+			});
+  		}
+  	});
+}
 $(document).ready(function(){
 		
-	//sidebar collapse
+//sidebar collapse
 	var a = document.title;
 	document.getElementsByTagName("body")[0].id = a;
 //navigation automatic dropdown
@@ -18,7 +151,6 @@ $(document).ready(function(){
 		});
 //set active navbar
 	$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
-	//$("#Edit a:contains('Profile')").parent().addClass('active');
 //set active sidebar
 		$("#"+a+" a:contains("+a+")").parent().addClass('active');
 		$(".sidehead ul:contains("+a+")").removeClass('collapse');
@@ -92,7 +224,24 @@ $('#addProduct').click(function(){
 	$('#productModal').modal('show');
 
 });
-});
+//SIDEBAR CLICK COLLAPSE
+	$('.sidehead').click(function() {
+			$(this).children('ul').first().stop(true, true).slideToggle(500);;
+		});
+	//numbers only validation
+	$('#telephone,#telephone1,#telephone2').keydown(function(event) {
+		if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                //key exemptions
+                if(event.keyCode != 8 && event.keyCode != 107 && event.keyCode != 187 && event.keyCode != 116 && event.keyCode != 16 && event.keyCode != 109 && event.keyCode != 189){
+                	$('.alert').show();
+                	event.preventDefault();
+                }
+            }
+        else{
+        	$('.alert').hide();
+        }
+	});
+});//end of ready function
 function editCategory(id){
 	$('#modalCatError').addClass('hidden')
 	var table = $('.category').DataTable();
@@ -140,31 +289,5 @@ function editProduct(id){
 
 }
 
-// function getIndex(selector){
-// 	var idx =table.row(selector).index();
-// 	alert(idx);
-// }
-// function editColumnValue(index,cell,value){
-// 	table.cell( index, cell ).data( value ).draw();
-// }
-
-
-// }
-// function editable(table,id){
-// 		var oTable=  $('.'+table).dataTable(); 
-// 		$('.editable'+id, oTable.fnGetNodes()).editable( '/asdasd', {
-// 				"callback": function( sValue, y ) {
-// 					var aPos = oTable.fnGetPosition( this );
-// 					oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-// 				},
-// 				"submitdata": function ( value, settings ) {
-// 					return {
-// 						"row_id": this.parentNode.getAttribute('id'),
-// 						"column": oTable.fnGetPosition( this )[2]
-// 					};
-// 				},
-// 				"height": "14px"
-// 			} );
-
-// }
+	
 	
