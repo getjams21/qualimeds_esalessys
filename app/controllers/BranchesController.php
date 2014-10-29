@@ -1,6 +1,6 @@
 <?php
 
-class BranchController extends \BaseController {
+class BranchesController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -32,11 +32,11 @@ class BranchController extends \BaseController {
 	 */
 	public function store()
 	{
-		$bank = new Branch;
-		$bank->BranchName = Input::get('name');
-		$bank->BAddress	= Input::get('address');
-		$bank->Telephone = Input::get('telephone');
-		$bank->save();
+		$branch = new Branch;
+		$branch->BranchName = Input::get('name');
+		$branch->BAddress	= Input::get('address');
+		$branch->Telephone = Input::get('telephone');
+		$branch->save();
 
 		return Redirect::back()
 			->withFlashMessage('
@@ -67,11 +67,11 @@ class BranchController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		$bank = Branch::find($id);
-		$bank->BranchName = Input::get('name');
-		$bank->BAddress	= Input::get('address');
-		$bank->Telephone = Input::get('telephone');
-		$bank->save();
+		$branch = Branch::find($id);
+		$branch->BranchName = Input::get('name');
+		$branch->BAddress	= Input::get('address');
+		$branch->Telephone = Input::get('telephone');
+		$branch->save();
 
 		return Redirect::back()
 			->withFlashMessage('
@@ -102,8 +102,8 @@ class BranchController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$bank = Bank::find($id);
-		$bank->delete();
+		$branch = Branch::find($id);
+		$branch->delete();
 
 		return Redirect::back()
 			->withFlashMessage('

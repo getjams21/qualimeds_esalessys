@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Categories')
+@section('meta-title','Branches')
 @section('metatags')
 @stop
 <!-- navbar -->

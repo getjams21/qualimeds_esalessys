@@ -22,7 +22,7 @@
                             <a href="#">Suppliers</a>
                         </li>
                         <li>
-                            <a href="#">Customers</a>
+                            <a href="/customers">Customers</a>
                         </li>
                         <li>
                             <a href="/branches">Branches</a>

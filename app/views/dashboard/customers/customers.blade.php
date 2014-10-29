@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Banks')
+@section('meta-title','Customers')
 @section('metatags')
 @stop
 <!-- navbar -->
@@ -16,7 +16,7 @@
     <div class="row">
        	<div class="col-md-12 shadowed"><br>
        		<div class="col-md-8 col-md-offset-2">
-                @include('includes.banks.new')
+                @include('includes.customers.new')
             </div>   
         </div>
     </div>
