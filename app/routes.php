@@ -20,8 +20,12 @@ Route::resource('sessions', 'SessionsController',['only' => ['create','store','d
 
 Route::group(["before" => "auth"], function() {
 	Route::get('/', 'PagesController@home');
-	Route::resource('/ProductCategories', 'ProductCategoriesController@index');
+	Route::resource('/ProductCategories', 'ProductCategoriesController');
  	#new product category ajax post
  		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
-
+ 		Route::post('/editCategory', 'ProductCategoriesController@editCategory');
+ 	Route::resource('/Suppliers', 'SuppliersController');
+ 		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
+ 	Route::resource('/Products', 'ProductsController');
+ 		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
 });

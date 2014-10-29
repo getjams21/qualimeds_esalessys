@@ -14,7 +14,10 @@
                     <a href="/ProductCategories">Product Categories</a>
                 </li>
                 <li>
-                    <a href="#">Suppliers</a>
+                    <a href="/Products">Products</a>
+                </li>
+                <li>
+                    <a href="/Suppliers">Suppliers</a>
                 </li>
                 <li>
                     <a href="#">Customers</a>
