@@ -23,5 +23,8 @@ Route::group(["before" => "auth"], function() {
 	Route::resource('/ProductCategories', 'ProductCategoriesController@index');
  	#new product category ajax post
  		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
-
+ 	#banks library
+ 		Route::resource('/banks', 'BanksController');
+ 		Route::get('/toEditBank','BanksController@toEditBank');
+ 		Route::get('delete-bank/{id}', 'BanksController@destroy');
 });

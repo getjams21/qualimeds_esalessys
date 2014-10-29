@@ -10,20 +10,27 @@
                 <li>
                     <a href="#" >Update Account</a>
                 </li>
-                <li>
-                    <a href="/ProductCategories">Product Categories</a>
-                </li>
-                <li>
-                    <a href="#">Suppliers</a>
-                </li>
-                <li>
-                    <a href="#">Customers</a>
-                </li>
-                <li>
-                    <a href="#">Branches</a>
-                </li>
-                <li>
-                    <a href="#">Banks</a>
+                <li class="sidehead">
+                    <a href="#">
+                        <b>File Maintenance </b>
+                    </a>
+                    <ul class="sidecontent collapse" style="display: none;">
+                        <li>
+                            <a href="/ProductCategories">Product Categories</a>
+                        </li>
+                        <li>
+                            <a href="#">Suppliers</a>
+                        </li>
+                        <li>
+                            <a href="#">Customers</a>
+                        </li>
+                        <li>
+                            <a href="#">Branches</a>
+                        </li>
+                        <li>
+                            <a href="/banks">Banks</a>
+                        </li>
+                    </ul>
                 </li>
                 
             </ul>
