@@ -25,7 +25,7 @@
                             <a href="#">Customers</a>
                         </li>
                         <li>
-                            <a href="#">Branches</a>
+                            <a href="/branches">Branches</a>
                         </li>
                         <li>
                             <a href="/banks">Banks</a>

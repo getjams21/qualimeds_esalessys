@@ -1,20 +1,20 @@
 <div class="panel panel-success">
 	<div class="panel-heading head">
-		<h4>Banks</h4>
+		<h4>Branches</h4>
 	</div>
 	<div class="panel-body">
-		<center><h4>New Bank</h4></center>
+		<center><h4>New Branch</h4></center>
 		<hr class="style-fade">	
 		<div class="container-fluid">
 			<div class="col-md-8 col-md-offset-2">
-			<div class="well bankForm">
+			<div class="well branchForm">
 			<div>
-			{{ Form::open(['route'=>'banks.store']) }}
+			{{ Form::open(['route'=>'branches.store']) }}
 			<div class="form-group">
-				<input class="form-control name" type="text" name="name" placeholder="Bank Name" required>
+				<input class="form-control name" type="text" name="name" placeholder="Branch Name" required>
 			</div>
 			<div class="form-group">
-				<textarea class="form-control address" rows="3" type="textarea" name="address" placeholder="Bank Address" required></textarea>
+				<textarea class="form-control address" rows="3" type="textarea" name="address" placeholder="Branch Address" required></textarea>
 			</div>
 			<div class="form-group">
 				<input class="form-control telephone" type="text" name="telephone" id="telephone" placeholder="Telephone Number" required>
@@ -22,7 +22,7 @@
 			</div>
 			<center>
 				<div class="form-group">
-				<button class="btn btn-success action" type="submit" name="action" value="add">Add New Bank</button>
+				<button class="btn btn-success action" type="submit" name="action" value="add">Add New Branch</button>
 				</div>
 			</center>
 			</div>
@@ -37,19 +37,19 @@
                 <table class="table table-striped table-bordered table-hover banks">
                   <thead>
                     <tr>
-                      <th>Bank Name</th>
-                      <th>Bank Address</th>
+                      <th>Branch Name</th>
+                      <th>Branch Address</th>
                       <th>Telephone</th>
                       <th>Edit/Delete</th>
                     </tr>
                   </thead>
                   <tbody>
-              		@foreach($Banks as $Bank)
+              		@foreach($Branches as $Branch)
                     	<tr>
-                          	<td>{{$Bank->BankName}}</td>
-                          	<td>{{$Bank->BAddress}}</td>
-                          	<td>{{$Bank->Telephone}}</td>
-                          	<td><center><button class="btn btn-warning btn-sm" onclick="triggerEdit({{$Bank->id}})"><span class="glyphicon glyphicon-cog"></span></button></center></td>
+                          	<td>{{$Branch->BranchName}}</td>
+                          	<td>{{$Branch->BAddress}}</td>
+                          	<td>{{$Branch->Telephone}}</td>
+                          	<td><center><button class="btn btn-warning btn-sm" onclick="triggerEditBranch({{$Branch->id}})"><span class="glyphicon glyphicon-cog"></span></button></center></td>
                    		</tr> 
                     @endforeach
                   </tbody>

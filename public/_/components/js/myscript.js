@@ -5,6 +5,7 @@ $(function() {
         }
     });
 });
+//edit-delte bank
 function triggerEdit(id){
 	$.get('toEditBank',{id:id},function(data){
   		if(data){
@@ -21,7 +22,7 @@ function triggerEdit(id){
 				<input class="form-control name" type="text" name="name" value="'+value.BankName+'" required>\
 			</div>\
 			<div class="form-group">\
-				<input class="form-control address" type="textarea" name="address" value="'+value.BAddress+'" required>\
+				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
 			</div>\
 			<div class="form-group">\
 				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
@@ -38,6 +39,47 @@ function triggerEdit(id){
 				</center>\
 				<center>\
 					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Bank</button>\
+				</center>	
+			</div>	
+			');
+			});
+  		}
+  	});
+}
+//edit-delete branch
+function triggerEditBranch(id){
+	$.get('toEditBranch',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+  			$('.branchForm div')
+			.find('div')
+			.remove()
+			.end();
+  			$.each(data, function(key,value) {
+  				$('.branchForm div')
+  				.append('
+			<form method="GET" action="http://qualimeds.com/branches/'+id+'/edit" accept-charset="UTF-8">\
+			<div class="form-group">\
+				<input class="form-control name" type="text" name="name" value="'+value.BranchName+'" required>\
+			</div>\
+			<div class="form-group">\
+				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
+			</div>\
+			<div class="form-group">\
+				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
+				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
+			</div>\
+			<div class="form-group">\
+				<center>\
+					<button class="btn btn-primary action" type="submit">Update</button>\
+					<a href="/delete-branch/'+id+'"><button class="btn btn-danger" type="button" id="bank-delete">Delete</button></a>\
+					<br>\
+					<br>\
+					<hr class="style-fade">
+					<i>or</i>
+				</center>\
+				<center>\
+					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Branch</button>\
 				</center>	
 			</div>	
 			');

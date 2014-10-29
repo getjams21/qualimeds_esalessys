@@ -27,4 +27,8 @@ Route::group(["before" => "auth"], function() {
  		Route::resource('/banks', 'BanksController');
  		Route::get('/toEditBank','BanksController@toEditBank');
  		Route::get('delete-bank/{id}', 'BanksController@destroy');
+ 	#branch library
+ 		Route::resource('/branches', 'BranchController');
+ 		Route::get('/toEditBranch','BranchController@toEditBranch');
+ 		Route::get('delete-branch/{id}', 'BranchController@destroy');
 });
