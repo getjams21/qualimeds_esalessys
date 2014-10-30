@@ -45,13 +45,14 @@
               {{Form::text('RetailQtyPerWholeSaleUnit',null,['class'=>'form-control square','required'=>'required'])}}
              <p>{{ errors_for('RetailQtyPerWholeSaleUnit', $errors)}}</p> 
           </div>
-          <div class="form-group">
+          </div>
+          <div class="col-md-6">
+            <br>
+            <div class="form-group">
               {{Form::label('Reorderpoint', 'Reorder Point')}}
               {{Form::text('Reorderpoint',null,['class'=>'form-control square','required'=>'required'])}}
              <p>{{ errors_for('Reorderpoint', $errors)}}</p> 
           </div>
-          </div>
-          <div class="col-md-6">
               <div class="form-group">
                 {{Form::label('Markup1', 'Markup 1')}}
                 {{Form::text('Markup1',null,['class'=>'form-control square','required'=>'required'])}}
