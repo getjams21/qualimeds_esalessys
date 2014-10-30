@@ -276,11 +276,12 @@ function editProduct(id){
 		$.post('/fetchProduct',{id:id},function(data){
 			$('#txtProdID').val(data['id']);
 	      	$('#ProductCatNo').val(data['ProductCatNo']);
-	      	$('#ProductName').val(data['ProductCatNo']);
+	      	$('#ProductName').val(data['ProductName']);
 	      	$('#BrandName').val(data['BrandName']);
 	      	$('#WholeSaleUnit').val(data['WholeSaleUnit']);
 	      	$('#RetailUnit').val(data['RetailUnit']);
 	      	$('#RetailQtyPerWholeSaleUnit').val(data['RetailQtyPerWholeSaleUnit']);
+	      	$('#Reorderpoint').val(data['Reorderpoint']);
 	      	$('#Markup1').val(data['Markup1']);
 	      	$('#Markup2').val(data['Markup2']);
 	      	$('#Markup3').val(data['Markup3']);

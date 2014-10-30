@@ -13,7 +13,8 @@
           <div class="col-md-6">
 
           
-            {{Form::hidden('id',null,['class'=>'form-control square','required'=>'required','id'=>'txtProdID'])}}
+            {{Form::hidden('id',null,['class'=>'form-control square','id'=>'txtProdID'])}}
+            <p>{{ errors_for('id', $errors)}}</p>
             <div class="form-group">
                 {{Form::label('ProductCatNo', 'Product Category')}}
                 {{  Form::select('ProductCatNo', $category, 'key', array('class' => 'form-control square'));}}
@@ -43,6 +44,11 @@
               {{Form::label('RetailQtyPerWholeSaleUnit', 'Retail Qty. per Wholesale Unit')}}
               {{Form::text('RetailQtyPerWholeSaleUnit',null,['class'=>'form-control square','required'=>'required'])}}
              <p>{{ errors_for('RetailQtyPerWholeSaleUnit', $errors)}}</p> 
+          </div>
+          <div class="form-group">
+              {{Form::label('Reorderpoint', 'Reorder Point')}}
+              {{Form::text('Reorderpoint',null,['class'=>'form-control square','required'=>'required'])}}
+             <p>{{ errors_for('Reorderpoint', $errors)}}</p> 
           </div>
           </div>
           <div class="col-md-6">

@@ -20,6 +20,7 @@ class CreateSuppliersTable extends Migration {
 			$table -> string('Telephone1',20)->nullable();
 			$table -> string('Telephone2',20)->nullable();
 			$table -> string('ContactPerson',150)->nullable();
+			$table -> boolean('IsActive')->default(1);
 			$table -> timestamps();
 		});
 	}

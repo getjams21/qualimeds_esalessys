@@ -10,6 +10,7 @@ class ProductForm extends FormValidator {
 		'WholeSaleUnit' => 'required',
 		'RetailUnit' => 'required',
 		'RetailQtyPerWholeSaleUnit' => 'required|numeric', 
+		'Reorderpoint' => 'required|numeric',
 		'Markup1' => 'required|numeric',
 		'Markup2' => 'required|numeric',
 		'Markup3' => 'required|numeric',

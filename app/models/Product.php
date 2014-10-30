@@ -10,6 +10,7 @@ class Product extends \Eloquent {
 		'WholeSaleUnit',
 		'RetailUnit',
 		'RetailQtyPerWholeSaleUnit',
+		'Reorderpoint',
 		'Markup1',
 		'Markup2',
 		'Markup3',

@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration {
 			$table -> string('Telephone2',20)->nullable();
 			$table -> string('ContactPerson',150)->nullable();
 			$table -> decimal('CreditLimit', 19, 4)->nullable();
+			$table -> boolean('IsActive')->default(1);
 			$table -> timestamps();
 		});
 	}

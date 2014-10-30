@@ -18,6 +18,7 @@ class CreateBanksTable extends Migration {
 			$table -> string('BankName',250)->nullable();
 			$table -> string('BAddress',500)->nullable();
 			$table -> string('Telephone',20)->nullable();
+			$table -> boolean('IsActive')->default(1);
 			$table -> timestamps();
 		});
 	}

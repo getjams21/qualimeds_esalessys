@@ -39,7 +39,7 @@ class ProductsController extends \BaseController {
 	public function store()
 	{
 		$input = Input::only('id','ProductCatNo','ProductName','BrandName','WholeSaleUnit','RetailUnit',
-							'RetailQtyPerWholeSaleUnit','Markup1','Markup2','Markup3','ActiveMarkup');
+							'RetailQtyPerWholeSaleUnit','Reorderpoint','Markup1','Markup2','Markup3','ActiveMarkup');
 		$id = $input['id'];
 		$this->productForm->validate($input);
 		if($id != null){
