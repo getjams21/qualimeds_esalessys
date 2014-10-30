@@ -1,0 +1,48 @@
+Update on CustomerReturnDetails
+   - change Column CostPerQty  to UnitPrice
+
+Update on Bills
+  - Add column BranchNo
+
+Update on SupplierReturns
+  - Add column BranchNo
+
+
+Update on CustomerReturns
+  - Add column BranchNo
+
+Update on InventoryAdjustments
+  - Add column BranchNo
+
+Update on InventoryDamages
+  - Add column BranchNo
+
+Update on productcategories
+  - Add column IsActive Char(1)
+
+Update on products
+  - Add column IsActive Char(1)
+  - Add column reorderpoint   decimal(18,2)
+
+
+Update on suppliers
+  - Add column IsActive Char(1)
+
+Update on customers
+  - Add column IsActive Char(1)
+
+Update on Branches
+  - Add column IsActive Char(1)
+
+Update on Banks
+  - Add column IsActive Char(1)
+
+Update on users
+  - Add column IsActive Char(1)
+
+Add new table 'Brands'
+   Columns
+          Brandname  varchar(150) 
+
+
+
