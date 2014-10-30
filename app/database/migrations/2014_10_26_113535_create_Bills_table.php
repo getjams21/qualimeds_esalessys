@@ -17,6 +17,7 @@ class CreateBillsTable extends Migration {
 			$table -> increments('id');
 			$table -> integer('PurchaseOrderNo')->nullable()->unsigned();
 			$table -> integer('SupplierNo')->nullable()->unsigned();
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table->timestamp('BillDate')->nullable();
 			$table -> integer('SalesInvoiceNo')->nullable();
 			$table->timestamp('SalesInvoiceDate')->nullable();

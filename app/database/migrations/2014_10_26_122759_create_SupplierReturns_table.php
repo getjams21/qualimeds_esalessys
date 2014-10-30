@@ -16,6 +16,7 @@ class CreateSupplierReturnsTable extends Migration {
 		{
 			$table -> increments('id');
 			$table -> integer('BillNo')->nullable()->unsigned();
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table->timestamp('ReturnDate')->nullable();
 			$table -> string('Remarks',500)->nullable();
 			$table -> string('PreparedBy',250)->nullable();

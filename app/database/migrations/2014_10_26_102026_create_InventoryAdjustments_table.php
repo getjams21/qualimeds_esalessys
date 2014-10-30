@@ -15,6 +15,7 @@ class CreateInventoryAdjustmentsTable extends Migration {
 		Schema::create('InventoryAdjustments', function(Blueprint $table)
 		{
 			$table -> increments('id');
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table->timestamp('AdjustmentDate')->nullable();
 			$table -> string('Remarks',500)->nullable();
 			$table -> string('PreparedBy',250)->nullable();

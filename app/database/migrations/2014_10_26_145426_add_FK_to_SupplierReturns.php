@@ -16,6 +16,8 @@ class AddFKToSupplierReturns extends Migration {
 		{
 			$table-> foreign('BillNo')->references('id')->on('Bills')
 			->onDelete('restrict')->onUpdate('cascade');
+			$table-> foreign('BranchNo')->references('id')->on('Branches')
+			->onDelete('restrict')->onUpdate('cascade');
 		});
 	}
  
@@ -29,6 +31,7 @@ class AddFKToSupplierReturns extends Migration {
 		Schema::table('SupplierReturns', function(Blueprint $table)
 		{
 			$table->dropForeign('SupplierReturns_BillNo_foreign');
+			$table->dropForeign('SupplierReturns_BranchNo_foreign');
 		});
 	}
 
