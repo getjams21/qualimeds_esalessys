@@ -33,18 +33,25 @@ class BanksController extends \BaseController {
 	 */
 	public function store()
 	{
-		$bank = new Bank;
-		$bank->BankName = Input::get('name');
-		$bank->BAddress	= Input::get('address');
-		$bank->Telephone = Input::get('telephone');
-		$bank->save();
-
-		return Redirect::back()
-			->withFlashMessage('
-					<div class="alert alert-success" role="alert">
-						Bank is Successfully added.
-					</div>
-				');
+		$input = Input::only('id','BankName','BAddress','Telephone');
+		if($input['id'] == ''){
+			$customer = Bank::create($input);
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Bank is Successfully added.
+						</div>
+					');
+		}else{
+			$customer = Bank::find($input['id']);
+			$customer->fill($input)->save();
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Bank is Successfully updated.
+						</div>
+					');
+		}
 	}
 
 
