@@ -139,7 +139,8 @@ function triggerEditCustomer(id){
   	});
 }
 $(document).ready(function(){
-		
+		$(".pops").popover({ trigger: "hover" });
+   	    $("a").tooltip();
 //sidebar collapse
 	var a = document.title;
 	document.getElementsByTagName("body")[0].id = a;

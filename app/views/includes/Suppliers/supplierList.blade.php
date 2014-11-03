@@ -32,7 +32,7 @@
 		     <tbody>
 		         @foreach($suppliers as $supplier)
 		          <tr id="supplier{{$supplier->id}}"> 
-		          	<td>{{$supplier->id}}</td>
+		          	<td>{{$supplier->updated_at}}</td>
 		            <td>{{$supplier->SupplierName}}</td>
 		            <td>{{$supplier->Address}}</td>
 		            <td>{{$supplier->Telephone1}}</td>

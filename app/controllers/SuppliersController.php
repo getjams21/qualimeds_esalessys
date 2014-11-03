@@ -1,10 +1,13 @@
 <?php
 use Acme\Forms\SupplierForm;
+use Acme\Repos\Supplier\SupplierRepository;
 class SuppliersController extends \BaseController {
 	protected $supplierForm;
-	function __construct(SupplierForm $supplierForm)
+	private $supplierRepo;
+	function __construct(SupplierForm $supplierForm, SupplierRepository $supplierRepo)
 		{
 			$this->supplierForm = $supplierForm;
+			$this->supplierRepo = $supplierRepo;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -13,7 +16,7 @@ class SuppliersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$suppliers = Supplier::all();
+		$suppliers = $this->supplierRepo->getAll();
 		return View::make('dashboard.Suppliers.list',compact('suppliers'));
 	}
 
@@ -40,10 +43,10 @@ class SuppliersController extends \BaseController {
 		$id = $input['id'];
 		$this->supplierForm->validate($input);
 		if($id != null){
-			$supplier = Supplier::find($id);
+			$supplier = $this->supplierRepo->getById($id);
 			$supplier->fill($input)->save();
 		}else{
-			$supplier = Supplier::create($input);
+			$supplier = $this->supplierRepo->addNew($input);
 		}
 		return Redirect::to('/Suppliers');
 	}
@@ -52,7 +55,7 @@ class SuppliersController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$id = $input['id'];
-  			$supplier = Supplier::find($id);
+  			$supplier = $this->supplierRepo->getById($id);
 			return Response::json($supplier);
   		}
 

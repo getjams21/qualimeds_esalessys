@@ -7,9 +7,6 @@
                             {{Auth::user()->username}}
                     </a>
                 </li>
-                <li>
-                    <a href="#" >Update Account</a>
-                </li>
                 <li class="sidehead">
                     <a href="#">
                         <b>File Maintenance </b>
@@ -32,6 +29,16 @@
                         </li>
                         <li>
                             <a href="/banks">Banks</a>
+                        </li>
+                    </ul>
+                </li>
+                   <li class="sidehead">
+                    <a href="#">
+                        <b>Transactions </b>
+                    </a>
+                    <ul class="sidecontent collapse" >
+                        <li>
+                            <a href="/PurchaseOrders">Purchase Orders</a>
                         </li>
                     </ul>
                 </li>

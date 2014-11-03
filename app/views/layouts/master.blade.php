@@ -3,7 +3,7 @@
 	<head>  
 		<link rel="shortcut icon" type="image/x-icon" href="_/fonts/icon_16.ico" />
 		<meta charset="utf-8">
-		<meta name="_token" content="{{ csrf_token() }}" />
+		<meta name="_token" content="{{ csrf_token() }}" hidden/>
 		@yield('metatags')
 		{{ HTML::style('_/css/bootstrap.css') }}
 		{{ HTML::style('_/css/plugins/dataTables.bootstrap.css') }}
