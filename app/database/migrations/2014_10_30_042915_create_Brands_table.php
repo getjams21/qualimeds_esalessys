@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBranchesTable extends Migration {
+class CreateBrandsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,10 @@ class CreateBranchesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('Branches', function(Blueprint $table)
+		Schema::create('Brands', function(Blueprint $table)
 		{
 			$table -> increments('id');
-			$table -> string('BranchName',250)->nullable();
-			$table -> string('BAddress',500)->nullable();
-			$table -> string('Telephone',20)->nullable();
-			$table -> boolean('IsActive')->default(1);
+			$table -> string('BrandName',150)->nullable();
 			$table -> timestamps();
 		});
 	}
@@ -30,7 +27,7 @@ class CreateBranchesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('Branches');
+		Schema::drop('Brands');
 	}
 
 }

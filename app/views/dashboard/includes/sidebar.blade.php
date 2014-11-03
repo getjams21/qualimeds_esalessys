@@ -14,12 +14,15 @@
                     <a href="#">
                         <b>File Maintenance </b>
                     </a>
-                    <ul class="sidecontent collapse" style="display: none;">
+                    <ul class="sidecontent collapse" >
                         <li>
                             <a href="/ProductCategories">Product Categories</a>
                         </li>
                         <li>
-                            <a href="#">Suppliers</a>
+                            <a href="/Products">Products</a>
+                        </li>
+                        <li>
+                            <a href="/Suppliers">Suppliers</a>
                         </li>
                         <li>
                             <a href="/customers">Customers</a>

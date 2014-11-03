@@ -23,9 +23,9 @@
 		     </thead> 
 		     <tbody>
 		         @foreach($categories as $category)
-		          <tr> 
+		          <tr id="category{{$category->id}}"> 
 		          	<td >{{$category->id}}</td>
-		            <td>
+		            <td id="catName{{$category->id}}">
 		              {{$category->ProdCatName}}
 		            </td>
 		            <td>

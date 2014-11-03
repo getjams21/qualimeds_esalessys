@@ -10,16 +10,18 @@
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
+@include('includes.ProductCategories.edit')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
     <div class="row">
        	<div class="col-md-12 shadowed"><br>
+            <div class="col-md-1">
+            </div> 
        		<div class="col-md-6">
                 @include('includes.ProductCategories.list')
             </div> 
-            <div class="col-md-6" hidden>
-                @include('includes.ProductCategories.edit')
+            <div class="col-md-5" >
             </div>   
 
         </div>
@@ -34,10 +36,13 @@
 
 @stop
 @section('script')
-<script type="text/javascript">
+<script language="javascript" type="text/javascript">
    $(document).ready(function() {
         var oTable= $('.category').dataTable( {
         	"order": [[ 0, "desc" ]],
+        	"columnDefs": [
+			    { "width": "15%", "targets": 2 }
+			  ]
     	});
     	 oTable.fnSetColumnVis( 0, false );
     });

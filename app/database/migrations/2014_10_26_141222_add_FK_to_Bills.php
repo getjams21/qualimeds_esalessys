@@ -18,6 +18,8 @@ class AddFKToBills extends Migration {
 			->onDelete('restrict')->onUpdate('cascade');
 			$table-> foreign('SupplierNo')->references('id')->on('Suppliers')
 			->onDelete('restrict')->onUpdate('cascade');
+			$table-> foreign('BranchNo')->references('id')->on('Branches')
+			->onDelete('restrict')->onUpdate('cascade');
 		});
 	}
 
@@ -32,6 +34,7 @@ class AddFKToBills extends Migration {
 		{
 			$table->dropForeign('Bills_PurchaseOrderNo_foreign');
 			$table->dropForeign('Bills_SupplierNo_foreign');
+			$table->dropForeign('BranchNo');
 		});
 	}
 

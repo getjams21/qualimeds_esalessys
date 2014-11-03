@@ -67,8 +67,9 @@ App::down(function()
 	return Response::make("Be right back!", 503);
 });
 App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
-{
-	return Redirect::back()->withInput()->withErrors($exception->getErrors());
+{	$input=Input::all();
+	$input['autoOpenModal'] = 'true';
+	return Redirect::back()->withInput($input)->withErrors($exception->getErrors())->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Input error!</b> Please check your inputs and try again.</div>');
 });
 App::error(function(Symfony \ Component \ HttpKernel \ Exception \ NotFoundHttpException $exception, $code)
 {

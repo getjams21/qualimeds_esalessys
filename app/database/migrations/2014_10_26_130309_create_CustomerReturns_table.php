@@ -16,7 +16,8 @@ class CreateCustomerReturnsTable extends Migration {
 		{
 			$table -> increments('id');
 			$table -> integer('SalesinvoiceNo')->nullable()->unsigned();
-			$table->timestamp('CustomerReturnDate')->nullable();
+			$table -> integer('BranchNo')->nullable()->unsigned();
+			$table->timestamp('CustomerReturnDate')->nullable(); 
 			$table -> string('Remarks',500)->nullable();
 			$table -> string('PreparedBy',250)->nullable();
 			$table -> string('ApprovedBy',250)->nullable();

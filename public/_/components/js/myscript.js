@@ -77,30 +77,92 @@ $(document).ready(function(){
   			$('.telephone').val('');
   			$('.delete').hide();
 		});
+		
+//sidebar collapse
+	var a = document.title;
+	document.getElementsByTagName("body")[0].id = a;
+//navigation automatic dropdown
+		$('ul.nav li.dropdown').hover(function() {
+			$('.dropdown-menu', this).fadeIn();
+		}, function() {
+			$('.dropdown-menu', this).fadeOut('fast');
+		});
+//set active navbar
+	$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
+//set active sidebar
+		$("#"+a+" a:contains("+a+")").parent().addClass('active');
+		$(".sidehead ul:contains("+a+")").removeClass('collapse');
+
 	$("#sidebar-wrapper").hover(function(e) {
 	        e.preventDefault();
 	        $("#wrapper").addClass("toggled");
 	    }, function() {
 		$("#wrapper").removeClass('toggled');
 	});	
+	$('#ProductCategory').keyup(function(){
+		$('#catError').addClass('hidden');
+	});
 	$('#saveCategory').click(function(e){
 			e.preventDefault(); 
-	      var category=$('#ProductCategory').val();
-	      if((!category) || jQuery.trim(category).length == 0){
+	      var category=jQuery.trim($('#ProductCategory').val());
+	      if((!category) || category.length == 0){
 	      	$('#catError').text('Category text field is empty!');
 	      	$('#catError').removeClass('hidden');
 	      }else{
 	      	  var table=  $('.category').dataTable(); 
 		 	  $.post('/addCategory',{cat:category},function(data){
-		 	  	var rowIndex= table.fnAddData([
-		               data['id'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
-		        ]);
+		 	  	if(data == 0){
+		 	  		$('#catError').text('Category already exists!');
+	      			$('#catError').removeClass('hidden');
+		 	  	}else{
+			 	  	var rowIndex= table.fnAddData([
+			               data['id'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
+			        ]);
+			        var row = table.fnGetNodes(rowIndex);
+			        var thisRow= $(row).attr( 'id', 'category'+data['id'] );
+			        $(' td:nth-child(1)').attr( 'id', 'catName'+data['id'] );
+			        $('#catError').addClass('hidden');
+		        }
 		      });
 	      }
 	      $('#ProductCategory').val(' ');
-	  
 	});
-	//SIDEBAR CLICK COLLAPSE
+$('#categoryBtn').click(function(){
+	var table = $('.category').DataTable();
+	var id= $('#catID').val();
+	var index = $('#catIndex').val();
+	var catName = $('#txtCatName').val();
+	var category=jQuery.trim($('#txtCatName').val());
+      if((!category) || category.length == 0){
+      	$('#modalCatError').text('Text field is empty!');
+      	$('#modalCatError').removeClass('hidden');
+      }else{
+      		$.post('/editCategory',{id:id,catName:catName},function(data){
+      			if(data == 0){
+		 	  		$('#modalCatError').text('Category already exists!');
+	      			$('#modalCatError').removeClass('hidden');
+		 		}else{
+			        table.cell( index, 1 ).data( data ).draw();
+			        $('#myModal').modal('hide');
+			    }
+			});
+	  }
+});
+$('#addSupplier').click(function(){
+	$('.modal-title').text('Add new Supplier');
+	$('#txtSupID').val(null);
+	$('input[type=text]').val(null);
+	$('#supplierModal').modal('show');
+
+});
+$('#addProduct').click(function(){
+	$('.modal-title').text('Add new Product');
+	$('#txtProdID').val(null);
+	$('input[type=text]').val(null);
+	$('#productModal').modal('show');
+
+});
+//SIDEBAR CLICK COLLAPSE
 	$('.sidehead').click(function() {
 			$(this).children('ul').first().stop(true, true).slideToggle(500);;
 		});
@@ -117,5 +179,54 @@ $(document).ready(function(){
         	$('.alert').hide();
         }
 	});
-	//edit/delete bank
-});
+});//end of ready function
+function editCategory(id){
+	$('#modalCatError').addClass('hidden')
+	var table = $('.category').DataTable();
+	var catName= jQuery.trim($('#catName'+id).text());
+	var index=table.row('#category'+id).index();
+		$('#catID').val(id);
+		$('#catIndex').val(index);
+		$('#txtCatName').val(catName);
+		$('#myModal').modal('show');
+		$('.modal-title').text('Edit '+catName);
+}
+
+
+function editSupplier(id){
+	var table=$('.supplier').DataTable();
+			$('.modal-title').text('Edit Supplier');
+	      	$('#supplierModal').modal('show');
+		$.post('/fetchSupplier',{id:id},function(data){
+			$('#txtSupID').val(data['id']);
+	      	$('#SupplierName').val(data['SupplierName']);
+	      	$('#Address').val(data['Address']);
+	      	$('#Telephone1').val(data['Telephone1']);
+	      	$('#Telephone2').val(data['Telephone2']);
+	      	$('#ContactPerson').val(data['ContactPerson']);
+		});
+
+}
+function editProduct(id){
+	var table=$('.product').DataTable();
+			$('.modal-title').text('Edit Product');
+	      	$('#productModal').modal('show');
+		$.post('/fetchProduct',{id:id},function(data){
+			$('#txtProdID').val(data['id']);
+	      	$('#ProductCatNo').val(data['ProductCatNo']);
+	      	$('#ProductName').val(data['ProductName']);
+	      	$('#BrandName').val(data['BrandName']);
+	      	$('#WholeSaleUnit').val(data['WholeSaleUnit']);
+	      	$('#RetailUnit').val(data['RetailUnit']);
+	      	$('#RetailQtyPerWholeSaleUnit').val(data['RetailQtyPerWholeSaleUnit']);
+	      	$('#Reorderpoint').val(data['Reorderpoint']);
+	      	$('#Markup1').val(data['Markup1']);
+	      	$('#Markup2').val(data['Markup2']);
+	      	$('#Markup3').val(data['Markup3']);
+	      	$('#ActiveMarkup').val(data['ActiveMarkup']);
+		});
+
+}
+
+	
+	

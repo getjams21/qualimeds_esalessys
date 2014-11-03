@@ -11,7 +11,7 @@ class ProductCategoriesController extends \BaseController {
 	public function index()
 	{
 		$categories = ProductCategory::all();
-		return View::make('dashboard.ProductCategories.index',compact('categories'));
+		return View::make('dashboard.ProductCategories.list',compact('categories'));
 	}
 
 	/**
@@ -29,10 +29,34 @@ class ProductCategoriesController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$cat = $input['cat'];
-  			$category = new ProductCategory;
-  			$category->ProdCatName = $cat;
-  			$category->save();
-			return Response::json($category);
+  			$find = ProductCategory::where('ProdCatName', '=', $cat)->count();
+  			if($find != 0){
+  				return Response::json(0);	
+  			}else{
+	  			$category = new ProductCategory;
+	  			$category->ProdCatName = $cat;
+	  			$category->save();
+				return Response::json($category);
+			}
+  		}
+	}
+	
+	public function editCategory()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$cat = $input['catName'];
+  			$id = $input['id'];
+  			$find = ProductCategory::where('ProdCatName', '=', $cat)
+  									->where('id', '!=', $id)->count();
+  			if($find != 0){
+  				return Response::json(0);	
+  			}else{
+  				$category = ProductCategory::find($id);
+		  			$category->ProdCatName = $cat;
+		  			$category->save();
+				return Response::json($category->ProdCatName);
+			}
   		}
 	}
 

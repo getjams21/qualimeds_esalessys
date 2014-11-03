@@ -21,10 +21,12 @@ class CreateProductsTable extends Migration {
 			$table -> string('WholeSaleUnit',25)->nullable();
 			$table -> string('RetailUnit',25)->nullable();
 			$table -> decimal('RetailQtyPerWholeSaleUnit', 18, 2)->nullable();
+			$table -> decimal('Reorderpoint', 18, 2)->nullable();
 			$table -> integer('Markup1')->nullable();
 			$table -> integer('Markup2')->nullable();
 			$table -> integer('Markup3')->nullable();
 			$table -> integer('ActiveMarkup')->nullable();
+			$table -> boolean('IsActive')->default(1);
 			$table -> timestamps();
 		});
 	}
