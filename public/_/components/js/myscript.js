@@ -10,135 +10,73 @@ function triggerEdit(id){
 	$.get('toEditBank',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$('.bankForm div')
-			.find('div')
-			.remove()
-			.end();
   			$.each(data, function(key,value) {
-  				$('.bankForm div')
-  				.append('
-			<form method="GET" action="http://qualimeds.com/banks/'+id+'/edit" accept-charset="UTF-8" id="bankForm">\
-			<div class="form-group">\
-				<input class="form-control name" type="text" name="name" value="'+value.BankName+'" required>\
-			</div>\
-			<div class="form-group">\
-				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
-			</div>\
-			<div class="form-group">\
-				<center>\
-					<button class="btn btn-primary action" type="submit">Update</button>\
-					<a href="/delete-bank/'+id+'"><button class="btn btn-danger" type="button" id="bank-delete">Delete</button></a>\
-					<br>\
-					<br>\
-					<hr class="style-fade">
-					<i>or</i>
-				</center>\
-				<center>\
-					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Bank</button>\
-				</center>	
-			</div>	
-			');
-			});
+	  			$('#library-action').val(value.id);
+	  			$('.name').val(value.BankName);
+	  			$('.address').val(value.BAddress);
+	  			$('.telephone').val(value.Telephone);
+	  			$('.deactivate').attr('href', '/delete-bank/'+id+'');
+	  			$('.delete').show();
+  			});
   		}
   	});
+$('#bank-library').modal('show');
 }
 //edit-delete branch
 function triggerEditBranch(id){
 	$.get('toEditBranch',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$('.branchForm div')
-			.find('div')
-			.remove()
-			.end();
   			$.each(data, function(key,value) {
-  				$('.branchForm div')
-  				.append('
-			<form method="GET" action="http://qualimeds.com/branches/'+id+'/edit" accept-charset="UTF-8">\
-			<div class="form-group">\
-				<input class="form-control name" type="text" name="name" value="'+value.BranchName+'" required>\
-			</div>\
-			<div class="form-group">\
-				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.BAddress+'</textarea>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control telephone" type="text" name="telephone" id="telephone" value="'+value.Telephone+'" required>\
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
-			</div>\
-			<div class="form-group">\
-				<center>\
-					<button class="btn btn-primary action" type="submit">Update</button>\
-					<a href="/delete-branch/'+id+'"><button class="btn btn-danger" type="button" id="bank-delete">Delete</button></a>\
-					<br>\
-					<br>\
-					<hr class="style-fade">
-					<i>or</i>
-				</center>\
-				<center>\
-					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Branch</button>\
-				</center>	
-			</div>	
-			');
-			});
+	  			$('#library-action').val(value.id);
+	  			$('.name').val(value.BranchName);
+	  			$('.address').val(value.BAddress);
+	  			$('.telephone').val(value.Telephone);
+	  			$('.deactivate').attr('href', '/delete-branch/'+id+'');
+	  			$('.delete').show();
+  			});
   		}
   	});
+$('#branch-library').modal('show');
 }
 //edit-delete branch
 function triggerEditCustomer(id){
 	$.get('toEditCustomer',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$('.customerForm div')
-			.find('div')
-			.remove()
-			.end();
   			$.each(data, function(key,value) {
-  				$('.customerForm div')
-  				.append('
-			<form method="GET" action="http://qualimeds.com/customers/'+id+'/edit" accept-charset="UTF-8">\
-			<div class="form-group">\
-				<input class="form-control name" type="text" name="name" value="'+value.CustomerName+'" required>\
-			</div>\
-			<div class="form-group">\
-				<textarea class="form-control address" rows="3" type="textarea" name="address" required>'+value.Address+'</textarea>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control telephone1" type="text" name="telephone1" id="telephone1" value="'+value.Telephone1+'" required>\
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control telephone2" type="text" name="telephone2" id="telephone2" value="'+value.Telephone2+'">\
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control contact-person" type="text" name="contact-person" id="contact-person" value="'+value.ContactPerson+'" required>\
-			</div>\
-			<div class="form-group">\
-				<input class="form-control credit-limit type="text" name="credit-limit" id="contact-person" value="'+value.CreditLimit+'" required>\
-			</div>\
-			<div class="form-group">\
-				<center>\
-					<button class="btn btn-primary action" type="submit">Update</button>\
-					<a href="/delete-customer/'+id+'"><button class="btn btn-danger" type="button" id="customer-delete">Delete</button></a>\
-					<br>\
-					<br>\
-					<hr class="style-fade">
-					<i>or</i>
-				</center>\
-				<center>\
-					<button type="button" class="btn btn-success" onClick="window.location.reload()">Add New Customer</button>\
-				</center>	
-			</div>	
-			');
-			});
+	  			$('#library-action').val(value.id);
+	  			$('.name').val(value.CustomerName);
+	  			$('.address').val(value.Address);
+	  			$('.telephone1').val(value.Telephone1);
+	  			$('.telephone2').val(value.Telephone2);
+	  			$('.contact-person').val(value.ContactPerson);
+	  			$('.credit-limit').val(value.CreditLimit);
+	  			$('.deactivate').attr('href', '/delete-customer/'+id+'');
+	  			$('.delete').show();
+  			});
   		}
   	});
+$('#customer-library').modal('show');
 }
 $(document).ready(function(){
+	$('.add-customer').click(function(event) {
+			$('#library-action').val('');
+			$('.name').val('');
+  			$('.address').val('');
+  			$('.telephone1').val('');
+  			$('.telephone2').val('');
+  			$('.contact-person').val('');
+  			$('.credit-limit').val('');
+  			$('.delete').hide();
+		});
+	$('.add-branch').click(function(event) {
+			$('#library-action').val('');
+			$('.name').val('');
+  			$('.address').val('');
+  			$('.telephone').val('');
+  			$('.delete').hide();
+		});
 	$("#sidebar-wrapper").hover(function(e) {
 	        e.preventDefault();
 	        $("#wrapper").addClass("toggled");
@@ -170,7 +108,7 @@ $(document).ready(function(){
 	$('#telephone,#telephone1,#telephone2').keydown(function(event) {
 		if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
                 //key exemptions
-                if(event.keyCode != 8 && event.keyCode != 107 && event.keyCode != 187 && event.keyCode != 116 && event.keyCode != 16 && event.keyCode != 109 && event.keyCode != 189){
+                if(event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 107 && event.keyCode != 187 && event.keyCode != 116 && event.keyCode != 16 && event.keyCode != 109 && event.keyCode != 189){
                 	$('.alert').show();
                 	event.preventDefault();
                 }

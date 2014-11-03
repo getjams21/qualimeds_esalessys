@@ -32,18 +32,25 @@ class BranchesController extends \BaseController {
 	 */
 	public function store()
 	{
-		$branch = new Branch;
-		$branch->BranchName = Input::get('name');
-		$branch->BAddress	= Input::get('address');
-		$branch->Telephone = Input::get('telephone');
-		$branch->save();
-
-		return Redirect::back()
-			->withFlashMessage('
-					<div class="alert alert-success" role="alert">
-						Branch is Successfully added.
-					</div>
-				');
+		$input = Input::only('id','BranchName','BAddress','Telephone');
+		if($input['id'] == ''){
+			$customer = Branch::create($input);
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Branch is Successfully added.
+						</div>
+					');
+		}else{
+			$customer = Branch::find($input['id']);
+			$customer->fill($input)->save();
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Branch is Successfully updated.
+						</div>
+					');
+		}
 	}
 
 
@@ -67,18 +74,7 @@ class BranchesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		$branch = Branch::find($id);
-		$branch->BranchName = Input::get('name');
-		$branch->BAddress	= Input::get('address');
-		$branch->Telephone = Input::get('telephone');
-		$branch->save();
-
-		return Redirect::back()
-			->withFlashMessage('
-					<div class="alert alert-success" role="alert">
-						Branch is Successfully updated.
-					</div>
-				');
+			//
 	}
 
 
@@ -114,6 +110,7 @@ class BranchesController extends \BaseController {
 	}
 
 	public function toEditBranch(){
+		// dd(Input::get('id'));
 		if(Request::ajax()){
   			$branch = DB::select('select * from branches where id = '.Input::get('id').'');
 			return Response::json($branch);

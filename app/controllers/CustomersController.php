@@ -32,21 +32,26 @@ class CustomersController extends \BaseController {
 	 */
 	public function store()
 	{
-		$customer = new Customer;
-		$customer->CustomerName = Input::get('name');
-		$customer->Address	= Input::get('address');
-		$customer->Telephone1 = Input::get('telephone1');
-		$customer->Telephone2 = Input::get('telephone2');
-		$customer->ContactPerson = Input::get('contact-person');
-		$customer->CreditLimit = Input::get('credit-limit');
-		$customer->save();
-
-		return Redirect::back()
-			->withFlashMessage('
-					<div class="alert alert-success" role="alert">
-						Customer is Successfully added.
-					</div>
-				');
+		$input = Input::only('id','CustomerName','Address','Telephone1','Telephone2','ContactPerson','CreditLimit');
+		if($input['id'] == ''){
+			$customer = Customer::create($input);
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Customer is Successfully added.
+						</div>
+					');
+		}else{
+			// dd($input['id']);
+			$customer = Customer::find($input['id']);
+			$customer->fill($input)->save();
+			return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-success" role="alert">
+							Customer is Successfully updated.
+						</div>
+					');
+		}
 	}
 
 
@@ -70,21 +75,7 @@ class CustomersController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		$customer = Customer::find($id);
-		$customer->CustomerName = Input::get('name');
-		$customer->Address	= Input::get('address');
-		$customer->Telephone1 = Input::get('telephone1');
-		$customer->Telephone2 = Input::get('telephone2');
-		$customer->ContactPerson = Input::get('contact-person');
-		$customer->CreditLimit = Input::get('credit-limit');
-		$customer->save();
-
-		return Redirect::back()
-			->withFlashMessage('
-					<div class="alert alert-success" role="alert">
-						Customer is Successfully updated.
-					</div>
-				');
+		//
 	}
 
 

@@ -9,6 +9,6 @@ class Customer extends \Eloquent {
 		'Telephone1',
 		'Telephone2',
 		'ContactPerson',
-		'CreditLimt'
+		'CreditLimit'
 	];
 }
