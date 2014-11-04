@@ -24,7 +24,7 @@
           <a class="dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" >
             {{Auth::user()->username}}
             </a>
-            <ul class="dropdown-menu side-dropdown" role="menu" aria-labelledby="dropdownMenu1" >
+       <!--      <ul class="dropdown-menu side-dropdown" role="menu" aria-labelledby="dropdownMenu1" >
               <li>
                 <a href="#" >
                     <i class="fa fa-tachometer"></i> Dashboard
@@ -39,8 +39,19 @@
               <li>
                   <a href="/logout" ><span class="glyphicon glyphicon-log-out"></span> Logout</a>
               </li>
-            </ul>
+            </ul> -->
 
+        </li>
+        <li  class="divider-vertical"></li>
+        <li>
+         <a href="#" data-toggle="tooltip" data-placement="bottom"
+       title="" data-original-title="Settings"
+       class="red-tooltip"><i class="fa fa-gear"></i></a>
+        </li>
+        <li>
+         <a href="/logout" data-toggle="tooltip" data-placement="bottom"
+       title="" data-original-title="Logout"
+       class="red-tooltip"><i class="fa fa-sign-out"></i></a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->

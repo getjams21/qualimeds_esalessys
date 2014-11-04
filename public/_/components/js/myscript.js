@@ -60,6 +60,8 @@ function triggerEditCustomer(id){
 $('#customer-library').modal('show');
 }
 $(document).ready(function(){
+$(".pops").popover({ trigger: "hover" });
+$("a").tooltip();
 	$('.add-customer').click(function(event) {
 			$('#library-action').val('');
 			$('.name').val('');

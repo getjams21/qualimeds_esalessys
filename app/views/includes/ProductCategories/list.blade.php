@@ -24,7 +24,7 @@
 		     <tbody>
 		         @foreach($categories as $category)
 		          <tr id="category{{$category->id}}"> 
-		          	<td >{{$category->id}}</td>
+		          	<td >{{$category->updated_at}}</td>
 		            <td id="catName{{$category->id}}">
 		              {{$category->ProdCatName}}
 		            </td>

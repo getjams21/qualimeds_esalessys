@@ -16,7 +16,7 @@
 			</div>
 		@endif
 	    <hr>
-		<div class="table-responsive" >
+		<div class="table-responsive responsive" >
 		  <table class="table table-striped table-bordered table-hover product">
 		    <thead>
 		      <tr>
@@ -37,7 +37,7 @@
 		     <tbody>
 		         @foreach($products as $product)
 		          <tr id="product{{$product->id}}"> 
-		          	<td>{{$product->id}}</td>
+		          	<td>{{$product->updated_at}}</td>
 		            <td>{{$product->ProdCatName}}</td>
 		            <td>{{$product->ProductName}}</td>
 		            <td>{{$product->BrandName}}</td>

@@ -121,6 +121,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'Laracasts\Validation\ValidationServiceProvider',
+		'Acme\Repos\BackendServiceProvider'
 
 	),
 

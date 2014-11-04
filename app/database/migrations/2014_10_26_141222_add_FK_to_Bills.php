@@ -34,7 +34,7 @@ class AddFKToBills extends Migration {
 		{
 			$table->dropForeign('Bills_PurchaseOrderNo_foreign');
 			$table->dropForeign('Bills_SupplierNo_foreign');
-			$table->dropForeign('BranchNo');
+			$table->dropForeign('Bills_BranchNo_foreign');
 		});
 	}
 

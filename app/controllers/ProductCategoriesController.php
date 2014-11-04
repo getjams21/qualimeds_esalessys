@@ -1,7 +1,12 @@
 <?php
-
+use Acme\Repos\ProductCategory\ProductCategoryRepository;
 class ProductCategoriesController extends \BaseController {
+	private $productCategoryRepo;
 
+	function __construct(ProductCategoryRepository $productCategoryRepo)
+		{
+			$this->productCategoryRepo = $productCategoryRepo;
+		}
 	/**
 	 * Display a listing of the resource.
 	 * GET /productcategories
@@ -10,7 +15,7 @@ class ProductCategoriesController extends \BaseController {
 	 */
 	public function index()
 	{
-		$categories = ProductCategory::all();
+		$categories = $this->productCategoryRepo->getAll();
 		return View::make('dashboard.ProductCategories.list',compact('categories'));
 	}
 
@@ -29,13 +34,11 @@ class ProductCategoriesController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$cat = $input['cat'];
-  			$find = ProductCategory::where('ProdCatName', '=', $cat)->count();
+  			$find = $this->productCategoryRepo->getCatCount($cat);
   			if($find != 0){
   				return Response::json(0);	
   			}else{
-	  			$category = new ProductCategory;
-	  			$category->ProdCatName = $cat;
-	  			$category->save();
+	  			$this->productCategoryRepo->addNew($input);
 				return Response::json($category);
 			}
   		}
@@ -47,12 +50,11 @@ class ProductCategoriesController extends \BaseController {
   			$input = Input::all();
   			$cat = $input['catName'];
   			$id = $input['id'];
-  			$find = ProductCategory::where('ProdCatName', '=', $cat)
-  									->where('id', '!=', $id)->count();
+  			$find = $this->productCategoryRepo->getCount($cat,$id);
   			if($find != 0){
   				return Response::json(0);	
   			}else{
-  				$category = ProductCategory::find($id);
+  				$category = $this->productCategoryRepo->getById($id);
 		  			$category->ProdCatName = $cat;
 		  			$category->save();
 				return Response::json($category->ProdCatName);

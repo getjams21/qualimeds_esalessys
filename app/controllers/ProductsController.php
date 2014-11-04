@@ -1,10 +1,13 @@
 <?php
 use Acme\Forms\ProductForm;
+use Acme\Repos\Product\ProductRepository;
 class ProductsController extends \BaseController {
 	protected $productForm;
-	function __construct(ProductForm $productForm)
+	private $productRepo;
+	function __construct(ProductForm $productForm, ProductRepository $productRepo)
 		{
 			$this->productForm = $productForm;
+			$this->productRepo = $productRepo;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -15,7 +18,7 @@ class ProductsController extends \BaseController {
 	public function index()
 	{
 		$category = ProductCategory::lists('ProdCatName','id');
-    	$products=DB::select('Select a.*,b.ProdCatName from products as a inner join productcategories as b on a.ProductCatNo=b.id');
+    	$products= $this->productRepo->getAllWithCat();
 		return View::make('dashboard.Products.list',compact('products','category'));
 	}
 
@@ -43,10 +46,10 @@ class ProductsController extends \BaseController {
 		$id = $input['id'];
 		$this->productForm->validate($input);
 		if($id != null){
-			$supplier = Product::find($id);
+			$supplier =$this->productRepo->getById($id);
 			$supplier->fill($input)->save();
 		}else{
-			$supplier = Product::create($input);
+			$supplier = $this->productRepo->addNew($input);
 		}
 		return Redirect::to('/Products')->withFlashMessage('<div class="alert alert-success square" role="alert">Successfully Updated Record.</div>');
 	}
@@ -55,7 +58,7 @@ class ProductsController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$id = $input['id'];
-  			$product = Product::find($id);
+  			$product = $this->productRepo->getById($id);
 		return Response::json($product);
   		}
 
