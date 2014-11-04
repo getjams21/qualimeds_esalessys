@@ -44,4 +44,6 @@ Route::group(["before" => "auth"], function() {
  		Route::resource('/branches', 'BranchesController');
  		Route::get('/toEditBranch','BranchesController@toEditBranch');
  		Route::get('delete-branch/{id}', 'BranchesController@destroy');
+ 	#PURCHASE ORDER ROUTES
+ 		Route::resource('/PurchaseOrders', 'POController');
 });

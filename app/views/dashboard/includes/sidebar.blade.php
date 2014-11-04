@@ -34,6 +34,16 @@
                 </li>
                 <li class="sidehead">
                     <a href="#">
+                        <b>Transactions </b>
+                    </a>
+                    <ul class="sidecontent collapse" >
+                        <li>
+                            <a href="/PurchaseOrders">Purchase Orders</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidehead">
+                    <a href="#">
                         <b>Security</b>
                     </a>
                     <ul class="sidecontent collapse" >
