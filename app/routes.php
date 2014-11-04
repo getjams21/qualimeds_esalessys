@@ -40,5 +40,8 @@ Route::group(["before" => "auth"], function() {
  		Route::resource('/customers', 'CustomersController');
  		Route::get('/toEditCustomer','CustomersController@toEditCustomer');
  		Route::get('delete-customer/{id}', 'CustomersController@destroy');
- 		Route::get('update-customer/{id}/edit', 'CustomersController@edit');
+ 	#branch library
+ 		Route::resource('/branches', 'BranchesController');
+ 		Route::get('/toEditBranch','BranchesController@toEditBranch');
+ 		Route::get('delete-branch/{id}', 'BranchesController@destroy');
 });

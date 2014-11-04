@@ -1,42 +1,46 @@
-<!-- Customer Add Modal -->
-<div class="modal fade" id="customer-library" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- User Add Modal -->
+<div class="modal fade" id="user-library" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Customers</h4>
+        <h4 class="modal-title" id="myModalLabel">Users</h4>
       </div>
       <div class="modal-body">
       	<div class="container-fluid">
         	<div class="col-md-12">
 			<div class="well customerForm">
 			<div>
-			{{ Form::open(['route'=>'customers.store', 'id'=>'customerForm']) }}
+			{{ Form::open(['route'=>'users.store', 'id'=>'customerForm']) }}
 			<div class="form-group">
-				<label>Customer Name</label>
-				<input class="form-control name" type="text" name="CustomerName" placeholder="Customer Name" required>
+				<label>Username</label>
+				<input class="form-control username" type="text" name="username" placeholder="Username" required>
 			</div>
 			<div class="form-group">
-				<label>Customer Address</label>
-				<textarea class="form-control address" rows="3" name="Address" placeholder="Customer's Address" required></textarea>
+				<label>Password</label>
+				<input type="password" class="form-control password" name="password" placeholder="Password" required></textarea>
 			</div>
 			<div class="form-group">
-				<label>Telephone 1</label>
-				<input class="form-control telephone1" type="text" name="Telephone1" id="telephone1" placeholder="Telephone 1" required>
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>
+				<label>Last Name</label>
+				<input class="form-control lastname" type="text" name="Lastname" id="lastname" placeholder="Last Name" required>
 			</div>
 			<div class="form-group">
-				<label>Telephone 2</label>
-				<input class="form-control telephone2" type="text" name="Telephone2" id="telephone2" placeholder="Telephone 2">
-				<div class="alert alert-danger" role="alert" hidden>Phone Format Only. i.e. +63-916-1111-455</div>
+				<label>First Name</label>
+				<input class="form-control firstname" type="text" name="Firstname" id="firstname" placeholder="First Name">
 			</div>
 			<div class="form-group">
-				<label>Contact Person</label>
-				<input class="form-control contact-person" type="text" name="ContactPerson" id="contact-person" placeholder="Contact Person" required>
+				<label>Middle Initial</label>
+				<input class="form-control mi" type="text" name="mi" id="mi" placeholder="Middle Initial" required>
 			</div>
 			<div class="form-group">
-				<label>Credit Limit</label>
-				<input class="form-control credit-limit" type="text" name="CreditLimit" id="credit-limit" placeholder="Credit Limit" required>
+				<label>User Type</label>
+				<select class="form-control">
+				  <option class="" value="1">Admin</option>
+				  <option class="" value="11">Admin/Sales Rep</option>
+				  <option class="" value="2">Warehouse</option>
+				  <option class="" value="3">Office Clerk</option>
+				  <option class="" value="4">Sales Rep</option>
+				</select>
 				<input type="hidden" name="id" id="library-action" value="">
 			</div>
 			</div>

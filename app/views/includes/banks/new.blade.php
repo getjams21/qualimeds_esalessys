@@ -47,14 +47,14 @@
 
 <div class="panel panel-success">
 	<div class="panel-heading head">
-		<h4>Banks</h4>
+		<div class="container-fluid">
+			<font size="5">Banks</font>
+			<button class="btn btn-success add-bank pull-right square" data-toggle="modal" data-target="#bank-library">
+		  	<span class="glyphicon glyphicon-plus"></span> New Bank
+			</button>
+		</div>
 	</div>
 	<div class="panel-body">
-		<center><button class="btn btn-primary add-bank" data-toggle="modal" data-target="#bank-library">
-		  New Bank
-		</button></center>
-		<br>
-		<hr class="style-fade">	
 		<div class="container-fluid">
 			<div class="table-responsive" >
                 <table class="table table-striped table-bordered table-hover banks">
