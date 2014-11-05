@@ -129,4 +129,9 @@ class UsersController extends \BaseController {
   		}
 	}
 
+	public function editAccount(){
+		// $user = $this->userRepo->getByid(Auth::user()->id);
+		return View::make('dashboard.users.update');
+	}
+
 }
