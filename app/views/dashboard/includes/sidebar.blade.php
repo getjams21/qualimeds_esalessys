@@ -7,32 +7,34 @@
                             {{Auth::user()->username}}
                     </a>
                 </li>
+                @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
+                    <li class="sidehead">
+                        <a href="#">
+                            <b>File Maintenance </b>
+                        </a>
+                        <ul class="sidecontent collapse" >
+                            <li>
+                                <a href="/ProductCategories">Product Categories</a>
+                            </li>
+                            <li>
+                                <a href="/Products">Products</a>
+                            </li>
+                            <li>
+                                <a href="/Suppliers">Suppliers</a>
+                            </li>
+                            <li>
+                                <a href="/customers">Customers</a>
+                            </li>
+                            <li>
+                                <a href="/branches">Branches</a>
+                            </li>
+                            <li>
+                                <a href="/banks">Banks</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="sidehead">
-                    <a href="#">
-                        <b>File Maintenance </b>
-                    </a>
-                    <ul class="sidecontent collapse" >
-                        <li>
-                            <a href="/ProductCategories">Product Categories</a>
-                        </li>
-                        <li>
-                            <a href="/Products">Products</a>
-                        </li>
-                        <li>
-                            <a href="/Suppliers">Suppliers</a>
-                        </li>
-                        <li>
-                            <a href="/customers">Customers</a>
-                        </li>
-                        <li>
-                            <a href="/branches">Branches</a>
-                        </li>
-                        <li>
-                            <a href="/banks">Banks</a>
-                        </li>
-                    </ul>
-                </li>
-                   <li class="sidehead">
                     <a href="#">
                         <b>Transactions </b>
                     </a>
@@ -42,7 +44,21 @@
                         </li>
                     </ul>
                 </li>
-                
+                <li class="sidehead">
+                    <a href="#">
+                        <b>Security</b>
+                    </a>
+                    <ul class="sidecontent collapse" >
+                        @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
+                            <li>
+                                <a href="/Users">Users</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="update-account" >Update Account</a>
+                        </li>   
+                    </ul>
+                </li>
             </ul>
             </div>
         </div>

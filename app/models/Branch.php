@@ -6,6 +6,7 @@ class Branch extends \Eloquent {
 	protected $fillable = [
 		'BranchName',
 		'BAddress',
-		'Telephone'
+		'Telephone',
+		'IsActive'
 	];
 }

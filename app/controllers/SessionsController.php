@@ -21,6 +21,7 @@ class SessionsController extends \BaseController {
 			$user= new User;
 			$user->username='admin';
 			$user->password='admin';
+			$user->UserType=1;
 			$user->save();
 		}
 		return View::make('sessions.create');

@@ -47,15 +47,16 @@
 
 <div class="panel panel-success">
 	<div class="panel-heading head">
-		<h4>Branches</h4>
+		<div class="panel-heading head">
+		<div class="container-fluid">
+			<font size="5">Branches</font>
+			<button class="btn btn-success add-bank pull-right square" data-toggle="modal" data-target="#branch-library">
+		  	<span class="glyphicon glyphicon-plus"></span> New Branch
+			</button>
+		</div>
 	</div>
-	<div class="panel-body">
-		<!-- Button trigger modal -->
-		<center><button class="btn btn-primary add-branch" data-toggle="modal" data-target="#branch-library">
-		  New Branch
-		</button></center>
-		<br>
-		<hr class="style-fade">	
+	</div>
+	<div class="panel-body">	
 		<div class="container-fluid">
 			<div class="table-responsive" >
                 <table class="table table-striped table-bordered table-hover banks">

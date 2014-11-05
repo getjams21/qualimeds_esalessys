@@ -122,8 +122,40 @@ function triggerEditCustomer(id){
   			});
   		}
   	});
-$('#customer-library').modal('show');
+ $('#customer-library').modal('show');
+ }
+function triggerEditUser(id){
+	$.get('toEditUser',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+  			var usertype;
+  			$.each(data, function(key,value) {
+  				if (value.UserType == 1){
+  					usertype = 'Admin';
+  				} else if (value.UserType == 11){
+  					usertype = 'Admin/Sales Rep';
+  				} else if (value.UserType == 2){
+  					usertype = 'Warehouse User';
+  				} else if (value.UserType == 3){
+  					usertype = 'Office Clerk';
+  				} else if (value.UserType == 4){
+  					usertype = 'Sales Rep';
+  				}
+	  			$('#library-action').val(value.id);
+	  			$('.username').val(value.username);
+	  			$('.lastname').val(value.Lastname);
+	  			$('.firstname').val(value.Firstname);
+	  			$('.mi').val(value.MI);
+	  			$('.usertype').val(usertype);
+	  			$('.deactivate').attr('href', '/delete-user/'+id+'');
+	  			$('.delete').show();
+  			});
+  		}
+  	});
+$('#user-library').modal('show');
 }
+
+//Document Ready
 $(document).ready(function(){
 $.fn.editable.defaults.mode = 'inline';
 $(".pops").popover({ trigger: "hover" });
@@ -139,6 +171,13 @@ $("a").tooltip();
   			$('.delete').hide();
 		});
 	$('.add-branch').click(function(event) {
+			$('#library-action').val('');
+			$('.name').val('');
+  			$('.address').val('');
+  			$('.telephone').val('');
+  			$('.delete').hide();
+		});
+	$('.add-bank').click(function(event) {
 			$('#library-action').val('');
 			$('.name').val('');
   			$('.address').val('');

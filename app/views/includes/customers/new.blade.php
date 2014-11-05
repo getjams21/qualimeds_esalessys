@@ -62,15 +62,14 @@
 @endif
 <div class="panel panel-success">
 	<div class="panel-heading head">
-		<h4>Customers</h4>
+		<div class="container-fluid">
+			<font size="5">Customers</font>
+			<button class="btn btn-success add-bank pull-right square" data-toggle="modal" data-target="#customer-library">
+		  	<span class="glyphicon glyphicon-plus"></span> New Customer
+			</button>
+		</div>
 	</div>
-	<div class="panel-body">
-		<!-- Button trigger modal -->
-		<center><button class="btn btn-primary add-customer" data-toggle="modal" data-target="#customer-library">
-		  New Customer
-		</button></center>
-		<br>
-		<hr class="style-fade">	
+	<div class="panel-body">	
 		<div class="container-fluid">
 			<div class="table-responsive" >
                 <table class="table table-striped table-bordered table-hover banks">

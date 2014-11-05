@@ -8,6 +8,9 @@ class BackendServiceProvider extends ServiceProvider{
 		$this->app->bind('Acme\Repos\Product\ProductRepository','Acme\Repos\Product\DbProductRepository');
 		$this->app->bind('Acme\Repos\Supplier\SupplierRepository','Acme\Repos\Supplier\DbSupplierRepository');
 		$this->app->bind('Acme\Repos\ProductCategory\ProductCategoryRepository','Acme\Repos\ProductCategory\DbProductCategoryRepository');
+
 		$this->app->bind('Acme\Repos\PurchaseOrder\PurchaseOrderRepository','Acme\Repos\PurchaseOrder\DbPurchaseOrderRepository');
+		$this->app->bind('Acme\Repos\User\UserRepository','Acme\Repos\User\DbUserRepository');
+
 	}
 }

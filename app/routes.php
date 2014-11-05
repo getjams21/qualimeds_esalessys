@@ -20,28 +20,36 @@ Route::resource('sessions', 'SessionsController',['only' => ['create','store','d
 
 Route::group(["before" => "auth"], function() {
 	Route::get('/', 'PagesController@home');
-	Route::resource('/ProductCategories', 'ProductCategoriesController');
- 	#new product category ajax post
- 		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
- 		Route::post('/editCategory', 'ProductCategoriesController@editCategory');
- 	Route::resource('/Suppliers', 'SuppliersController');
- 		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
- 	Route::resource('/Products', 'ProductsController');
- 		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
- 	#banks library
- 		Route::resource('/banks', 'BanksController');
- 		Route::get('/toEditBank','BanksController@toEditBank');
- 		Route::get('delete-bank/{id}', 'BanksController@destroy');
- 	#branch library
- 		Route::resource('/branches', 'BranchesController');
- 		Route::get('/toEditBranch','BranchesController@toEditBranch');
- 		Route::get('delete-branch/{id}', 'BranchesController@destroy');
- 	#customer library
- 		Route::resource('/customers', 'CustomersController');
- 		Route::get('/toEditCustomer','CustomersController@toEditCustomer');
- 		Route::get('delete-customer/{id}', 'CustomersController@destroy');
- 	
- 		Route::get('update-customer/{id}/edit', 'CustomersController@edit');
+	#File Maintenance Filters
+	Route::group(["before" => "admin"], function(){
+		Route::resource('/ProductCategories', 'ProductCategoriesController');
+	 	#new product category ajax post
+	 		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
+	 		Route::post('/editCategory', 'ProductCategoriesController@editCategory');
+	 	Route::resource('/Suppliers', 'SuppliersController');
+	 		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
+	 	Route::resource('/Products', 'ProductsController');
+	 		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
+	 	#banks library
+	 		Route::resource('/banks', 'BanksController');
+	 		Route::get('/toEditBank','BanksController@toEditBank');
+	 		Route::get('delete-bank/{id}', 'BanksController@destroy');
+	 	#branch library
+	 		Route::resource('/branches', 'BranchesController');
+	 		Route::get('/toEditBranch','BranchesController@toEditBranch');
+	 		Route::get('delete-branch/{id}', 'BranchesController@destroy');
+	 	#customer library
+	 		Route::resource('/customers', 'CustomersController');
+	 		Route::get('/toEditCustomer','CustomersController@toEditCustomer');
+	 		Route::get('delete-customer/{id}', 'CustomersController@destroy');
+	 	#user library
+	 		Route::resource('/Users', 'UsersController');
+	 		Route::get('/toEditUser','UsersController@toEditUser');
+	 		Route::get('delete-user/{id}', 'UsersController@destroy');
+ 	});
+	#Update Account
+		Route::get('update-account', 'UsersController@editAccount');
+	#Transactions
  	#PURCHASE ORDER ROUTES
  		Route::resource('/PurchaseOrders', 'POController');
 });
