@@ -69,13 +69,17 @@ App::down(function()
 App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
 {	$input=Input::all();
 	$input['autoOpenModal'] = 'true';
-	return Redirect::back()->withInput($input)->withErrors($exception->getErrors())->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Input error!</b> Please check your inputs and try again.</div>');
+	return Redirect::back()->withInput($input)->withErrors($exception->getErrors())->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Input error!</b>'.$exception->getErrors().'</div>');
 });
 App::error(function(Symfony \ Component \ HttpKernel \ Exception \ NotFoundHttpException $exception, $code)
 {
 	return Redirect::to('/404');
 });
 
+// App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
+// {
+// 	Log::error($exception);
+// });
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File

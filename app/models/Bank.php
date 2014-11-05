@@ -6,6 +6,7 @@ class Bank extends \Eloquent {
 	protected $fillable = [
 		'BankName',
 		'BAddress',
-		'Telephone'
+		'Telephone',
+		'IsActive'
 	];
 }

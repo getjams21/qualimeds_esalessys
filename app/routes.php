@@ -40,10 +40,10 @@ Route::group(["before" => "auth"], function() {
  		Route::resource('/customers', 'CustomersController');
  		Route::get('/toEditCustomer','CustomersController@toEditCustomer');
  		Route::get('delete-customer/{id}', 'CustomersController@destroy');
- 	#branch library
- 		Route::resource('/branches', 'BranchesController');
- 		Route::get('/toEditBranch','BranchesController@toEditBranch');
- 		Route::get('delete-branch/{id}', 'BranchesController@destroy');
+ 	#user library
+ 		Route::resource('/Users', 'UsersController');
+ 		Route::get('/toEditUser','UsersController@toEditUser');
+ 		Route::get('delete-user/{id}', 'UsersController@destroy');
  	#PURCHASE ORDER ROUTES
  		Route::resource('/PurchaseOrders', 'POController');
 });

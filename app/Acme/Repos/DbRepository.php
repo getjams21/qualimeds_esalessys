@@ -2,6 +2,9 @@
 use Product;
 abstract class DbRepository{
 	
+	public function getAllActive(){
+		return $this->model->where('IsActive','=','1')->get();
+	}
 
 	public function getAll(){
 		return $this->model->all();
