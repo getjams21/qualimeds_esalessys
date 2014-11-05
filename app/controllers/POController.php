@@ -1,7 +1,13 @@
 <?php
-
+use Acme\Repos\PurchaseOrder\PurchaseOrderRepository;
+use Acme\Repos\Product\ProductRepository;
 class POController extends \BaseController {
-
+	private $purchaseOrderRepo;
+	function __construct(PurchaseOrderRepository $purchaseOrderRepo,ProductRepository $productRepo)
+		{
+			$this->purchaseOrderRepo = $purchaseOrderRepo;
+			$this->productRepo = $productRepo;
+		}
 	/**
 	 * Display a listing of the resource.
 	 * GET /po
@@ -9,8 +15,11 @@ class POController extends \BaseController {
 	 * @return Response
 	 */
 	public function index()
-	{
-		//
+	{	
+		$supplier = Supplier::lists('SupplierName','id');
+		$products = $this->productRepo->getAll();
+		$POs= $this->purchaseOrderRepo->getAll();
+		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products'));
 	}
 
 	/**

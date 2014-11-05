@@ -5,6 +5,71 @@ $(function() {
         }
     });
 });
+//PO FUNCTIONS
+var itemno = 1;
+function addPO(id){
+	var name= $('#name'+id).text();
+	var brand= $('#brand'+id).text();
+	var unit= $('#unit'+id).text();
+	var table = $('.product').DataTable();
+	var index=table.row('#rowProd'+id).index();
+	$('.POtable').append('<tr id="PO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
+		<td>'+name+'</td><td>'+brand+'</td><td>'+unit+'</td>
+		<td class="light-green editable" id="prodQty'+id+'">'+1+'</td><td class="light-red editable" id="prodUnit'+id+'"></td>
+		<td id="prodCost'+id+'">0.00</td><td >
+		<button class="btn btn-danger btn-xs square" id="removePO'+itemno+'" onclick="removePO('+itemno+','+id+','+index+')">
+		<i class="fa fa-times"></i> Remove</button></td></tr>');
+	itemno +=1;
+	table.cell( index, 4 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+		$('.editable').editable({
+			send: 'never', 
+		    type: 'text',
+		    value:1,
+		    validate: function(value) {
+		        if($.trim(value) == '') {
+		         return 'This field is required';
+		        }
+		        if ($.isNumeric(value) == '' || value==0) {
+		            return 'Please input a valid number greater than 0';
+		        }
+		    },
+		    emptytext:0,
+		   display: function(value) {
+		   	$(this).text(value);
+		        calcCost(id);
+		    }
+		});
+
+}
+
+function calcCost(id){
+	var qty = $('#prodQty'+id).text();
+	var unit = $('#prodUnit'+id).text();
+	$('#prodCost'+id).text(qty*unit);
+}
+function removePO(id,prodId,index){
+	var table = $('.product').DataTable();
+		table.cell( index, 4 ).data('<button class="btn btn-success btn-xs square" 
+			onclick="addPO('+prodId+')" >
+			<i class="fa fa-check-circle"></i> Add</button>').draw();
+	$('#PO'+id).remove();
+	id +=1;
+	if( $('#PO'+id).length ) 
+	{
+	  while(id<itemno){
+			$('#PO'+id).attr('id','PO'+(id-1));
+			$('#itemno'+(id)).attr('id','itemno'+(id-1));
+			$('#itemno'+(id-1)).text(id-1);
+			$('#productId'+id).attr('id','productId'+(id-1));
+			$('#removePO'+(id)).attr('id','removePO'+(id-1));
+			prodId = $('#productId'+(id-1)).text();
+			index = table.row('#rowProd'+prodId).index();
+			$('#removePO'+(id-1)).attr('onclick','removePO('+(id-1)+','+prodId+','+index+')');
+			id++;
+		}
+	}
+	itemno -=1;
+}
 //edit-delte bank
 function triggerEdit(id){
 	$.get('toEditBank',{id:id},function(data){
@@ -60,6 +125,7 @@ function triggerEditCustomer(id){
 $('#customer-library').modal('show');
 }
 $(document).ready(function(){
+$.fn.editable.defaults.mode = 'inline';
 $(".pops").popover({ trigger: "hover" });
 $("a").tooltip();
 	$('.add-customer').click(function(event) {
@@ -181,6 +247,38 @@ $('#addProduct').click(function(){
         	$('.alert').hide();
         }
 	});
+//term check
+$('#term2').click(function() {
+	$('#termBox').removeClass('hidden');
+	$('#term1').removeClass('active');
+	$('#term').val(30);
+	$('#term').select();
+});
+$('#term1').click(function() {
+	$('#termBox').addClass('hidden');
+	$('#term2').removeClass('active');
+	$('#term').val(0);
+});
+$('#term').blur(function() {
+	var value=jQuery.trim($(this).val());
+	if(value <1){
+		$('#termError').show();
+	}else{
+		$('#termError').hide();
+	}
+});
+$("#term").keydown(function(e){
+		numberOnlyInput(e);
+});
+$('#addProductPO').click(function(){
+	$('#addProductPOModal').modal('show');
+});
+$('#erase').click(function(){
+    $('#erase').text(' ');
+});
+$("#editable").click(function(){
+	$("#editable").attr('contentEditable',true);
+});
 });//end of ready function
 function editCategory(id){
 	$('#modalCatError').addClass('hidden')
@@ -229,6 +327,23 @@ function editProduct(id){
 		});
 
 }
+
+	//number only input
+	function numberOnlyInput(e){
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+      	}
+	}
 
 	
 	
