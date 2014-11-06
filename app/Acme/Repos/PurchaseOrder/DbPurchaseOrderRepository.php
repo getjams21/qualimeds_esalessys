@@ -7,4 +7,10 @@ class DbPurchaseOrderRepository extends DbRepository implements PurchaseOrderRep
 	public function __construct(PurchaseOrder $model){
 		$this->model = $model;
 	}
+	public function getMaxId(){
+		return PurchaseOrder::max('id');;
+	}
+	public function getAllWithSup(){
+		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')->get();
+	}
 }

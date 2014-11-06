@@ -45,3 +45,24 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="successModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="modal-title">Success</h4>
+      </div>
+      <div class="modal-body panel-head" style="color:white;">
+          <div class="row">
+          <div class="col-md-12 ">
+            <center><h4>Successfully added PO</h4></center>
+          </div>
+         </div>
+        </div><!--modal body -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

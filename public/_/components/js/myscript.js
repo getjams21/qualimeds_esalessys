@@ -4,6 +4,8 @@ $(function() {
             'X-CSRF-Token': $('meta[name="_token"]').attr('content')
         }
     });
+    var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 });
 //PO FUNCTIONS
 var itemno = 1;
@@ -16,7 +18,7 @@ function addPO(id){
 	$('.POtable').append('<tr id="PO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
 		<td>'+name+'</td><td>'+brand+'</td><td>'+unit+'</td>
 		<td class="light-green editable" id="prodQty'+id+'">'+1+'</td><td class="light-red editable" id="prodUnit'+id+'"></td>
-		<td id="prodCost'+id+'">0.00</td><td >
+		<td class="cost" id="prodCost'+id+'">0.00</td><td >
 		<button class="btn btn-danger btn-xs square" id="removePO'+itemno+'" onclick="removePO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
 	itemno +=1;
@@ -35,17 +37,27 @@ function addPO(id){
 		    },
 		    emptytext:0,
 		   display: function(value) {
-		   	$(this).text(value);
+		   		$(this).text(value);
 		        calcCost(id);
-		    }
+				}
 		});
-
+		$('#savePO').removeClass('hidden');
 }
-
 function calcCost(id){
 	var qty = $('#prodQty'+id).text();
 	var unit = $('#prodUnit'+id).text();
 	$('#prodCost'+id).text(qty*unit);
+	totalCost();
+}
+function totalCost(){
+	var total=0;
+	$('.cost').each(function(){
+		total += parseInt($(this).text()); 
+	});
+	$('#POTotalCost').text(total);
+	if(total = 0){
+		$('#savePO').addClass('hidden');
+	}
 }
 function removePO(id,prodId,index){
 	var table = $('.product').DataTable();
@@ -69,6 +81,7 @@ function removePO(id,prodId,index){
 		}
 	}
 	itemno -=1;
+	totalCost();
 }
 //edit-delte bank
 function triggerEdit(id){
@@ -157,9 +170,9 @@ $('#user-library').modal('show');
 
 //Document Ready
 $(document).ready(function(){
+// TAB PANE active 
 $.fn.editable.defaults.mode = 'inline';
-$(".pops").popover({ trigger: "hover" });
-$("a").tooltip();
+	$(".pops").popover({ trigger: "hover" });
 	$('.add-customer').click(function(event) {
 			$('#library-action').val('');
 			$('.name').val('');
@@ -286,6 +299,7 @@ $('#addProduct').click(function(){
         	$('.alert').hide();
         }
 	});
+// PO TERM 
 //term check
 $('#term2').click(function() {
 	$('#termBox').removeClass('hidden');
@@ -300,24 +314,56 @@ $('#term1').click(function() {
 });
 $('#term').blur(function() {
 	var value=jQuery.trim($(this).val());
-	if(value <1){
-		$('#termError').show();
-	}else{
-		$('#termError').hide();
-	}
 });
 $("#term").keydown(function(e){
 		numberOnlyInput(e);
 });
+//END OF PO TERM
 $('#addProductPO').click(function(){
 	$('#addProductPOModal').modal('show');
 });
-$('#erase').click(function(){
-    $('#erase').text(' ');
+
+//SAVE PO
+$('#savePO').click(function(){
+	var TableData;
+	var supplier = $('#supplier').val();
+	var term = $('#term').val();
+	var preparedBy= $('#preparedBy').text();
+	if($('#approved').is(':checked')){
+			var approvedBy=preparedBy;
+		} else{
+			var approvedBy='';
+		}
+	TableData = storeTblValues()
+	TableData = $.toJSON(TableData);
+
+	$.post('/savePO',{TD:TableData,supplier:supplier,term:term,preparedBy:preparedBy,approvedBy:approvedBy},function(data){
+			if(date=1){
+				location.reload();
+				 $('#successModal').modal('show');
+				setTimeout(function(){
+			    $('#successModal').modal('hide');
+				}, 1500);
+			}else{
+				$('#errorModal').modal('show');
+			}
+		});
+function storeTblValues()
+{
+	var TableData = new Array();
+	$('.POtable tr').each(function(row, tr){
+	    TableData[row]={
+	        "ProdNo" : $(tr).find('td:eq(1)').text()
+	        , "Unit" :$(tr).find('td:eq(4)').text()
+	        , "Qty" : $(tr).find('td:eq(5)').text()
+	        , "CostPerQty" : $(tr).find('td:eq(6)').text()
+	    }
+	});
+	TableData.shift();
+    return TableData;
+}
 });
-$("#editable").click(function(){
-	$("#editable").attr('contentEditable',true);
-});
+
 });//end of ready function
 function editCategory(id){
 	$('#modalCatError').addClass('hidden')

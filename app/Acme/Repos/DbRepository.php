@@ -1,5 +1,4 @@
 <?php namespace Acme\Repos;
-use Product;
 abstract class DbRepository{
 	
 	public function getAllActive(){

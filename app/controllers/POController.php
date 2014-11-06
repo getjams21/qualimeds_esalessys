@@ -1,6 +1,7 @@
 <?php
 use Acme\Repos\PurchaseOrder\PurchaseOrderRepository;
 use Acme\Repos\Product\ProductRepository;
+use Carbon\Carbon;
 class POController extends \BaseController {
 	private $purchaseOrderRepo;
 	function __construct(PurchaseOrderRepository $purchaseOrderRepo,ProductRepository $productRepo)
@@ -16,10 +17,41 @@ class POController extends \BaseController {
 	 */
 	public function index()
 	{	
+		$max = $this->purchaseOrderRepo->getMaxId();
 		$supplier = Supplier::lists('SupplierName','id');
 		$products = $this->productRepo->getAll();
-		$POs= $this->purchaseOrderRepo->getAll();
-		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products'));
+		$POs= $this->purchaseOrderRepo->getAllWithSup();
+		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products','max'));
+	}
+	public function savePO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$TableData = stripcslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			if(!$TableData){
+  				$result = 0;
+  			}else{
+  				$PO= new PurchaseOrder;
+  				$PO->SupplierNo=$input['supplier'];
+  				$PO->PODate= Carbon::now();
+  				$PO->Terms= $input['term'];
+  				$PO->PreparedBy= $input['preparedBy'];
+  				$PO->ApprovedBy= $input['approvedBy'];
+  				$PO->save();
+  				$result =1;
+  				foreach($TableData as $td){
+  					$POdetail= new PurchaseOrderDetails;
+  					$POdetail->PurchaseOrderNo=$PO->id;
+  					$POdetail->ProductNo=$td['ProdNo'];
+  					$POdetail->Unit=$td['Unit'];
+  					$POdetail->Qty=$td['Qty'];
+  					$POdetail->CostPerQty=$td['CostPerQty'];
+  					$POdetail->save();
+  				}
+  			}
+		return Response::json($result);
+  		}
 	}
 
 	/**

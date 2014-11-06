@@ -44,14 +44,14 @@
         </li>
         <li  class="divider-vertical"></li>
         <li>
-         <a href="#" data-toggle="tooltip" data-placement="bottom"
-       title="" data-original-title="Settings"
-       class="red-tooltip"><i class="fa fa-gear"></i></a>
+         <a href="#" data-toggle="popover" data-placement="bottom"
+        data-content="Settings"
+       class="red-tooltip pops"><i class="fa fa-gear"></i></a>
         </li>
         <li>
          <a href="/logout" data-toggle="tooltip" data-placement="bottom"
-       title="" data-original-title="Logout"
-       class="red-tooltip"><i class="fa fa-sign-out"></i></a>
+       title=""  data-content="Logout"
+       class="red-tooltip pops"><i class="fa fa-sign-out"></i></a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->

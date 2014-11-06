@@ -19,37 +19,44 @@
 		  <table class="table table-striped table-bordered table-hover POList">
 		    <thead>
 		      <tr>
-		      	<th>No</th>
-		        <th>Prod. Category</th>
-		        <th>Prod. Name</th>
-		        <th>Brand Name</th>
-		        <th>Wholesale Unit</th>
-		        <th>Retail Unit</th>
-		        <th>Rtl.Qty/WhlSale Unit</th>
-		        <th>Markup1</th>
-		        <th>Markup2</th>
-		        <th>Markup3</th>
-		        <th>Active Markup</th>
-		        <th>Update</th>
+		      	<th>updated</th>
+		      	<th>PO No</th>
+		        <th>Supplier</th>
+		        <th>PO Date</th>
+		        <th>Terms</th>
+		        <th>Prepared By</th>
+		        <th>Approved By</th>
+		        <th>Cancelled By</th>
 		      </tr>
 		     </thead> 
 		     <tbody>
 		         @foreach($POs as $PO)
-		          <tr id="product{{$product->id}}"> 
-		          	<td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td>
-		            	<button class="btn btn-success btn-xs square"><i class="fa fa-cog"></i> Edit</button>
+		          <tr > 
+		          	<td>{{$PO->updated_at}}</td>
+		          	<td>{{$PO->id}}</td>
+		            <td>{{$PO->SupplierName}}</td>
+		            <td>{{dateformat($PO->PODate)}}</td>
+		            <td>@if($PO->Terms == 0)
+		            	Cash
+		            	@else
+		            	{{$PO->Terms}} days
+		            	@endif
 		            </td>
+		            <td>{{$PO->PreparedBy}}</td>
+		            <td>@if($PO->ApprovedBy)
+		            	{{$PO->ApprovedBy}}
+		            	@else
+		            	N/A
+		            	@endif
+		            </td>
+		            <td>@if($PO->CancelledBy)
+		            	{{$PO->CancelledBy}}
+		            	@else
+		            	N/A
+		            	@endif
+		            </td>
+		           
+		            
 		         </tr> 
 		        @endforeach
 		      </tbody>
