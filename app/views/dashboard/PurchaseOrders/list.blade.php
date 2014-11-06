@@ -44,13 +44,23 @@
 @section('script')
 <script language="javascript" type="text/javascript">
    $(document).ready(function() {
-        var oTable= $('.POList').dataTable( {
+     $.datepicker.regional[""].dateFormat = 'mm/dd/yy';
+     $.datepicker.setDefaults($.datepicker.regional['']);
+     
+        var oTable= $('.POList').DataTable( {
         	"order": [[ 0, "desc" ]],
         	"columnDefs": [
-			    { "width": "8%", "targets": 6 }
-			  ],
-        "aoColumnDefs": [{ "bVisible": false, "aTargets": [0] }]
-    	});
+			           { "width": "8%", "targets": 6 }
+			     ]
+        });
+        // .columnFilter({  
+        //  sPlaceHolder: "head:before",
+        //   aoColumns: [
+        //            null,null,
+        //             {  sSelector: "#platformsFilter", type:"date-range"},
+        //            null, null, null, null
+        //             ]
+        //     });
           $('.product').dataTable({
              "iDisplayLength": 5,
              "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]

@@ -171,6 +171,7 @@ $('#user-library').modal('show');
 //Document Ready
 $(document).ready(function(){
 // TAB PANE active 
+
 $.fn.editable.defaults.mode = 'inline';
 	$(".pops").popover({ trigger: "hover" });
 	$('.add-customer').click(function(event) {
@@ -208,7 +209,7 @@ $.fn.editable.defaults.mode = 'inline';
 			$('.dropdown-menu', this).fadeOut('fast');
 		});
 //set active navbar
-	$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
+		$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
 //set active sidebar
 		$("#"+a+" a:contains("+a+")").parent().addClass('active');
 		$(".sidehead ul:contains("+a+")").removeClass('collapse');
@@ -283,22 +284,22 @@ $('#addProduct').click(function(){
 
 });
 //SIDEBAR CLICK COLLAPSE
-	$('.sidehead').click(function() {
-			$(this).children('ul').first().stop(true, true).slideToggle(500);;
-		});
-	//numbers only validation
-	$('#telephone,#telephone1,#telephone2').keydown(function(event) {
-		if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-                //key exemptions
-                if(event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 107 && event.keyCode != 187 && event.keyCode != 116 && event.keyCode != 16 && event.keyCode != 109 && event.keyCode != 189){
-                	$('.alert').show();
-                	event.preventDefault();
-                }
-            }
-        else{
-        	$('.alert').hide();
-        }
+$('.sidehead').click(function() {
+		$(this).children('ul').first().stop(true, true).slideToggle(500);;
 	});
+//numbers only validation
+$('#telephone,#telephone1,#telephone2').keydown(function(event) {
+	if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+            //key exemptions
+            if(event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 107 && event.keyCode != 187 && event.keyCode != 116 && event.keyCode != 16 && event.keyCode != 109 && event.keyCode != 189){
+            	$('.alert').show();
+            	event.preventDefault();
+            }
+        }
+    else{
+    	$('.alert').hide();
+    }
+});
 // PO TERM 
 //term check
 $('#term2').click(function() {
@@ -322,9 +323,11 @@ $("#term").keydown(function(e){
 $('#addProductPO').click(function(){
 	$('#addProductPOModal').modal('show');
 });
-
-//SAVE PO
 $('#savePO').click(function(){
+	$('#confirmModal').modal('show');
+});
+//SAVE PO
+$('#saveFinalPO').click(function(){
 	var TableData;
 	var supplier = $('#supplier').val();
 	var term = $('#term').val();

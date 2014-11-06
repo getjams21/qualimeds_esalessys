@@ -16,10 +16,20 @@
 		@endif
 	    <hr>
 		<div class="table-responsive responsive" >
+			<div class="well">
+				<div class="row">
+					<div class="col-md-8">
+						<b>Logged in as: &nbsp;&nbsp;</b><i>{{fullame(Auth::user())}}</i>
+					</div>
+					<div class="col-md-4">
+						<b>Date Filter: </b><p id="platformsFilter" ></p>
+					</div>
+				</div>
+			</div>
 		  <table class="table table-striped table-bordered table-hover POList">
+			
 		    <thead>
 		      <tr>
-		      	<th>updated</th>
 		      	<th>PO No</th>
 		        <th>Supplier</th>
 		        <th>PO Date</th>
@@ -32,7 +42,6 @@
 		     <tbody>
 		         @foreach($POs as $PO)
 		          <tr > 
-		          	<td>{{$PO->updated_at}}</td>
 		          	<td>{{$PO->id}}</td>
 		            <td>{{$PO->SupplierName}}</td>
 		            <td>{{dateformat($PO->PODate)}}</td>
@@ -60,6 +69,7 @@
 		         </tr> 
 		        @endforeach
 		      </tbody>
+		      
 		  </table>
 		</div>
 		

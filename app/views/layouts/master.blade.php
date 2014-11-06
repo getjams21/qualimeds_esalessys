@@ -31,10 +31,12 @@
 		{{ HTML::script('_/js/bootstrap.js') }}
 		{{ HTML::script('_/js/jquery-ui.min.js') }}
 		{{ HTML::script('_/js/jquery.json-2.4.min.js') }}
+		{{ HTML::script('_/js/moment.js')}}
 		{{ HTML::script('_/js/plugins/dataTables/jquery.dataTables.js') }}
 		{{ HTML::script('_/js/plugins/dataTables/dataTables.bootstrap.js') }}
 		{{ HTML::script('_/js/plugins/dataTables/dataTable.editable.js') }}
 		@yield('script')
 		{{ HTML::script('_/js/myscript.js')}}
+		{{ HTML::script('_/js/dataTables-columnFilter.js') }}
 	</body>
 </html>

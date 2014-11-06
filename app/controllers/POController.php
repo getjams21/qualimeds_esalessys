@@ -21,7 +21,9 @@ class POController extends \BaseController {
 		$supplier = Supplier::lists('SupplierName','id');
 		$products = $this->productRepo->getAll();
 		$POs= $this->purchaseOrderRepo->getAllWithSup();
-		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products','max'));
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
+		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products','max','now','lastweek'));
 	}
 	public function savePO()
 	{

@@ -78,7 +78,7 @@
         <div class="well">
           <div class="row">
             <div class="col-md-7">
-            <b>Prepared By: <i id="preparedBy">{{ucfirst(Auth::user()->Lastname)}}, {{ucfirst(Auth::user()->Firstname)}} {{ucfirst(Auth::user()->MI)}}.</i></b> 
+            <b>Prepared By: <i id="preparedBy">{{fullame(Auth::user())}}</i></b> 
             </div>
             <div class="col-md-3">
             <input type="checkbox" id="approved" style="width:15px; height:15px;"/> Approved
