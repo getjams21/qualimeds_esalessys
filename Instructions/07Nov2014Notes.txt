@@ -1,0 +1,20 @@
+Prodcut Category
+       Empty String is added when saving a new prod cat.
+       then it does not automatically show to the page.
+
+Logins
+       Show the Branch of the user together with the username
+        format   :    Username   [BranchName]
+
+
+Purchase Order
+      Pls add the Datefrom and dateto filters
+      Consider  branchno of the user in saving to PurchaseOrders table
+       Non admin user can view always PO 
+      Non admin user can edit only POs that are not yet approved.
+     Non admin user cannot cancel approved POs
+
+     Admin user can do anything on PO.
+    Everyone cannot cancel PO that are already billed.
+     
+      
