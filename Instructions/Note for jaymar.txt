@@ -1,0 +1,11 @@
+for Update account.
+
+   mar pls check the update account function,
+ 
+       let the user enter the current password for validating the user,
+
+      then enter new password and retype password.
+
+     the new password must prevail during the next logon.
+       
+   
