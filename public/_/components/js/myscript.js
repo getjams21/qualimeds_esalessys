@@ -170,6 +170,21 @@ $('#user-library').modal('show');
 
 //Document Ready
 $(document).ready(function(){
+
+//Verify current password
+$('#current-password').blur(function(event) {
+	/* Act on the event */
+	var val = $(this).val();
+	// alert (val);
+	$.get('verifyCurrentPassword',{val:val},function(data){
+  		if(data == '0'){
+  			$('.alert').show();
+  		}else{
+  			$('.alert').hide();
+  		}
+  	});
+});
+
 // TAB PANE active 
 
 $.fn.editable.defaults.mode = 'inline';
