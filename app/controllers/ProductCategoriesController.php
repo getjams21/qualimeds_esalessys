@@ -33,12 +33,12 @@ class ProductCategoriesController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
-  			$cat = $input['cat'];
-  			$find = $this->productCategoryRepo->getCatCount($cat);
+  			$ProdCatName = $input['ProdCatName'];
+  			$find = $this->productCategoryRepo->getCatCount($ProdCatName);
   			if($find != 0){
   				return Response::json(0);	
   			}else{
-	  			$this->productCategoryRepo->addNew($input);
+	  			$category = $this->productCategoryRepo->addNew($input);
 				return Response::json($category);
 			}
   		}
@@ -48,14 +48,14 @@ class ProductCategoriesController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
-  			$cat = $input['catName'];
+  			$ProdCatName = $input['ProdCatName'];
   			$id = $input['id'];
-  			$find = $this->productCategoryRepo->getCount($cat,$id);
+  			$find = $this->productCategoryRepo->getCount($ProdCatName,$id);
   			if($find != 0){
   				return Response::json(0);	
   			}else{
   				$category = $this->productCategoryRepo->getById($id);
-		  			$category->ProdCatName = $cat;
+		  			$category->ProdCatName = $ProdCatName;
 		  			$category->save();
 				return Response::json($category->ProdCatName);
 			}

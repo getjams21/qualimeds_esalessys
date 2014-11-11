@@ -7,6 +7,7 @@ $(function() {
     var hash = window.location.hash;
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 });
+
 //PO FUNCTIONS
 var itemno = 1;
 function addPO(id){
@@ -82,6 +83,67 @@ function removePO(id,prodId,index){
 	}
 	itemno -=1;
 	totalCost();
+}
+function viewPO(id){
+	var role= $('#vwRole').val();
+	$('#viewPOModal').modal('show');
+	 $.post('/viewPO',{id:id},function(data){
+	 	$('#vwPOId').text(data[0]['id']);
+	 	$('#vwPODate').text(data[0]['PODate']);
+	 	$('#vwSupplier').val(data[0]['SupplierNo']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#vwTerm').val(0);
+	 		$('#vwTerm1').addClass('active');
+	 		$('#vwTerm1').prop("disabled", false);
+	 		$('#vwTerm2').removeClass('active');
+	 		$('#vwTerm2').prop("disabled", true);
+	 		$('#vwTermBox').addClass('hidden');
+		}else{
+		 	$('#vwTerm').val(data[0]['Terms']);
+		 	$('#vwTerm1').removeClass('active');
+		 	$('#vwTerm1').prop("disabled", true);
+		 	$('#vwTerm2').addClass('active');
+		 	$('#vwTerm2').prop("disabled", false)
+		 	$('#vwTermBox').removeClass('hidden');
+		}
+	 	$('#vwPreparedBy').val(data[0]['PreparedBy']);
+	 	if(data[0]['ApprovedBy'] == ''){
+	 		$('#vwApprovedBy').val('N/A');
+	 	}else{
+	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
+	 	}
+	      });
+	 $.post('/viewPODetails',{id:id},function(data){
+	  			$(".vwPOTable > tbody").html("");
+	  			var counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				$('.vwPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td>'+value.ProductNo+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td>'+value.Qty+'</td><td>'+value.CostPerQty+'</td>
+	  					<td>'+(value.CostPerQty*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
+						<i class="fa fa-times" ></i> Remove</button></td></tr>');
+		  			counter+=1;
+		  			total+=value.CostPerQty*value.Qty;
+	  				});
+	  				$('#vwTotalCost').text(total);
+	      });
+}
+function vwRemovePO(id){
+	$('#vwPO'+id).remove();
+	id +=1;
+	if( $('#vwPO'+id).length ) 
+	{
+	  while($('#vwPO'+id).length ){
+			$('#vwPO'+id).attr('id','vwPO'+(id-1));
+			$('#vwItemno'+(id)).attr('id','vwItemno'+(id-1));
+			$('#vwItemno'+(id-1)).text(id-1);
+			$('#vwRemovePO'+(id)).attr('id','vwRemovePO'+(id-1));
+			$('#vwRemovePO'+(id-1)).attr('onclick','vwRemovePO('+(id-1)+')');
+			id++;
+		}
+	}
 }
 //edit-delte bank
 function triggerEdit(id){
@@ -172,6 +234,7 @@ $('#user-library').modal('show');
 $(document).ready(function(){
 // TAB PANE active 
 
+	
 $.fn.editable.defaults.mode = 'inline';
 	$(".pops").popover({ trigger: "hover" });
 	$('.add-customer').click(function(event) {
@@ -223,42 +286,42 @@ $.fn.editable.defaults.mode = 'inline';
 	$('#ProductCategory').keyup(function(){
 		$('#catError').addClass('hidden');
 	});
-	$('#saveCategory').click(function(e){
-			e.preventDefault(); 
-	      var category=jQuery.trim($('#ProductCategory').val());
-	      if((!category) || category.length == 0){
-	      	$('#catError').text('Category text field is empty!');
-	      	$('#catError').removeClass('hidden');
-	      }else{
-	      	  var table=  $('.category').dataTable(); 
-		 	  $.post('/addCategory',{cat:category},function(data){
-		 	  	if(data == 0){
-		 	  		$('#catError').text('Category already exists!');
-	      			$('#catError').removeClass('hidden');
-		 	  	}else{
-			 	  	var rowIndex= table.fnAddData([
-			               data['id'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
-			        ]);
-			        var row = table.fnGetNodes(rowIndex);
-			        var thisRow= $(row).attr( 'id', 'category'+data['id'] );
-			        $(' td:nth-child(1)').attr( 'id', 'catName'+data['id'] );
-			        $('#catError').addClass('hidden');
-		        }
-		      });
-	      }
-	      $('#ProductCategory').val(' ');
-	});
+$('#saveCategory').click(function(e){
+		e.preventDefault(); 
+      var category=jQuery.trim($('#ProductCategory').val());
+      if((!category) || category.length == 0){
+      	$('#catError').text('Category text field is empty!');
+      	$('#catError').removeClass('hidden');
+      }else{
+      	  var table=  $('.category').DataTable(); 
+	 	  $.post('/addCategory',{ProdCatName:category},function(data){
+	 	  	if(data == 0){
+	 	  		$('#catError').text('Category already exists!');
+      			$('#catError').removeClass('hidden');
+	 	  	}else{
+	 	  		table.row.add( [
+		            data['updated_at'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
+		        ]).draw();
+		        var row = table.rows( '.selected' ).indexes();
+		        var thisRow= $(row).attr( 'id', 'category'+data['id'] );
+		        $(' td:nth-child(1)').attr( 'id', 'catName'+data['id'] );
+		        $('#catError').addClass('hidden');
+	        }
+	      });
+      }
+      $('#ProductCategory').val(' ');
+});
 $('#categoryBtn').click(function(){
 	var table = $('.category').DataTable();
 	var id= $('#catID').val();
 	var index = $('#catIndex').val();
-	var catName = $('#txtCatName').val();
+	var ProdCatName = $('#txtCatName').val();
 	var category=jQuery.trim($('#txtCatName').val());
       if((!category) || category.length == 0){
       	$('#modalCatError').text('Text field is empty!');
       	$('#modalCatError').removeClass('hidden');
       }else{
-      		$.post('/editCategory',{id:id,catName:catName},function(data){
+      		$.post('/editCategory',{id:id,ProdCatName:ProdCatName},function(data){
       			if(data == 0){
 		 	  		$('#modalCatError').text('Category already exists!');
 	      			$('#modalCatError').removeClass('hidden');
@@ -302,32 +365,31 @@ $('#telephone,#telephone1,#telephone2').keydown(function(event) {
 });
 // PO TERM 
 //term check
-$('#term2').click(function() {
-	$('#termBox').removeClass('hidden');
-	$('#term1').removeClass('active');
-	$('#term').val(30);
-	$('#term').select();
+$('#term2,#vwTerm2').click(function() {
+	$('#termBox,#vwTermBox').removeClass('hidden');
+	$('#term1,#vwTerm1').removeClass('active');
+	$('#term,#vwTerm').select();
 });
-$('#term1').click(function() {
-	$('#termBox').addClass('hidden');
-	$('#term2').removeClass('active');
-	$('#term').val(0);
+$('#term1,#vwTerm1').click(function() {
+	$('#termBox,#vwTermBox').addClass('hidden');
+	$('#term2,#vwTerm2').removeClass('active');
+	$('#term,#vwTerm').val(0);
 });
-$('#term').blur(function() {
+$('#term,#vwTerm').blur(function() {
 	var value=jQuery.trim($(this).val());
+	if(value==''){
+		$(this).val(0);
+	}
 });
-$("#term").keydown(function(e){
+$("#term,#vwTerm").keydown(function(e){
 		numberOnlyInput(e);
 });
 //END OF PO TERM
 $('#addProductPO').click(function(){
 	$('#addProductPOModal').modal('show');
 });
-$('#savePO').click(function(){
-	$('#confirmModal').modal('show');
-});
 //SAVE PO
-$('#saveFinalPO').click(function(){
+$('#savePO').click(function(){
 	var TableData;
 	var supplier = $('#supplier').val();
 	var term = $('#term').val();
@@ -344,27 +406,24 @@ $('#saveFinalPO').click(function(){
 			if(date=1){
 				location.reload();
 				 $('#successModal').modal('show');
-				setTimeout(function(){
-			    $('#successModal').modal('hide');
-				}, 1500);
 			}else{
 				$('#errorModal').modal('show');
 			}
 		});
-function storeTblValues()
-{
-	var TableData = new Array();
-	$('.POtable tr').each(function(row, tr){
-	    TableData[row]={
-	        "ProdNo" : $(tr).find('td:eq(1)').text()
-	        , "Unit" :$(tr).find('td:eq(4)').text()
-	        , "Qty" : $(tr).find('td:eq(5)').text()
-	        , "CostPerQty" : $(tr).find('td:eq(6)').text()
-	    }
-	});
-	TableData.shift();
-    return TableData;
-}
+	function storeTblValues()
+	{
+		var TableData = new Array();
+		$('.POtable tr').each(function(row, tr){
+		    TableData[row]={
+		        "ProdNo" : $(tr).find('td:eq(1)').text()
+		        , "Unit" :$(tr).find('td:eq(4)').text()
+		        , "Qty" : $(tr).find('td:eq(5)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(6)').text()
+		    }
+		});
+		TableData.shift();
+	    return TableData;
+	}
 });
 
 });//end of ready function

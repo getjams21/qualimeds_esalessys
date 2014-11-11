@@ -18,17 +18,35 @@
 		<div class="table-responsive responsive" >
 			<div class="well">
 				<div class="row">
-					<div class="col-md-8">
-						<b>Logged in as: &nbsp;&nbsp;</b><i>{{fullame(Auth::user())}}</i>
-					</div>
 					<div class="col-md-4">
-						<b>Date Filter: </b><p id="platformsFilter" ></p>
+						<div class="col-xs-8">
+					<div class="input-group">
+                  	{{ Form::label('', 'From: '); }}
+                    <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
+                      <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
+                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    {{ Form::label('', 'To: '); }}
+                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
+                      <input class="form-control" value="{{$now}}" type="text" id="max"  max="{{$now}}" readonly required>
+                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    </div>
+                   
+                  </div>
 					</div>
+					<div class="col-md-8"></div>
 				</div>
 			</div>
-		  <table class="table table-striped table-bordered table-hover POList">
-			
-		    <thead>
+			 
+		  <table class="table table-striped table-bordered table-hover" id="POList">
+		  	 <div class="form-group">
+		                <div class="input-group" style="width:50%;">
+		                  <span class="input-group-addon">Search PO keyword: </span>
+		                  <input type="text" id="mySearchTextField" class="form-control"  >
+		                </div>
+		         	</div> 
+			<thead>
 		      <tr>
 		      	<th>PO No</th>
 		        <th>Supplier</th>
@@ -37,6 +55,7 @@
 		        <th>Prepared By</th>
 		        <th>Approved By</th>
 		        <th>Cancelled By</th>
+		        <th>Action</th>
 		      </tr>
 		     </thead> 
 		     <tbody>
@@ -63,6 +82,13 @@
 		            	@else
 		            	N/A
 		            	@endif
+		            </td>
+		            <td>
+		             <button class="btn btn-success btn-xs " onclick="viewPO({{$PO->id}})"> View</button>
+		             @if($PO->ApprovedBy == '' || Auth::user()->UserType==1 || Auth::user()->UserType==11)
+
+		              <button class="btn btn-primary btn-xs " ><i class="fa fa-gear"></i>Edit</button>
+		              @endif
 		            </td>
 		           
 		            

@@ -2,12 +2,16 @@
 use Acme\Repos\PurchaseOrder\PurchaseOrderRepository;
 use Acme\Repos\Product\ProductRepository;
 use Carbon\Carbon;
+use Acme\Repos\PurchaseOrderDetails\PurchaseOrderDetailsRepository;
+
 class POController extends \BaseController {
 	private $purchaseOrderRepo;
-	function __construct(PurchaseOrderRepository $purchaseOrderRepo,ProductRepository $productRepo)
+	function __construct(PurchaseOrderRepository $purchaseOrderRepo,ProductRepository $productRepo,
+		PurchaseOrderDetailsRepository $purchaseOrderDetailsRepo)
 		{
 			$this->purchaseOrderRepo = $purchaseOrderRepo;
 			$this->productRepo = $productRepo;
+			$this->purchaseOrderDetailsRepo = $purchaseOrderDetailsRepo;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -53,6 +57,24 @@ class POController extends \BaseController {
   				}
   			}
 		return Response::json($result);
+  		}
+	}
+	public function viewPO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$PO= $this->purchaseOrderRepo->getByIdWithSup($id);
+		return Response::json($PO);
+  		}
+	}
+	public function viewPODetails()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$POdetails = $this->purchaseOrderDetailsRepo->getAllByPO($id);
+		return Response::json($POdetails);
   		}
 	}
 

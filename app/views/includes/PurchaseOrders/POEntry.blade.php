@@ -17,15 +17,8 @@
                 Supplier: 
                </span>
                {{Form::select('supplier', $supplier, 'key', array('class' => 'form-control square','id'=>'supplier'));}}
-          </div><!-- /input-group --><br>
-           <div class="input-group">
-              <button type="button" class="btn btn-success  square" style="white-space: normal;" id="addProductPO" ><i class="fa fa-plus-square" ></i> <b> Add Products for PO</b></button>
-          </div><!-- /input-group -->
-                 </div>
-       <div class="col-md-4">
-       </div>
-       <div class="col-md-3">
-          <div class="form-group">
+          </div><br>
+           <div class="form-group">
             <div class="input-group">
               {{Form::label('term', 'Terms :&nbsp;&nbsp;&nbsp;')}}
               <div class="btn-group square" data-toggle="buttons">
@@ -40,9 +33,54 @@
              </div>
              <p id="termError" class="error" hidden>Please enter a valid term days.</p>
              <p>{{ errors_for('term', $errors)}}</p> 
-          </div>
+          </div><br>
+          <div class="alert alert-warning">
+              <center>Type the desired product on the Search Bar and click Add button to add the product to PO List.</center>
+            </div>
         </div>
+          <!-- /input-group -->
+          <!--  <div class="input-group">
+              <button type="button" class="btn btn-success  square" style="white-space: normal;" id="addProductPO" ><i class="fa fa-plus-square" ></i> <b> Add Products for PO</b></button>
+          </div> --><!-- /input-group -->
+                 </div>
+       <div class="col-md-1">
+       </div>
+       <div class="col-md-7">
+        <div class="form-group" style="width:80%;">
+                <div class="input-group">
+                  <span class="input-group-addon">Search Product: </span>
+                  <input type="text" id="myInputTextField" class="form-control"  >
+                </div>
+         </div>
+      <div class=" responsive" >
+              <table class="table table-striped table-bordered table-hover product">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Unit</th>
+                    <th>Add</th>
+                  </tr>
+                 </thead> 
+                 <tbody>
+                  @foreach($products as $product)
+                    <tr id="rowProd{{$product->id}}">
+                      <td id="prodId{{$product->id}}">{{$product->id}}</td>
+                      <td id="name{{$product->id}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
+                      <td id="unit{{$product->id}}">{{$product->WholeSaleUnit}}</td>
+                      <td><button class="btn btn-success btn-xs square" onclick="addPO({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
+                      </td>
+                    </tr>
+                  @endforeach
+                 </tbody>
+              </table>
+            </div>
       </div>
+    </div>
+    <div class="row">
+      
     </div>
   </div>
     <div class="panel-body">
@@ -81,7 +119,9 @@
             <b>Prepared By: <i id="preparedBy">{{fullame(Auth::user())}}</i></b> 
             </div>
             <div class="col-md-3">
+              @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
             <input type="checkbox" id="approved" style="width:15px; height:15px;"/> Approved
+             @endif
              </div>
             <div class="col-md-2">
              <button type="button" class="btn btn-success square btn-sm hidden"  id="savePO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save PO</b></button>

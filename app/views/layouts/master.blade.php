@@ -6,6 +6,7 @@
 		<meta name="_token" content="{{ csrf_token() }}" hidden/>
 		@yield('metatags')
 		{{ HTML::style('_/css/bootstrap.css') }}
+		{{ HTML::style('_/css/datepicker.css') }}
 		{{ HTML::style('_/css/jquery-ui.min.css') }}
 		{{ HTML::style('_/css/plugins/dataTables.bootstrap.css') }}
 		{{ HTML::style('_/css/simple-sidebar.css') }}
@@ -38,5 +39,6 @@
 		@yield('script')
 		{{ HTML::script('_/js/myscript.js')}}
 		{{ HTML::script('_/js/dataTables-columnFilter.js') }}
+		{{ HTML::script('_/js/bootstrap-datepicker.js') }}
 	</body>
 </html>

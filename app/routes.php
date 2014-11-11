@@ -53,4 +53,6 @@ Route::group(["before" => "auth"], function() {
  	#PURCHASE ORDER ROUTES
  		Route::resource('/PurchaseOrders', 'POController');
  		Route::post('/savePO', 'POController@savePO');
+ 		Route::post('/viewPO', 'POController@viewPO');
+ 		Route::post('/viewPODetails', 'POController@viewPODetails');
 });

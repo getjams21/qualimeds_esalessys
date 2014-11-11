@@ -38,13 +38,13 @@
 @section('script')
 <script language="javascript" type="text/javascript">
    $(document).ready(function() {
-        var oTable= $('.category').dataTable( {
+        var oTable= $('.category').DataTable( {
         	"order": [[ 0, "desc" ]],
         	"columnDefs": [
-			    { "width": "15%", "targets": 2 }
+			    { "width": "15%", "targets": 2 },
+                { "visible": false, "targets": 0 },
 			  ]
     	});
-    	 oTable.fnSetColumnVis( 0, false );
     });
 </script>
 @stop 

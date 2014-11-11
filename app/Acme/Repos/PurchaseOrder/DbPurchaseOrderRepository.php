@@ -13,4 +13,7 @@ class DbPurchaseOrderRepository extends DbRepository implements PurchaseOrderRep
 	public function getAllWithSup(){
 		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')->get();
 	}
+	public function getByIdWithSup($id){
+		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')->where('Purchaseorders.id', '=', $id)->get();
+	}
 }

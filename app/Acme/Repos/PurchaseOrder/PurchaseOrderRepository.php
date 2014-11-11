@@ -5,4 +5,5 @@ interface PurchaseOrderRepository{
 	public function getByid($id);
 	public function getMaxId();
 	public function getAllWithSup();
+	public function getByIdWithSup($id);
 }

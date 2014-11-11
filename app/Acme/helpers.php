@@ -10,3 +10,10 @@ function dateformat($date){
 function fullame($user){
 	return ucfirst($user->Lastname).', '.ucfirst($user->Firstname).' '.ucfirst($user->MI).'.';
 }
+function isAdmin(){
+	if(Auth::user()->UserType == 1 ||Auth::user()->UserType == 11){
+		return true;
+	}else{
+		return false;
+	}
+}
