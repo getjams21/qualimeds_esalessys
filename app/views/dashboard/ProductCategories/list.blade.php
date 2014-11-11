@@ -38,7 +38,7 @@
 @section('script')
 <script language="javascript" type="text/javascript">
    $(document).ready(function() {
-        var oTable= $('.category').DataTable( {
+        var oTable= $('.category').dataTable( {
         	"order": [[ 0, "desc" ]],
         	"columnDefs": [
 			    { "width": "15%", "targets": 2 },

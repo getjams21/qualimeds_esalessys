@@ -405,18 +405,25 @@ $('#saveCategory').click(function(e){
       	$('#catError').text('Category text field is empty!');
       	$('#catError').removeClass('hidden');
       }else{
-      	  var table=  $('.category').DataTable(); 
+      	  var table=  $('.category').dataTable(); 
 	 	  $.post('/addCategory',{ProdCatName:category},function(data){
 	 	  	if(data == 0){
 	 	  		$('#catError').text('Category already exists!');
       			$('#catError').removeClass('hidden');
 	 	  	}else{
-	 	  		table.row.add( [
-		            data['updated_at'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
-		        ]).draw();
-		        var row = table.rows( '.selected' ).indexes();
-		        var thisRow= $(row).attr( 'id', 'category'+data['id'] );
-		        $(' td:nth-child(1)').attr( 'id', 'catName'+data['id'] );
+	 	  		// table.row.add( [
+		     //        data['updated_at'],data['ProdCatName'],'<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
+		     //    ]).draw();
+		        var rowid = table.fnAddData( [
+				     data['updated_at'],
+				    data['ProdCatName'],
+				    '<button class="btn btn-success btn-xs" onclick="editCategory('+data['id']+');"><i class="fa fa-cog"></i> Edit</button>'
+				     ] );
+				var theNode = table.fnSettings().aoData[rowid[0]].nTr;
+				theNode.setAttribute('id', 'category'+data['id']);
+		        // var row = table.rows( '.selected' ).indexes();
+		        // var thisRow= $(row).attr( 'id', 'category'+data['id'] );
+		        $('#category'+data['id']+' td:nth-child(1)').attr( 'id', 'catName'+data['id'] );
 		        $('#catError').addClass('hidden');
 	        }
 	      });
