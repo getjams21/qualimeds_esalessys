@@ -134,4 +134,17 @@ class UsersController extends \BaseController {
 		return View::make('dashboard.users.update');
 	}
 
+	public function validateCurrentPassword(){
+		if(Request::ajax()){
+			$currentPword = DB::select('select password from users where id = '.Auth::user()->id.'');
+			// dd($currentPword[0]->password);
+			$typedPword = Input::get('val');
+			if (Hash::check($typedPword, $currentPword[0]->password)){
+				return Response::json([1]);
+			}
+			else{
+				return Response::json([0]);
+			}
+		}
+	}
 }

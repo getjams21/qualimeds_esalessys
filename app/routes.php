@@ -46,6 +46,7 @@ Route::group(["before" => "auth"], function() {
 	 		Route::resource('/Users', 'UsersController');
 	 		Route::get('/toEditUser','UsersController@toEditUser');
 	 		Route::get('delete-user/{id}', 'UsersController@destroy');
+	 		Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
  	});
 	#Update Account
 		Route::get('update-account', 'UsersController@editAccount');

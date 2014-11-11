@@ -16,6 +16,13 @@
 				<input class="form-control username" type="text" name="username" id="username" placeholder="Username" value="{{Auth::user()->username}}" required>
 			</div>
 			<div class="form-group">
+				<label>Current Password</label>
+				<input type="password" class="form-control password" name="current-password" id="current-password" placeholder="Current password" required></textarea>
+				<div class="alert alert-danger" role="alert" hidden>
+					Wrong Password!
+				</div>
+			</div>
+			<div class="form-group">
 				<label>Password</label>
 				<input type="password" class="form-control password" name="password" id="password" placeholder="Password" required></textarea>
 			</div>
