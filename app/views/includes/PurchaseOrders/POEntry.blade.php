@@ -46,12 +46,12 @@
        <div class="col-md-1">
        </div>
        <div class="col-md-7">
-        <div class="form-group" style="width:80%;">
-                <div class="input-group">
-                  <span class="input-group-addon">Search Product: </span>
-                  <input type="text" id="myInputTextField" class="form-control"  >
-                </div>
-         </div>
+      <div class="form-group" style="width:80%;">
+              <div class="input-group">
+                <span class="input-group-addon">Search Product: </span>
+                <input type="text" id="myInputTextField" class="form-control"  >
+              </div>
+       </div>
       <div class=" responsive" >
               <table class="table table-striped table-bordered table-hover product">
                 <thead>
@@ -80,7 +80,9 @@
       </div>
     </div>
     <div class="row">
-      
+       <div class="alert alert-danger " id="savePOError" hidden>
+              <center><b>Please complete all inputs.</b></center>
+            </div>
     </div>
   </div>
     <div class="panel-body">

@@ -35,7 +35,7 @@ class POController extends \BaseController {
   			$input = Input::all();
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
-  			if(!$TableData){
+  			if(!$TableData || !$input['supplier']){
   				$result = 0;
   			}else{
   				$PO= new PurchaseOrder;
@@ -75,6 +75,40 @@ class POController extends \BaseController {
   			$id= $input['id'];
   			$POdetails = $this->purchaseOrderDetailsRepo->getAllByPO($id);
 		return Response::json($POdetails);
+  		}
+	}
+	public function saveEditedPO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$TableData = stripcslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			$PO=$this->purchaseOrderRepo->getByIdWithSup($id);
+  			$POdetails = $this->purchaseOrderDetailsRepo->getAllByPO($id);
+  			foreach($POdetails as $d){
+  					$d->delete();
+  				}
+  			if(!$TableData || (!isAdmin() && ($PO[0]->ApprovedBy!=''))){
+  				$result = 0;
+  			}else{
+  				$PO[0]->SupplierNo=$input['supplier'];
+  				$PO[0]->PODate= Carbon::now();
+  				$PO[0]->Terms= $input['term'];
+  				$PO[0]->PreparedBy= fullame(Auth::user());
+  				$PO[0]->save();
+  				foreach($TableData as $td){
+  					$POdetail= new PurchaseOrderDetails;
+  					$POdetail->PurchaseOrderNo=$id;
+  					$POdetail->ProductNo=$td['ProdNo'];
+  					$POdetail->Unit=$td['Unit'];
+  					$POdetail->Qty=$td['Qty'];
+  					$POdetail->CostPerQty=$td['CostPerQty'];
+  					$POdetail->save();
+  				}
+  				$result =1;
+  			}
+  			return Response::json($result);
   		}
 	}
 

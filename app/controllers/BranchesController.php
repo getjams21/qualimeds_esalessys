@@ -44,6 +44,9 @@ class BranchesController extends \BaseController {
 		}else{
 			$customer = Branch::find($input['id']);
 			$customer->fill($input)->save();
+			if(Auth::user()->BranchNo == $customer->id){
+				Session::put('Branch',$customer->BranchName);
+			}
 			return Redirect::back()
 				->withFlashMessage('
 						<div class="alert alert-success" role="alert">

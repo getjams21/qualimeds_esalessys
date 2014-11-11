@@ -38,7 +38,6 @@
 		{{ HTML::script('_/js/plugins/dataTables/dataTable.editable.js') }}
 		@yield('script')
 		{{ HTML::script('_/js/myscript.js')}}
-		{{ HTML::script('_/js/dataTables-columnFilter.js') }}
 		{{ HTML::script('_/js/bootstrap-datepicker.js') }}
 	</body>
 </html>

@@ -6,8 +6,8 @@ class SupplierForm extends FormValidator {
 	protected $rules = [
 		'SupplierName' => 'required',
 		'Address' => 'required',
-		'Telephone1' => 'required|numeric',
-		'Telephone2' => 'required|numeric',
+		'Telephone1' => 'required',
+		'Telephone2' => 'required',
 		'ContactPerson' => 'required'
 		];
 }

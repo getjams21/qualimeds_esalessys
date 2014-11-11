@@ -70,23 +70,23 @@ display: none;
         $('#mySearchTextField').keyup(function(){
          oTable.fnFilter( $(this).val() );
         })
-        var vw= $('#vwPOTable').DataTable( {
-          "order": [[ 0, "desc" ]],
-          "bPaginate": false,
-          "bFilter":false,
-           "columnDefs": [ {
-            "searchable": false,
-            "orderable": false,
-            "targets": 0
-           } ],
-           "order": [[ 1, 'asc' ]]
-        }
-        );
-         vw.on( 'order.dt search.dt', function () {
-        vw.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-       } ).draw();
+       //  var vw= $('#vwPOTable').DataTable( {
+       //    "order": [[ 0, "desc" ]],
+       //    "bPaginate": false,
+       //    "bFilter":false,
+       //     "columnDefs": [ {
+       //      "searchable": false,
+       //      "orderable": false,
+       //      "targets": 0
+       //     } ],
+       //     "order": [[ 1, 'asc' ]]
+       //  }
+       //  );
+       //   vw.on( 'order.dt search.dt', function () {
+       //  vw.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+       //      cell.innerHTML = i+1;
+       //  } );
+       // } ).draw();
 
         $('#min').change( function() { oTable.fnDraw(); } );
         $('#max').change( function() { oTable.fnDraw(); } );
@@ -99,7 +99,16 @@ display: none;
             });
        $('#myInputTextField').keyup(function(){
          p.fnFilter( $(this).val() );
-        })
+        });
+       var vwp= $('.vwproduct').dataTable({
+           "iDisplayLength": 1,
+           "aLengthMenu": 1,
+          "bLengthChange": false,
+           "pagingType": "simple"
+            });
+       $('#vwmyInputTextField').keyup(function(){
+         vwp.fnFilter( $(this).val() );
+        });
 //date search filter
 $.fn.dataTable.ext.search.push(
     function( oSettings, aData, iDataIndex ) {
@@ -162,4 +171,5 @@ $.fn.dataTable.ext.search.push(
 );
     });
 </script>
+
 @stop 

@@ -56,4 +56,5 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/savePO', 'POController@savePO');
  		Route::post('/viewPO', 'POController@viewPO');
  		Route::post('/viewPODetails', 'POController@viewPODetails');
+ 		Route::post('/saveEditedPO', 'POController@saveEditedPO');
 });

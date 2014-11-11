@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration {
 			$table -> string('MI',1)->nullable();
 			$table -> integer('UserType')->nullable();
 			$table -> boolean('IsActive')->default(1);
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table -> timestamps();
 		});
 	}

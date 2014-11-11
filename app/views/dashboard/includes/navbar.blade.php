@@ -22,25 +22,9 @@
 
         <li class="dropdown" >
           <a class="dropdown-toggle"  id="dropdownMenu1" data-toggle="dropdown" >
-            {{Auth::user()->username}}
-            </a>
-       <!--      <ul class="dropdown-menu side-dropdown" role="menu" aria-labelledby="dropdownMenu1" >
-              <li>
-                <a href="#" >
-                    <i class="fa fa-tachometer"></i> Dashboard
-                  </a>
-              </li>
-              <li>
-                  <a href="#" >
-                    <span class="glyphicon glyphicon-user"></span> Account
-                  </a>
-              </li>
-              <li  class="divider"></li>
-              <li>
-                  <a href="/logout" ><span class="glyphicon glyphicon-log-out"></span> Logout</a>
-              </li>
-            </ul> -->
+            {{Auth::user()->username}}&nbsp;&nbsp;[&nbsp;{{Session::get('Branch');}}&nbsp;]
 
+            </a> 
         </li>
         <li  class="divider-vertical"></li>
         <li>

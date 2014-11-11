@@ -8,8 +8,10 @@ $(function() {
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 });
 
+
 //PO FUNCTIONS
 var itemno = 1;
+var counter = 1;
 function addPO(id){
 	var name= $('#name'+id).text();
 	var brand= $('#brand'+id).text();
@@ -25,23 +27,23 @@ function addPO(id){
 	itemno +=1;
 	table.cell( index, 4 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
 		$('.editable').editable({
-			send: 'never', 
-		    type: 'text',
-		    value:1,
-		    validate: function(value) {
-		        if($.trim(value) == '') {
-		         return 'This field is required';
-		        }
-		        if ($.isNumeric(value) == '' || value==0) {
-		            return 'Please input a valid number greater than 0';
-		        }
-		    },
-		    emptytext:0,
-		   display: function(value) {
-		   		$(this).text(value);
-		        calcCost(id);
-				}
-		});
+				send: 'never', 
+			    type: 'text',
+			    value:1,
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			        if ($.isNumeric(value) == '' || value==0) {
+			            return 'Please input a valid number greater than 0';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   		$(this).text(value);
+			        calcCost(id);
+					}
+			});
 		$('#savePO').removeClass('hidden');
 }
 function calcCost(id){
@@ -85,26 +87,15 @@ function removePO(id,prodId,index){
 	totalCost();
 }
 function viewPO(id){
-	var role= $('#vwRole').val();
 	$('#viewPOModal').modal('show');
-	 $.post('/viewPO',{id:id},function(data){
+	$.post('/viewPO',{id:id},function(data){
 	 	$('#vwPOId').text(data[0]['id']);
 	 	$('#vwPODate').text(data[0]['PODate']);
 	 	$('#vwSupplier').val(data[0]['SupplierNo']);
 	 	if(data[0]['Terms'] == '0'){
-	 		$('#vwTerm').val(0);
-	 		$('#vwTerm1').addClass('active');
-	 		$('#vwTerm1').prop("disabled", false);
-	 		$('#vwTerm2').removeClass('active');
-	 		$('#vwTerm2').prop("disabled", true);
-	 		$('#vwTermBox').addClass('hidden');
+	 		$('#vwTerm').val('Cash');
 		}else{
 		 	$('#vwTerm').val(data[0]['Terms']);
-		 	$('#vwTerm1').removeClass('active');
-		 	$('#vwTerm1').prop("disabled", true);
-		 	$('#vwTerm2').addClass('active');
-		 	$('#vwTerm2').prop("disabled", false)
-		 	$('#vwTermBox').removeClass('hidden');
 		}
 	 	$('#vwPreparedBy').val(data[0]['PreparedBy']);
 	 	if(data[0]['ApprovedBy'] == ''){
@@ -113,22 +104,124 @@ function viewPO(id){
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post('/viewPODetails',{id:id},function(data){
+	$.post('/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
-	  			var counter=1;
+	  			    counter=1;
 	  			var total=0;
 			  		$.each(data, function(key,value) {
-	  				$('.vwPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td>'+value.ProductNo+'</td>
+	  				$('.vwPOTable >tbody').append('<tr ><td>'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td>'+value.Qty+'</td><td>'+value.CostPerQty+'</td>
-	  					<td>'+(value.CostPerQty*value.Qty)+'</td><td><button class="btn btn-danger 
-	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
-						<i class="fa fa-times" ></i> Remove</button></td></tr>');
+	  					<td>'+(value.CostPerQty*value.Qty)+'</td></tr>');
 		  			counter+=1;
 		  			total+=value.CostPerQty*value.Qty;
 	  				});
 	  				$('#vwTotalCost').text(total);
 	      });
+}
+function editPO(id){
+	$('#vwSaveBtn').addClass('hidden');
+	$('#editPOModal').modal('show');
+	 $.post('/viewPO',{id:id},function(data){
+	 	$('#edPOId').text(data[0]['id']);
+	 	$('#edPODate').text(data[0]['PODate']);
+	 	$('[name="vwSupplier"]').val(data[0]['SupplierNo']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#edTerm').val(0);
+	 		$('#edTerm1').addClass('active');
+	 		$('#edTerm2').removeClass('active');
+	 		$('#edTermBox').addClass('hidden');
+		}else{
+		 	$('#edTerm').val(data[0]['Terms']);
+		 	$('#edTerm1').removeClass('active');
+		 	$('#edTerm2').addClass('active');
+		 	$('#edTerm2').prop("disabled", false)
+		 	$('#edTermBox').removeClass('hidden');
+		}
+	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
+	 	if(data[0]['ApprovedBy'] == ''){
+	 		$('#edApprovedBy').val('N/A');
+	 	}else{
+	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
+	 	}
+	      });
+	 $.post('/viewPODetails',{id:id},function(data){
+	  			$(".edPOTable > tbody").html("");
+	  			counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="vweditable" id="edQty'+value.ProductNo+'">'+value.Qty+'</td><td class="vweditable" id="edUnit'+value.ProductNo+'">'+value.CostPerQty+'</td>
+	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.CostPerQty*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
+						<i class="fa fa-times" ></i> Remove</button></td></tr>');
+		  			total+=value.CostPerQty*value.Qty;
+	  				editable(value.ProductNo);
+		  			counter+=1;
+	  				});
+	  				$('#edTotalCost').text(total);
+	      });
+}
+function editable(id){
+	$('.vweditable').editable({
+			send: 'never', 
+		    type: 'text',
+		    validate: function(value) {
+		        if($.trim(value) == '') {
+		         return 'This field is required';
+		        }
+		        else if($.isNumeric(value) == '' || value==0) {
+		            return 'Please input a valid number greater than 0';
+		        }else{
+		        $('#vwSavePOBtn').removeClass('hidden');
+		        }
+		    },
+		    emptytext:0,
+		   display: function(value) {
+		   		$(this).text(value);
+		        edcalcCost(id);
+				}
+	});
+}
+function edcalcCost(id){
+	var qty = $('#edQty'+id).text();
+	var unit = $('#edUnit'+id).text();
+	$('#edCost'+id).text(qty*unit);
+	edtotalCost();
+}
+function edtotalCost(){
+	var total=0;
+	$('.ecost').each(function(){
+		total += parseInt($(this).text()); 
+	});
+	$('#edPOTotalCost').text(total);
+	if(total == 0){
+		$('#vwSavePOBtn').addClass('hidden');
+	}
+}
+function vwaddPO(id){
+	var name= $('#vwname'+id).text();
+	var brand= $('#vwbrand'+id).text();
+	var unit= $('#vwunit'+id).text();
+	var table = $('.vwproduct').DataTable();
+	var index=table.row('#vwrowProd'+id).index();
+	if($('#vwProd'+id).length){prodError
+		 $('#prodError').fadeIn("fast", function(){        
+	        $("#prodError").fadeOut(4000);
+	    });
+	}else{
+	$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
+	  					<td>'+name+'</td>
+	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable" id="edQty'+id+'">'+1+'</td><td class="vweditable" id="edUnit'+id+'">'+1+'</td>
+	  					<td class="ecost"id="edCost'+id+'">1</td><td><button class="btn btn-danger 
+	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
+						<i class="fa fa-times" ></i> Remove</button></td></tr>');
+	
+		counter +=1;
+		editable(id);
+		$('#vwSavePOBtn').removeClass('hidden');
+	}
 }
 function vwRemovePO(id){
 	$('#vwPO'+id).remove();
@@ -144,7 +237,11 @@ function vwRemovePO(id){
 			id++;
 		}
 	}
+	counter -=1;
+	edtotalCost();
+	$('#vwSavePOBtn').removeClass('hidden');
 }
+// END OF PO FUNCTIONS
 //edit-delte bank
 function triggerEdit(id){
 	$.get('toEditBank',{id:id},function(data){
@@ -380,23 +477,23 @@ $('#telephone,#telephone1,#telephone2').keydown(function(event) {
 });
 // PO TERM 
 //term check
-$('#term2,#vwTerm2').click(function() {
-	$('#termBox,#vwTermBox').removeClass('hidden');
-	$('#term1,#vwTerm1').removeClass('active');
-	$('#term,#vwTerm').select();
+$('#term2,#edTerm2').click(function() {
+	$('#termBox,#edTermBox').removeClass('hidden');
+	$('#term1,#edTerm1').removeClass('active');
+	$('#term,#edTerm').select();
 });
-$('#term1,#vwTerm1').click(function() {
-	$('#termBox,#vwTermBox').addClass('hidden');
-	$('#term2,#vwTerm2').removeClass('active');
-	$('#term,#vwTerm').val(0);
+$('#term1,#edTerm1').click(function() {
+	$('#termBox,#edTermBox').addClass('hidden');
+	$('#term2,#edTerm2').removeClass('active');
+	$('#term,#edTerm').val(0);
 });
-$('#term,#vwTerm').blur(function() {
+$('#term,#edTerm').blur(function() {
 	var value=jQuery.trim($(this).val());
 	if(value==''){
 		$(this).val(0);
 	}
 });
-$("#term,#vwTerm").keydown(function(e){
+$("#term,#edTerm").keydown(function(e){
 		numberOnlyInput(e);
 });
 //END OF PO TERM
@@ -418,17 +515,49 @@ $('#savePO').click(function(){
 	TableData = $.toJSON(TableData);
 
 	$.post('/savePO',{TD:TableData,supplier:supplier,term:term,preparedBy:preparedBy,approvedBy:approvedBy},function(data){
-			if(date=1){
+			if(data==1){
 				location.reload();
 				 $('#successModal').modal('show');
-			}else{
-				$('#errorModal').modal('show');
+			}else if(data==0){
+				$('#savePOError').fadeIn("fast", function(){        
+			        $("#savePOError").fadeOut(4000);
+			    });
 			}
 		});
 	function storeTblValues()
 	{
 		var TableData = new Array();
 		$('.POtable tr').each(function(row, tr){
+		    TableData[row]={
+		        "ProdNo" : $(tr).find('td:eq(1)').text()
+		        , "Unit" :$(tr).find('td:eq(4)').text()
+		        , "Qty" : $(tr).find('td:eq(5)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(6)').text()
+		    }
+		});
+		TableData.shift();
+	    return TableData;
+	}
+});
+$('#vwSavePOBtn').click(function(){
+	var TableData;
+	var id = $('#edPOId').text();
+	var supplier = $('[name="vwSupplier"]').val();
+	var term = $('#edTerm').val();
+	TableData = storeTblValues()
+	TableData = $.toJSON(TableData);
+
+	$.post('/saveEditedPO',{TD:TableData,supplier:supplier,term:term,id:id},function(data){
+			if(data==1){
+				location.reload();
+			}else if(data==0){
+				alert('invalid move');
+			}
+		});
+	function storeTblValues()
+	{
+		var TableData = new Array();
+		$('.edPOTable tr').each(function(row, tr){
 		    TableData[row]={
 		        "ProdNo" : $(tr).find('td:eq(1)').text()
 		        , "Unit" :$(tr).find('td:eq(4)').text()

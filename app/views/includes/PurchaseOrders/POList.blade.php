@@ -16,11 +16,15 @@
 		@endif
 	    <hr>
 		<div class="table-responsive responsive" >
-			<div class="well">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="col-xs-8">
-					<div class="input-group">
+			 
+		  <table class="table table-striped table-bordered table-hover" id="POList">
+		  	<div class="row">
+		  		<!-- <div class="col-md-5">
+		  			
+		  		<br>
+		         </div>	 -->
+		         <div class="col-md-11">
+		         	<div class="input-group ">
                   	{{ Form::label('', 'From: '); }}
                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
                       <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
@@ -31,21 +35,15 @@
                       <input class="form-control" value="{{$now}}" type="text" id="max"  max="{{$now}}" readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
-                    </div>
-                   
-                  </div>
-					</div>
-					<div class="col-md-8"></div>
-				</div>
-			</div>
-			 
-		  <table class="table table-striped table-bordered table-hover" id="POList">
-		  	 <div class="form-group">
-		                <div class="input-group" style="width:50%;">
-		                  <span class="input-group-addon">Search PO keyword: </span>
+                    </div><br>
+		  		 	 <div class="form-group pull-left" >
+		                <div class="input-group" style="width:50%;  ">
+		                  <span class="input-group-addon">Search Keyword: </span>
 		                  <input type="text" id="mySearchTextField" class="form-control"  >
 		                </div>
 		         	</div> 
+		         </div>	
+		     </div>   	
 			<thead>
 		      <tr>
 		      	<th>PO No</th>
@@ -84,10 +82,10 @@
 		            	@endif
 		            </td>
 		            <td>
-		             <button class="btn btn-success btn-xs " onclick="viewPO({{$PO->id}})"> View</button>
 		             @if($PO->ApprovedBy == '' || Auth::user()->UserType==1 || Auth::user()->UserType==11)
-
-		              <button class="btn btn-primary btn-xs " ><i class="fa fa-gear"></i>Edit</button>
+		              <button class="btn btn-primary btn-xs "  onclick="editPO({{$PO->id}})"><i class="fa fa-gear"></i>Edit</button>
+		              @else
+		             <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"> View</button>
 		              @endif
 		            </td>
 		           

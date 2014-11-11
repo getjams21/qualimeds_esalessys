@@ -18,9 +18,17 @@ class SessionsController extends \BaseController {
 	public function create()
 	{
 		if(!User::find(1)){
+			if(!Branch::find(1)){
+				$branch= new Branch;
+				$branch->BranchName='Default';
+				$branch->BAddress='Default';
+				$branch->Telephone=1;
+				$branch->save();
+			}
 			$user= new User;
 			$user->username='admin';
 			$user->password='admin';
+			$user->BranchNo=$branch->id;
 			$user->UserType=1;
 			$user->save();
 		}
@@ -39,6 +47,8 @@ class SessionsController extends \BaseController {
 		$input = Input::only('username','password');
 		if(Auth::attempt($input))
 		{
+			$branch=Branch::find(Auth::user()->BranchNo);
+			Session::put('Branch',$branch->BranchName);
 			return Redirect::intended('/');
 		}
 		return Redirect::to('login')->withInput()->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Invalid credentials provided!</b></div>');
