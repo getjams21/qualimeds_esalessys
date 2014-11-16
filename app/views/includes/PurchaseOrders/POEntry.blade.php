@@ -70,13 +70,14 @@
                       <td id="name{{$product->id}}">{{$product->ProductName}}</td>
                       <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
                       <td id="unit{{$product->id}}">{{$product->WholeSaleUnit}}</td>
-                      <td><button class="btn btn-success btn-xs square" onclick="addPO({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
-                      </td>
+                      <!-- <td><button class="btn btn-success btn-xs square" onclick="addPO({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
+                      </td> -->
                     </tr>
                   @endforeach
                  </tbody>
               </table>
             </div>
+            <div class="error" id="prodError1" hidden> Product already exists</div>
       </div>
     </div>
     <div class="row">
@@ -118,10 +119,10 @@
         <div class="well">
           <div class="row">
             <div class="col-md-7">
-            <b>Prepared By: <i id="preparedBy">{{fullame(Auth::user())}}</i></b> 
+            <b>Prepared By: <i id="preparedBy">{{fullname(Auth::user())}}</i></b> 
             </div>
             <div class="col-md-3">
-              @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
+              @if(isAdmin())
             <input type="checkbox" id="approved" style="width:15px; height:15px;"/> Approved
              @endif
              </div>

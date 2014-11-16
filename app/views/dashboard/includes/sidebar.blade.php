@@ -4,7 +4,7 @@
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#" class="active">
-                            {{Auth::user()->username}}
+                            {{fullname(Auth::user());}}
                     </a>
                 </li>
                 @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)

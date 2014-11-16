@@ -70,28 +70,14 @@ display: none;
         $('#mySearchTextField').keyup(function(){
          oTable.fnFilter( $(this).val() );
         })
-       //  var vw= $('#vwPOTable').DataTable( {
-       //    "order": [[ 0, "desc" ]],
-       //    "bPaginate": false,
-       //    "bFilter":false,
-       //     "columnDefs": [ {
-       //      "searchable": false,
-       //      "orderable": false,
-       //      "targets": 0
-       //     } ],
-       //     "order": [[ 1, 'asc' ]]
-       //  }
-       //  );
-       //   vw.on( 'order.dt search.dt', function () {
-       //  vw.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-       //      cell.innerHTML = i+1;
-       //  } );
-       // } ).draw();
-
+    
         $('#min').change( function() { oTable.fnDraw(); } );
         $('#max').change( function() { oTable.fnDraw(); } );
 // list of products
        var p= $('.product').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "/productDtAjax",
            "iDisplayLength": 1,
            "aLengthMenu": 1,
           "bLengthChange": false,

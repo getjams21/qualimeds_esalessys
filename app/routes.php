@@ -57,4 +57,8 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewPO', 'POController@viewPO');
  		Route::post('/viewPODetails', 'POController@viewPODetails');
  		Route::post('/saveEditedPO', 'POController@saveEditedPO');
+ 		Route::post('/approvePO', 'POController@approvePO');
+ 		Route::post('/cancelPO', 'POController@cancelPO');
+ 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
+ 		Route::post('/addProductToPO', 'POController@addProductToPO');
 });

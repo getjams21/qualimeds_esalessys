@@ -29,6 +29,26 @@ class POController extends \BaseController {
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		return View::make('dashboard.PurchaseOrders.list',compact('POs','supplier','products','max','now','lastweek'));
 	}
+	public function addProductToPO()
+	{	
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$Product= $this->productRepo->getByid($id);
+		return Response::json($Product);
+		}
+	}
+	public function productDtAjax()
+	{	
+		$result = DB::table('products')
+		->select('id as id', 'ProductName as ProductName', 'BrandName', 'WholeSaleUnit');
+ 
+	return Datatables::of($result)
+			
+			->add_column('add','<td><button class="btn btn-success btn-xs square" onclick="addPO({{$id}})" ><i class="fa fa-check-circle"></i> Add</button>
+                      </td>')	
+			->make();
+	}
 	public function savePO()
 	{
 		if(Request::ajax()){
@@ -40,6 +60,7 @@ class POController extends \BaseController {
   			}else{
   				$PO= new PurchaseOrder;
   				$PO->SupplierNo=$input['supplier'];
+  				$PO->BranchNo=Auth::user()->BranchNo;
   				$PO->PODate= Carbon::now();
   				$PO->Terms= $input['term'];
   				$PO->PreparedBy= $input['preparedBy'];
@@ -95,7 +116,7 @@ class POController extends \BaseController {
   				$PO[0]->SupplierNo=$input['supplier'];
   				$PO[0]->PODate= Carbon::now();
   				$PO[0]->Terms= $input['term'];
-  				$PO[0]->PreparedBy= fullame(Auth::user());
+  				$PO[0]->PreparedBy= fullname(Auth::user());
   				$PO[0]->save();
   				foreach($TableData as $td){
   					$POdetail= new PurchaseOrderDetails;
@@ -111,7 +132,34 @@ class POController extends \BaseController {
   			return Response::json($result);
   		}
 	}
-
+	public function approvePO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id = $input['id'];
+  			if($input['ApprovedBy']==1){
+  				$approve = fullname(Auth::user());
+  			}else{
+  				$approve = '';
+  			}
+  			$PO = PurchaseOrder::find($id);
+  			$PO->ApprovedBy=$approve;
+  			$PO->save();
+  			return Response::json($approve);
+  		}
+	}
+	public function cancelPO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id = $input['id'];
+  			$PO = PurchaseOrder::find($id);
+  			$PO->CancelledBy=fullname(Auth::user());
+  			$PO->IsCancelled=1;
+  			$PO->save();
+  			return Response::json(fullname(Auth::user()));
+  		}
+	}
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /po/create

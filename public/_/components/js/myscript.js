@@ -7,66 +7,71 @@ $(function() {
     var hash = window.location.hash;
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 });
-
-
+//to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
+// window.oncontextmenu = function () {
+//    return false;
+// }
+// document.onkeydown = function (e) { 
+//     if (window.event.keyCode == 123 ||  e.button==2)    
+//     return false;
+// }
+//
 //PO FUNCTIONS
 var itemno = 1;
 var counter = 1;
 function addPO(id){
-	var name= $('#name'+id).text();
-	var brand= $('#brand'+id).text();
-	var unit= $('#unit'+id).text();
-	var table = $('.product').DataTable();
-	var index=table.row('#rowProd'+id).index();
-	$('.POtable').append('<tr id="PO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
-		<td>'+name+'</td><td>'+brand+'</td><td>'+unit+'</td>
-		<td class="light-green editable" id="prodQty'+id+'">'+1+'</td><td class="light-red editable" id="prodUnit'+id+'"></td>
-		<td class="cost" id="prodCost'+id+'">0.00</td><td >
-		<button class="btn btn-danger btn-xs square" id="removePO'+itemno+'" onclick="removePO('+itemno+','+id+','+index+')">
-		<i class="fa fa-times"></i> Remove</button></td></tr>');
-	itemno +=1;
-	table.cell( index, 4 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
-		$('.editable').editable({
-				send: 'never', 
-			    type: 'text',
-			    value:1,
-			    validate: function(value) {
-			        if($.trim(value) == '') {
-			         return 'This field is required';
-			        }
-			        if ($.isNumeric(value) == '' || value==0) {
-			            return 'Please input a valid number greater than 0';
-			        }
-			    },
-			    emptytext:0,
-			   display: function(value) {
-			   		$(this).text(value);
-			        calcCost(id);
+		$.post('/addProductToPO',{id:id},function(data){
+				if($('#productId'+id).length){
+					$('#prodError1').fadeIn("fast", function(){        
+				        $("#prodError1").fadeOut(4000);
+				    });
+				}else{	
+					$('.POtable').append('<tr id="PO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+id+'">'+id+'</td>
+						<td>'+data['ProductName']+'</td><td>'+data['BrandName']+'</td><td>'+data['WholeSaleUnit']+'</td>
+						<td class="light-green editable dp" id="prodQty'+id+'">'+money(1)+'</td><td class="light-red editable dp" id="prodUnit'+id+'">1.00</td>
+						<td class="cost dp" id="prodCost'+id+'">0.00</td><td >
+						<button class="btn btn-danger btn-xs square" id="removePO'+itemno+'" onclick="removePO('+itemno+')">
+						<i class="fa fa-times"></i> Remove</button></td></tr>');
+					itemno +=1;
+						$('.editable').editable({
+								send: 'never', 
+							    type: 'text',
+							    value:1,
+							    validate: function(value) {
+							        if($.trim(value) == '') {
+							         return 'This field is required';
+							        }
+							        if ($.isNumeric(value) == '' || value==0) {
+							            return 'Please input a valid number greater than 0';
+							        }
+							    },
+							    emptytext:0,
+							   display: function(value) {
+							   		$(this).text(money(value));
+							        calcCost(id);
+									}
+							});
+						$('#savePO').removeClass('hidden');
 					}
-			});
-		$('#savePO').removeClass('hidden');
+			});	
 }
 function calcCost(id){
 	var qty = $('#prodQty'+id).text();
 	var unit = $('#prodUnit'+id).text();
-	$('#prodCost'+id).text(qty*unit);
+	$('#prodCost'+id).text(money(qty*unit));
 	totalCost();
 }
 function totalCost(){
 	var total=0;
 	$('.cost').each(function(){
-		total += parseInt($(this).text()); 
+		total += parseFloat($(this).text()); 
 	});
-	$('#POTotalCost').text(total);
+	$('#POTotalCost').text(money(total));
 	if(total = 0){
 		$('#savePO').addClass('hidden');
 	}
 }
-function removePO(id,prodId,index){
-	var table = $('.product').DataTable();
-		table.cell( index, 4 ).data('<button class="btn btn-success btn-xs square" 
-			onclick="addPO('+prodId+')" >
-			<i class="fa fa-check-circle"></i> Add</button>').draw();
+function removePO(id){
 	$('#PO'+id).remove();
 	id +=1;
 	if( $('#PO'+id).length ) 
@@ -75,11 +80,8 @@ function removePO(id,prodId,index){
 			$('#PO'+id).attr('id','PO'+(id-1));
 			$('#itemno'+(id)).attr('id','itemno'+(id-1));
 			$('#itemno'+(id-1)).text(id-1);
-			$('#productId'+id).attr('id','productId'+(id-1));
 			$('#removePO'+(id)).attr('id','removePO'+(id-1));
-			prodId = $('#productId'+(id-1)).text();
-			index = table.row('#rowProd'+prodId).index();
-			$('#removePO'+(id-1)).attr('onclick','removePO('+(id-1)+','+prodId+','+index+')');
+			$('#removePO'+(id-1)).attr('onclick','removePO('+(id-1)+')');
 			id++;
 		}
 	}
@@ -103,7 +105,15 @@ function viewPO(id){
 	 	}else{
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
-	      });
+	 	$('#vwCancelMsg').attr('class','alert');
+	 	if(data[0]['IsCancelled'] == 1){
+	 		$('#vwCancelMsg').addClass('alert-danger');
+	     	$('#vwCancelMsg').text('This PO has been cancelled by '+data[0]['CancelledBy']);
+	 	}else if(data[0]['ApprovedBy'] != ''){
+	 		$('#vwCancelMsg').addClass('alert-success');
+	     	$('#vwCancelMsg').text('This PO has been approved by '+data[0]['ApprovedBy']);
+	 	}
+	});
 	$.post('/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
@@ -111,16 +121,16 @@ function viewPO(id){
 			  		$.each(data, function(key,value) {
 	  				$('.vwPOTable >tbody').append('<tr ><td>'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
-	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td>'+value.Qty+'</td><td>'+value.CostPerQty+'</td>
-	  					<td>'+(value.CostPerQty*value.Qty)+'</td></tr>');
+	  					<td>'+value.BrandName+'</td><td >'+value.Unit+'</td><td class="dp">'+Number(value.Qty).toFixed(0) +'</td><td class="dp">'+Number(value.CostPerQty).toFixed(2)+'</td>
+	  					<td class="dp">'+(value.CostPerQty*value.Qty)+'</td></tr>');
 		  			counter+=1;
 		  			total+=value.CostPerQty*value.Qty;
 	  				});
-	  				$('#vwTotalCost').text(total);
+	  				$('#vwTotalCost').text(Number(total).toFixed(2));
 	      });
 }
 function editPO(id){
-	$('#vwSaveBtn').addClass('hidden');
+	$('#vwSavePOBtn').addClass('hidden');
 	$('#editPOModal').modal('show');
 	 $.post('/viewPO',{id:id},function(data){
 	 	$('#edPOId').text(data[0]['id']);
@@ -141,8 +151,10 @@ function editPO(id){
 	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
 	 	if(data[0]['ApprovedBy'] == ''){
 	 		$('#edApprovedBy').val('N/A');
+	 		$('#vwApproved').prop('checked', false);
 	 	}else{
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
+	 		$('#vwApproved').prop('checked', true);
 	 	}
 	      });
 	 $.post('/viewPODetails',{id:id},function(data){
@@ -152,15 +164,15 @@ function editPO(id){
 			  		$.each(data, function(key,value) {
 	  				$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
-	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="vweditable" id="edQty'+value.ProductNo+'">'+value.Qty+'</td><td class="vweditable" id="edUnit'+value.ProductNo+'">'+value.CostPerQty+'</td>
-	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.CostPerQty*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="vweditable dp" id="edQty'+value.ProductNo+'">'+value.Qty+'</td><td class="vweditable dp" id="edUnit'+value.ProductNo+'">'+Number(value.CostPerQty).toFixed(2)+'</td>
+	  					<td class="ecost dp"id="edCost'+value.ProductNo+'">'+Number(value.CostPerQty).toFixed(2)+'</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
 		  			total+=value.CostPerQty*value.Qty;
 	  				editable(value.ProductNo);
 		  			counter+=1;
 	  				});
-	  				$('#edTotalCost').text(total);
+	  				$('#edPOTotalCost').text(Number(total).toFixed(2));
 	      });
 }
 function editable(id){
@@ -179,7 +191,7 @@ function editable(id){
 		    },
 		    emptytext:0,
 		   display: function(value) {
-		   		$(this).text(value);
+		   		$(this).text(Number(value).toFixed(2));
 		        edcalcCost(id);
 				}
 	});
@@ -187,15 +199,15 @@ function editable(id){
 function edcalcCost(id){
 	var qty = $('#edQty'+id).text();
 	var unit = $('#edUnit'+id).text();
-	$('#edCost'+id).text(qty*unit);
+	$('#edCost'+id).text(Number(qty*unit).toFixed(2));
 	edtotalCost();
 }
 function edtotalCost(){
 	var total=0;
 	$('.ecost').each(function(){
-		total += parseInt($(this).text()); 
+		total += parseFloat($(this).text()); 
 	});
-	$('#edPOTotalCost').text(total);
+	$('#edPOTotalCost').text(Number(total).toFixed(2));
 	if(total == 0){
 		$('#vwSavePOBtn').addClass('hidden');
 	}
@@ -206,15 +218,15 @@ function vwaddPO(id){
 	var unit= $('#vwunit'+id).text();
 	var table = $('.vwproduct').DataTable();
 	var index=table.row('#vwrowProd'+id).index();
-	if($('#vwProd'+id).length){prodError
+	if($('#vwProd'+id).length){
 		 $('#prodError').fadeIn("fast", function(){        
 	        $("#prodError").fadeOut(4000);
 	    });
 	}else{
 	$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
 	  					<td>'+name+'</td>
-	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable" id="edQty'+id+'">'+1+'</td><td class="vweditable" id="edUnit'+id+'">'+1+'</td>
-	  					<td class="ecost"id="edCost'+id+'">1</td><td><button class="btn btn-danger 
+	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable dp" id="edQty'+id+'">'+Number(1).toFixed(2)+'</td><td class="vweditable dp" id="edUnit'+id+'">'+Number(1).toFixed(2)+'</td>
+	  					<td class="ecost dp"id="edCost'+id+'">0.00</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
 	
@@ -326,10 +338,48 @@ function triggerEditUser(id){
   	});
 $('#user-library').modal('show');
 }
-
+function money(x){
+	return Number(x).toFixed(2);
+}
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 //Document Ready
 $(document).ready(function(){
 
+$('#edTerm,#vwSupplier').change(function(){
+	$('#vwSavePOBtn').removeClass('hidden');
+});
+$('#edTerm1').click(function(){
+	$('#vwSavePOBtn').removeClass('hidden');
+});
+$('#vwApproved').change(function(){
+	var id=$('#edPOId').text();
+	if($('#vwApproved').is(':checked')){
+		var approve = 1;
+	}else{
+		var approve = 0;
+	}
+		$.post('/approvePO',{id:id,ApprovedBy:approve},function(data){
+	 	  	if(!data){
+	 	  		$('#edApprovedBy').val('N/A');
+	 	  		$('#App'+id).text('N/A');
+	 	  	}else{
+				$('#edApprovedBy').val(data);
+	 	  		$('#App'+id).text(data);
+	 	  	}
+		});
+});
+$('#POCancelBtn').click(function(){
+	var id=$('#edPOId').text();
+		$.post('/cancelPO',{id:id},function(data){
+	 	  	$('#CancelledBy'+id).text(data);
+	 	  	location.reload();
+	    	$(location).attr('href','/PurchaseOrders#showPOList');
+		});
+});
 //Verify current password
 $('#current-password').blur(function(event) {
 	/* Act on the event */
@@ -525,6 +575,7 @@ $('#savePO').click(function(){
 			if(data==1){
 				location.reload();
 				 $('#successModal').modal('show');
+				 $(location).attr('href','/PurchaseOrders#showPOList');
 			}else if(data==0){
 				$('#savePOError').fadeIn("fast", function(){        
 			        $("#savePOError").fadeOut(4000);
@@ -557,6 +608,7 @@ $('#vwSavePOBtn').click(function(){
 	$.post('/saveEditedPO',{TD:TableData,supplier:supplier,term:term,id:id},function(data){
 			if(data==1){
 				location.reload();
+				$(location).attr('href','/PurchaseOrders#showPOList');
 			}else if(data==0){
 				alert('invalid move');
 			}
