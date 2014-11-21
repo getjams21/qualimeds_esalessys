@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
 		<div class="row">
             <div class="col-md-9">
-              <h4><b>Purchase Order List</b></h4>
+              <h4><b>Bills</b></h4>
            </div>
            <div class="col-md-3">
            </div>
@@ -14,7 +14,6 @@
 				<p>{{Session::get('flash_message') }}</p>
 			</div>
 		@endif
-	    <hr>
 		<div class="table-responsive responsive" >
 			 
 		  <table class="table table-striped table-bordered table-hover" id="billList">

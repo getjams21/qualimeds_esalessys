@@ -14,7 +14,6 @@
 				<p>{{Session::get('flash_message') }}</p>
 			</div> 
 		@endif
-	    <hr>
 		<div class="table-responsive responsive" >
 			 
 		  <table class="table table-striped table-bordered table-hover" id="POList">
