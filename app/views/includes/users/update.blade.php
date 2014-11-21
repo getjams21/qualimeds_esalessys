@@ -18,6 +18,7 @@
 			<div class="form-group">
 				<label>Current Password</label>
 				<input type="password" class="form-control password" name="current-password" id="current-password" placeholder="Current password" required></textarea>
+				<input type="hidden" name="isCurrentPW" id="isCurrentPW" value="">
 				<div class="alert alert-danger" role="alert" hidden>
 					Wrong Password!
 				</div>

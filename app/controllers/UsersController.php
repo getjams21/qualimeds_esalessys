@@ -20,8 +20,9 @@ class UsersController extends \BaseController {
 	public function index()
 	{
 		$Users = $this->userRepo->getAllActive();
+		$branches = Branch::lists('BranchName','id');
 		// dd($Users);
-		return View::make('dashboard.users.users', compact('Users'));
+		return View::make('dashboard.users.users', compact('Users','branches'));
 	}
 
 
@@ -32,7 +33,7 @@ class UsersController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		
 	}
 
 
@@ -43,7 +44,16 @@ class UsersController extends \BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::only('id','username','password','password_confirmation','Lastname','Firstname','MI','UserType');
+		if(Input::get('isCurrentPW') == '0'){
+			return Redirect::back()
+			->withFlashMessage('
+						<div class="alert alert-danger" role="alert">
+							Current Password did not matched!
+						</div>
+					');;
+		}
+
+		$input = Input::only('id','username','password','password_confirmation','Lastname','Firstname','MI','UserType','BranchNo');
 		if($input['id'] == ''){
 			$this->registrationForm->validate($input);
 			$customer = User::create($input);
