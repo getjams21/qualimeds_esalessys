@@ -47,6 +47,10 @@
 				</select>
 				<input type="hidden" name="id" id="library-action" value="">
 			</div>
+			<div class="form-group">
+				<label>Branch</label>
+				{{Form::select('BranchNo', $branches, 'key', array('class' => 'form-control square','id'=>'branches'));}}
+			</div>
 			</div>
 			</div>
 			</div>

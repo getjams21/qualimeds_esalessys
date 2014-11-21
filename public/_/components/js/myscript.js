@@ -524,8 +524,10 @@ $('#current-password').blur(function(event) {
 	// alert (val);
 	$.get('verifyCurrentPassword',{val:val},function(data){
   		if(data == '0'){
+  			$('#isCurrentPW').val('0');
   			$('.alert').show();
   		}else{
+  			$('#isCurrentPW').val('1');
   			$('.alert').hide();
   		}
   	});

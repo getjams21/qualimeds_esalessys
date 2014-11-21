@@ -7,6 +7,7 @@ class Branch extends \Eloquent {
 		'BranchName',
 		'BAddress',
 		'Telephone',
-		'IsActive'
+		'IsActive',
+		'BranchNo'
 	];
 }
