@@ -58,7 +58,9 @@
 		     </thead> 
 		     <tbody>
 		         @foreach($POs as $PO)
-		          <tr > 
+		          <tr class="
+		         <?php if($PO->IsCancelled == 1){ echo "danger";}elseif($PO->ApprovedBy != ''){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
+		          "> 
 		          	<td>{{$PO->id}}</td>
 		            <td>{{$PO->SupplierName}}</td>
 		            <td>{{dateformat($PO->PODate)}}</td>
@@ -68,21 +70,21 @@
 		            	{{$PO->Terms}} days
 		            	@endif
 		            </td>
-		            <td>{{$PO->PreparedBy}}</td>
-		            <td>@if($PO->ApprovedBy)
+		            <td >{{$PO->PreparedBy}}</td>
+		            <td  id="App{{$PO->id}}">@if($PO->ApprovedBy)
 		            	{{$PO->ApprovedBy}}
 		            	@else
 		            	N/A
 		            	@endif
 		            </td>
-		            <td>@if($PO->CancelledBy)
+		            <td  id="CancelledBy{{$PO->id}}">@if($PO->CancelledBy)
 		            	{{$PO->CancelledBy}}
 		            	@else
 		            	N/A
 		            	@endif
 		            </td>
 		            <td>
-		             @if($PO->ApprovedBy == '' || Auth::user()->UserType==1 || Auth::user()->UserType==11)
+		             @if(($PO->ApprovedBy == '' || isAdmin()) && ($PO->CancelledBy == ''))
 		              <button class="btn btn-primary btn-xs "  onclick="editPO({{$PO->id}})"><i class="fa fa-gear"></i>Edit</button>
 		              @else
 		             <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"> View</button>

@@ -50,6 +50,7 @@
         </div>
           <div class="panel-body">
             <div class="table-responsive responsive" >
+              <div class="alert " id="vwCancelMsg" align="center"></div>
               <table class="table table-striped table-bordered table-hover vwPOTable">
                 <thead>
                   <tr>
@@ -115,7 +116,7 @@
               <div class="form-group">
                 <div class="input-group">
               {{Form::label('term', 'Terms :&nbsp;&nbsp;&nbsp;')}}
-              <div class="btn-group square" data-toggle="buttons">
+              <div class="btn-group square " data-toggle="buttons">
                 <button class="btn btn-success square panel-head dis" id="edTerm1" >
                  Cash </button>
                 <button class="btn btn-success square panel-head dis" id="edTerm2" >
@@ -202,6 +203,7 @@
               <hr class="style-fade">
               <div class="row">
                 <div class="col-md-8">
+
                 </div>
                 <div class="col-md-4">
                   <b>Total Cost:  <i id="edPOTotalCost"> 0</i></b>
@@ -213,8 +215,14 @@
          </div>
         </div><!--modal body -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-success hidden" id="vwSavePOBtn">Save PO</button>
-        <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
+           <button type="button" class="btn btn-danger  pull-left" id="POCancelBtn">Cancel PO</button>
+           @if(isAdmin())
+           <span class="alert alert-warning"> Approval status will be automatically updated upon clicking the checkbox.</span>
+              <input type="checkbox" id="vwApproved" style="width:18px; height:15px;"/> Approved
+           @endif
+           &nbsp;&nbsp;
+          <button type="button" class="btn btn-success hidden" id="vwSavePOBtn">Save Edit</button>
+        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

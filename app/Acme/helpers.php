@@ -7,7 +7,7 @@ function errors_for($attribute, $errors)
 function dateformat($date){
 	return date("m/d/Y",strtotime($date));
 }
-function fullame($user){
+function fullname($user){
 	return ucfirst($user->Lastname).', '.ucfirst($user->Firstname).' '.ucfirst($user->MI).'.';
 }
 function isAdmin(){
