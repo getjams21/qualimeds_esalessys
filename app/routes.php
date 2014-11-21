@@ -53,12 +53,19 @@ Route::group(["before" => "auth"], function() {
 	#Transactions
  	#PURCHASE ORDER ROUTES
  		Route::resource('/PurchaseOrders', 'POController');
- 		Route::post('/savePO', 'POController@savePO');
- 		Route::post('/viewPO', 'POController@viewPO');
- 		Route::post('/viewPODetails', 'POController@viewPODetails');
- 		Route::post('/saveEditedPO', 'POController@saveEditedPO');
- 		Route::post('/approvePO', 'POController@approvePO');
- 		Route::post('/cancelPO', 'POController@cancelPO');
- 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
- 		Route::post('/addProductToPO', 'POController@addProductToPO');
+	 		Route::post('/savePO', 'POController@savePO');
+	 		Route::post('/viewPO', 'POController@viewPO');
+	 		Route::post('/viewPODetails', 'POController@viewPODetails');
+	 		Route::post('/saveEditedPO', 'POController@saveEditedPO');
+	 		Route::post('/approvePO', 'POController@approvePO');
+	 		Route::post('/cancelPO', 'POController@cancelPO');
+	 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
+	 		Route::post('/addProductToPO', 'POController@addProductToPO');
+	 #BILLS ROUTES
+	 	Route::resource('/Bills', 'BillsController');
+	 	Route::post('/savePOBill', 'BillsController@savePOBill');
+	 	Route::post('/viewBill', 'BillsController@viewBill');
+	 	Route::post('/viewBillDetails', 'BillsController@viewBillDetails');
+	 	Route::post('/saveEditedPOBill', 'BillsController@saveEditedPOBill');
+
 });

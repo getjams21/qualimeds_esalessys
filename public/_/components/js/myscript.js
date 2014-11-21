@@ -6,6 +6,7 @@ $(function() {
     });
     var hash = window.location.hash;
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+	 
 });
 //to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
 // window.oncontextmenu = function () {
@@ -19,6 +20,7 @@ $(function() {
 //PO FUNCTIONS
 var itemno = 1;
 var counter = 1;
+var d = new Date();
 function addPO(id){
 		$.post('/addProductToPO',{id:id},function(data){
 				if($('#productId'+id).length){
@@ -155,6 +157,9 @@ function editPO(id){
 	 	}else{
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 		$('#vwApproved').prop('checked', true);
+	 		if(document.title == 'Bills'){
+	 			$('#vwApproved').prop('disabled',true);
+	 		}
 	 	}
 	      });
 	 $.post('/viewPODetails',{id:id},function(data){
@@ -173,6 +178,92 @@ function editPO(id){
 		  			counter+=1;
 	  				});
 	  				$('#edPOTotalCost').text(Number(total).toFixed(2));
+	      });
+}
+function billPO(id){
+	$('#saveBillPOBtn').removeClass('hidden');
+	$('#vwSaveBillBtn').addClass('hidden');
+	$('#billNo').text('New Bill');
+	$('#billPOModal').modal('show');
+	 $.post('/viewPO',{id:id},function(data){
+	 	$('#billPOId').text(data[0]['id']);
+	 	$('[name="billPOSupplier"]').val(data[0]['SupplierNo']);
+	 	$('#billBranchName').val(data[0]['BranchName']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#billTerm').val(0);
+	 		$('#billTerm1').addClass('active');
+	 		$('#billTerm2').removeClass('active');
+	 		$('#billTermBox').addClass('hidden');
+		}else{
+		 	$('#billTerm').val(data[0]['Terms']);
+		 	$('#billTerm1').removeClass('active');
+		 	$('#billTerm2').addClass('active');
+		 	$('#billTerm2').prop("disabled", false)
+		 	$('#billTermBox').removeClass('hidden');
+		}
+	      });
+	 $.post('/viewPODetails',{id:id},function(data){
+	  			$(".BillPOTable > tbody").html("");
+	  			counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				$('.BillPOTable >tbody').append('<tr id="billPO'+counter+'" class="billRow"><td >'+counter+'</td><td>'+value.ProductNo+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="numberEditable danger"></td><td class="danger dateEditable">'+(d.getFullYear()+1)+'-01-01</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.CostPerQty).toFixed(2)+'</td>
+	  					<td class="dp success">'+Number(value.CostPerQty*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">0</td><td class="danger selectEditable dp"></td><td class="vweditable dp danger">0.00</td></tr>');
+		  			total+=value.CostPerQty*value.Qty;
+	  				editable(value.ProductNo);
+	  				editableNumber(value.ProductNo);
+	  				editableSelect(value.ProductNo,value.RetailUnit,value.WholeSaleUnit);
+		  			dateEditable(value.ProductNo);
+		  			counter+=1;
+	  				});
+	  				$('#billPOTotalCost').text(Number(total).toFixed(2));
+	      });
+}
+function editBill(id){
+	$('#saveBillPOBtn').addClass('hidden');
+	$('#vwSaveBillBtn').removeClass('hidden');
+	$('#vwSaveBillBtn').val(id);
+	$('#billPOModal').modal('show');
+	$('#billNo').text('Bill No. '+id);
+	$.post('/viewBill',{id:id},function(data){
+		$('#billPOId').text(data[0]['PurchaseOrderNo']);
+	 	$('[name="billPOSupplier"]').val(data[0]['SupplierNo']);
+	 	$('#billBranchName').val(data[0]['BranchName']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#billTerm').val(0);
+	 		$('#billTerm1').addClass('active');
+	 		$('#billTerm2').removeClass('active');
+	 		$('#billTermBox').addClass('hidden');
+		}else{
+		 	$('#billTerm').val(data[0]['Terms']);
+		 	$('#billTerm1').removeClass('active');
+		 	$('#billTerm2').addClass('active');
+		 	$('#billTerm2').prop("disabled", false)
+		 	$('#billTermBox').removeClass('hidden');
+		}
+		var InvDate = new Date(data[0]['SalesInvoiceDate']);
+		$('#invoicedate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
+		$('#invoiceno').val(data[0]['SalesInvoiceNo']);
+	});
+	$.post('/viewBillDetails',{id:id},function(data){
+	  			$(".BillPOTable > tbody").html("");
+	  			counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				$('.BillPOTable >tbody').append('<tr id="billPO'+counter+'" ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="numberEditable danger">'+value.LotNo+'</td><td class="danger dateEditable">'+value.ExpiryDate+'</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.Cost).toFixed(2)+'</td>
+	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">'+value.FreebiesQty+'</td><td class="danger selectEditable dp">'+value.FreebiesUnit+'</td><td class="vweditable dp danger">'+value.CostPerQty+'</td></tr>');
+		  			total+=value.Cost*value.Qty;
+	  				editable(value.ProductNo);
+	  				editableNumber(value.ProductNo);
+	  				editableSelect(value.ProductNo,value.RetailUnit,value.WholeSaleUnit);
+		  			dateEditable(value.ProductNo);
+		  			counter+=1;
+	  				});
+	  				$('#billPOTotalCost').text(Number(total).toFixed(2));
 	      });
 }
 function editable(id){
@@ -196,6 +287,48 @@ function editable(id){
 				}
 	});
 }
+function editableNumber(id){
+	$('.numberEditable').editable({
+			send: 'never', 
+		    type: 'text',
+		     emptytext:0,
+		    validate: function(value) {
+		        if($.trim(value) == '') {
+		         return 'This field is required';
+		        }
+		        else if($.isNumeric(value) == '' || value==0) {
+		            return 'Please input a valid number greater than 0';
+		        }
+		    },
+		   display: function(value) {
+		   		$(this).text(value);
+				}
+	});
+}
+function editableSelect(id,first,second){
+	$('.selectEditable').editable({
+        value: 1, 
+        type: 'select',   
+        source: [
+              {value: 1, text: first},
+              {value: 2, text: second}
+           ]
+    });	
+}
+function dateEditable(id){
+	$('.dateEditable').editable({
+		type: 'combodate',
+        format: 'YYYY-MM-DD',    
+        viewformat: 'YYYY-MM-DD',    
+        template: 'D / MMMM / YYYY',    
+        combodate: {
+                minYear: d.getFullYear(),
+                maxYear: d.getFullYear()+10,
+                minuteStep: 1
+           }
+    });
+}
+
 function edcalcCost(id){
 	var qty = $('#edQty'+id).text();
 	var unit = $('#edUnit'+id).text();
@@ -348,6 +481,10 @@ function numberWithCommas(x) {
 }
 //Document Ready
 $(document).ready(function(){
+$('.vweditable,.numberEditable,.selectEditable,.dateEditable').change(function(){
+	$('#vwSaveBillBtn').removeClass('hidden');
+});	
+$( "#invoiceDate" ).datepicker();
 
 $('#edTerm,#vwSupplier').change(function(){
 	$('#vwSavePOBtn').removeClass('hidden');
@@ -534,23 +671,23 @@ $('#telephone,#telephone1,#telephone2').keydown(function(event) {
 });
 // PO TERM 
 //term check
-$('#term2,#edTerm2').click(function() {
-	$('#termBox,#edTermBox').removeClass('hidden');
-	$('#term1,#edTerm1').removeClass('active');
-	$('#term,#edTerm').select();
+$('#term2,#edTerm2,#billTerm2').click(function() {
+	$('#termBox,#edTermBox,#billTermBox').removeClass('hidden');
+	$('#term1,#edTerm1,#billTerm1').removeClass('active');
+	$('#term,#edTerm,#billTerm').select();
 });
-$('#term1,#edTerm1').click(function() {
-	$('#termBox,#edTermBox').addClass('hidden');
-	$('#term2,#edTerm2').removeClass('active');
-	$('#term,#edTerm').val(0);
+$('#term1,#edTerm1,#billTerm1').click(function() {
+	$('#termBox,#edTermBox,#billTermBox').addClass('hidden');
+	$('#term2,#edTerm2,#billTerm2').removeClass('active');
+	$('#term,#edTerm,#billTerm').val(0);
 });
-$('#term,#edTerm').blur(function() {
+$('#term,#edTerm,#billTerm').blur(function() {
 	var value=jQuery.trim($(this).val());
 	if(value==''){
 		$(this).val(0);
 	}
 });
-$("#term,#edTerm").keydown(function(e){
+$("#term,#edTerm,#billTerm,#invoiceno").keydown(function(e){
 		numberOnlyInput(e);
 });
 //END OF PO TERM
@@ -608,7 +745,9 @@ $('#vwSavePOBtn').click(function(){
 	$.post('/saveEditedPO',{TD:TableData,supplier:supplier,term:term,id:id},function(data){
 			if(data==1){
 				location.reload();
-				$(location).attr('href','/PurchaseOrders#showPOList');
+				if(document.title == 'Purchase'){
+					$(location).attr('href','/PurchaseOrders#showPOList');
+				}
 			}else if(data==0){
 				alert('invalid move');
 			}
@@ -627,6 +766,86 @@ $('#vwSavePOBtn').click(function(){
 		TableData.shift();
 	    return TableData;
 	}
+});
+$('#saveBillPOBtn').click(function(){
+	var TableData;
+	var id = $('#billPOId').text();
+	var term = $('#billTerm').val();
+	var SalesInvoiceNo = $('#invoiceno').val();
+	var SalesInvoiceDate = $('#invoicedate').val();
+
+	TableData = storeTblValues1()
+	TableData = $.toJSON(TableData);
+	$.post('/savePOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
+			if(data==1){
+				location.reload();
+				if(document.title == 'Purchase'){
+					$(location).attr('href','/PurchaseOrders#showPOList');
+				}
+			}else if(data==0){
+				$('#billError').fadeIn("fast", function(){        
+				        $("#billError").fadeOut(4000);
+				});
+			}
+		});
+	function storeTblValues1()
+	{
+		var TableData = new Array();
+		$('.BillPOTable > tbody  > tr').each(function(row, tr){
+		    TableData[row]={
+		    	 "ProductNo" : $(tr).find('td:eq(1)').text()
+		    	, "Unit" :$(tr).find('td:eq(4)').text()
+		        ,"LotNo" : $(tr).find('td:eq(5)').text()
+		        , "ExpiryDate" :$(tr).find('td:eq(6)').text()
+		        , "Qty" :$(tr).find('td:eq(7)').text()
+		        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
+		        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(12)').text()
+		    }
+		});
+		// TableData.shift();
+	    return TableData;
+	}	
+});
+$('#vwSaveBillBtn').click(function(){
+	var TableData;
+	var id = $('#vwSaveBillBtn').val();
+	var term = $('#billTerm').val();
+	var SalesInvoiceNo = $('#invoiceno').val();
+	var SalesInvoiceDate = $('#invoicedate').val();
+
+	TableData = storeTblValues1()
+	TableData = $.toJSON(TableData);
+	$.post('/saveEditedPOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
+			if(data==1){
+				location.reload();
+				if(document.title == 'Purchase'){
+					$(location).attr('href','/PurchaseOrders#showPOList');
+				}
+			}else if(data==0){
+				$('#billError').fadeIn("fast", function(){        
+				        $("#billError").fadeOut(4000);
+				});
+			}
+		});
+	function storeTblValues1()
+	{
+		var TableData = new Array();
+		$('.BillPOTable > tbody  > tr').each(function(row, tr){
+		    TableData[row]={
+		    	 "ProductNo" : $(tr).find('td:eq(1)').text()
+		    	, "Unit" :$(tr).find('td:eq(4)').text()
+		        ,"LotNo" : $(tr).find('td:eq(5)').text()
+		        , "ExpiryDate" :$(tr).find('td:eq(6)').text()
+		        , "Qty" :$(tr).find('td:eq(7)').text()
+		        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
+		        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(12)').text()
+		    }
+		});
+		// TableData.shift();
+	    return TableData;
+	}	
 });
 
 });//end of ready function

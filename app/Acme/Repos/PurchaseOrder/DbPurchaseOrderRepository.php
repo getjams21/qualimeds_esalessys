@@ -14,6 +14,14 @@ class DbPurchaseOrderRepository extends DbRepository implements PurchaseOrderRep
 		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')->get();
 	}
 	public function getByIdWithSup($id){
-		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')->where('Purchaseorders.id', '=', $id)->get();
+		return PurchaseOrder::selectRaw('Purchaseorders.*,b.BranchName,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')
+		->join('Branches AS b', 'Purchaseorders.BranchNo', '=', 'b.id')->where('Purchaseorders.id', '=', $id)->get();
+	}
+	public function getAllApprovedPO(){
+		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')
+		->leftJoin('Bills AS b', 'b.PurchaseOrderNo', '=', 'Purchaseorders.id')
+		->whereNotIn('Purchaseorders.ApprovedBy', array(''))->where('Purchaseorders.IsCancelled', '=', 0)
+		->whereNull('b.PurchaseOrderNo')
+		->get();
 	}
 }
