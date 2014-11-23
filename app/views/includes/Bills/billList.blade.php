@@ -16,22 +16,18 @@
 		@endif
 		<div class="table-responsive responsive" >
 			 
-		  <table class="table table-striped table-bordered table-hover" id="billList">
+		  <table class="table table-striped table-bordered table-hover" id="billListing">
 		  	<div class="row">
-		  		<!-- <div class="col-md-5">
-		  			
-		  		<br>
-		         </div>	 -->
 		         <div class="col-md-11">
 		         	<div class="input-group ">
                   	{{ Form::label('', 'From: '); }}
                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$lastweek}}" type="text" id="from"  readonly required>
+                      <input class="form-control" value="{{$lastweek}}" type="text" id="min2"  readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     {{ Form::label('', 'To: '); }}
                      <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$now}}" type="text" id="to"  max="{{$now}}" readonly required>
+                      <input class="form-control" value="{{$now}}" type="text" id="max2"  max="{{$now}}" readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     </div><br>
@@ -66,8 +62,8 @@
 		          "> 
 		          	<td>{{$bill->id}}</td>
 		            <td>{{$bill->PurchaseOrderNo}}</td>
-		            <td>{{$bill->SupplierNo}}</td>
-		            <td>{{$bill->BranchNo}}</td>
+		            <td>{{$bill->SupplierName}}</td>
+		            <td>{{$bill->BranchName}}</td>
 		            <td>{{dateformat($bill->BillDate)}}</td>
 		            <td>{{$bill->SalesInvoiceNo}}</td>
 		              <td>{{dateformat($bill->SalesInvoiceDate)}}</td>
@@ -94,7 +90,7 @@
 		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == ''))
 		              <button class="btn btn-primary btn-xs "  onclick="editBill({{$bill->id}})"><i class="fa fa-gear"></i>Edit</button>
 		              @else
-		             <button class="btn btn-success btn-xs "  onclick="viewPO({{$bill->id}})"> View</button>
+		             <button class="btn btn-success btn-xs "  onclick="viewBill({{$bill->id}})"> View</button>
 		              @endif
 		            </td>
 		           

@@ -29,7 +29,7 @@ private $purchaseOrderRepo;
 		$supplier = Supplier::lists('SupplierName','id');
 		$products = $this->productRepo->getAll();
 		$POs= $this->purchaseOrderRepo->getAllApprovedPO();
-		$bills= $this->billsRepo->getAll();
+		$bills= $this->billsRepo->getAllWithSup();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		return View::make('dashboard.Bills.list',compact('POs','supplier','products','max','now','lastweek','bills'));
@@ -43,6 +43,12 @@ private $purchaseOrderRepo;
   			if(!$TableData || !$input['SalesInvoiceNo'] || !$input['SalesInvoiceDate']){
   				$result = 0;
   			}else{
+  				if($input['ApprovedBy'] == 1){
+  					$approve = fullname(Auth::user());
+  				}else{
+  					$approve = '';
+  				}
+  				
   				$PO = PurchaseOrder::find($input['id']);
   				$bill = new Bill;
   				$bill->PurchaseOrderNo = $input['id'];
@@ -53,6 +59,7 @@ private $purchaseOrderRepo;
   				$bill->SalesInvoiceDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['SalesInvoiceDate'])->toDateTimeString();
   				$bill->Terms = $input['term'];
   				$bill->PreparedBy = fullname(Auth::user());
+  				$bill->ApprovedBy = $approve;
   				$bill->save();
   				$result =1;
   				foreach($TableData as $td){
@@ -125,6 +132,34 @@ private $purchaseOrderRepo;
 			$bill= $this->billDetailsRepo->getAllByBill($id);
 		return Response::json($bill);
 		}
+	}
+	public function cancelBill()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id = $input['id'];
+  			$bill = Bill::find($id);
+  			$bill->CancelledBy=fullname(Auth::user());
+  			$bill->IsCancelled=1;
+  			$bill->save();
+  			return Response::json(fullname(Auth::user()));
+  		}
+	}
+	public function approveBill()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id = $input['id'];
+  			if($input['ApprovedBy']==1){
+  				$approve = fullname(Auth::user());
+  			}else{
+  				$approve = '';
+  			}
+  			$PO = Bill::find($id);
+  			$PO->ApprovedBy=$approve;
+  			$PO->save();
+  			return Response::json($approve);
+  		}
 	}
 
 	/**

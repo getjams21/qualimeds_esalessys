@@ -67,7 +67,9 @@ Route::group(["before" => "auth"], function() {
 	 	Route::post('/viewBill', 'BillsController@viewBill');
 	 	Route::post('/viewBillDetails', 'BillsController@viewBillDetails');
 	 	Route::post('/saveEditedPOBill', 'BillsController@saveEditedPOBill');
-
+	 	Route::post('/cancelBill', 'BillsController@cancelBill');
+		Route::post('/approveBill', 'BillsController@approveBill');
+		
  	#SALES ORDER ROUTES
  		Route::resource('/SalesOrders', 'SOController');
  		Route::post('/saveSO', 'SOController@saveSO');

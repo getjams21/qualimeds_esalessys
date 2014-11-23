@@ -181,8 +181,8 @@ function editPO(id){
 	      });
 }
 function billPO(id){
-	$('#saveBillPOBtn').removeClass('hidden');
-	$('#vwSaveBillBtn').addClass('hidden');
+	$('#saveBillPOBtn,#billApprove').removeClass('hidden');
+	$('#vwSaveBillBtn,#BillCancelBtn,#checkAlert,#billApproved').addClass('hidden');
 	$('#billNo').text('New Bill');
 	$('#billPOModal').modal('show');
 	 $.post('/viewPO',{id:id},function(data){
@@ -222,8 +222,8 @@ function billPO(id){
 	      });
 }
 function editBill(id){
-	$('#saveBillPOBtn').addClass('hidden');
-	$('#vwSaveBillBtn').removeClass('hidden');
+	$('#saveBillPOBtn,#vwSaveBillBtn,#billApprove').addClass('hidden');
+	$('#BillCancelBtn,#checkAlert,#billApproved').removeClass('hidden');
 	$('#vwSaveBillBtn').val(id);
 	$('#billPOModal').modal('show');
 	$('#billNo').text('Bill No. '+id);
@@ -243,6 +243,11 @@ function editBill(id){
 		 	$('#billTerm2').prop("disabled", false)
 		 	$('#billTermBox').removeClass('hidden');
 		}
+		if(data[0]['ApprovedBy'] == ''){
+	 		$('#billApproved').prop('checked', false);
+	 	}else{
+	 		$('#billApproved').prop('checked', true);
+	 	}
 		var InvDate = new Date(data[0]['SalesInvoiceDate']);
 		$('#invoicedate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
 		$('#invoiceno').val(data[0]['SalesInvoiceNo']);
@@ -266,6 +271,43 @@ function editBill(id){
 	  				$('#billPOTotalCost').text(Number(total).toFixed(2));
 	      });
 }
+function viewBill(id){
+	$('#viewBillModal').modal('show');
+	$('#vwbillNo').text(id);
+	$.post('/viewBill',{id:id},function(data){
+		$('#vwbillPOId').text(data[0]['PurchaseOrderNo']);
+	 	$('[name="vwBillSupplier"]').val(data[0]['SupplierNo']);
+	 	$('#vwBillBranchName').val(data[0]['BranchName']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#vwBillTerm').val('Cash');
+		}else{
+		 	$('#vwBillTerm').val(data[0]['Terms']);
+		}
+		// if(data[0]['ApprovedBy'] == ''){
+	 // 		$('#billApproved').prop('checked', false);
+	 // 	}else{
+	 // 		$('#billApproved').prop('checked', true);
+	 // 	}
+	 $('#billDate').text(data[0]['BillDate']);
+		var InvDate = new Date(data[0]['SalesInvoiceDate']);
+		$('#vwBillInvoiceDate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
+		$('#vwBillInvoiceNo').val(data[0]['SalesInvoiceNo']);
+	});
+	$.post('/viewBillDetails',{id:id},function(data){
+	  			$(".BillPOTable > tbody").html("");
+	  			counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				$('.BillPOTable >tbody').append('<tr ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td >'+value.LotNo+'</td><td >'+value.ExpiryDate+'</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.Cost).toFixed(2)+'</td>
+	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="dp ">'+value.FreebiesQty+'</td><td class="dp">'+value.FreebiesUnit+'</td><td class="dp ">'+value.CostPerQty+'</td></tr>');
+		  			total+=value.Cost*value.Qty;
+		  			counter+=1;
+	  				});
+	  				$('#vwBillTotalCost').text(Number(total).toFixed(2));
+	      });
+}
 function editable(id){
 	$('.vweditable').editable({
 			send: 'never', 
@@ -277,7 +319,7 @@ function editable(id){
 		        else if($.isNumeric(value) == '' || value==0) {
 		            return 'Please input a valid number greater than 0';
 		        }else{
-		        $('#vwSavePOBtn').removeClass('hidden');
+		        $('#vwSaveBillBtn').removeClass('hidden');
 		        }
 		    },
 		    emptytext:0,
@@ -298,6 +340,8 @@ function editableNumber(id){
 		        }
 		        else if($.isNumeric(value) == '' || value==0) {
 		            return 'Please input a valid number greater than 0';
+		        }else{
+		        $('#vwSaveBillBtn').removeClass('hidden');
 		        }
 		    },
 		   display: function(value) {
@@ -308,7 +352,14 @@ function editableNumber(id){
 function editableSelect(id,first,second){
 	$('.selectEditable').editable({
         value: 1, 
-        type: 'select',   
+        type: 'select',
+	    validate: function(value) {
+	        if($.trim(value) == '') {
+	         return 'This field is required';
+	        }else{
+	        $('#vwSaveBillBtn').removeClass('hidden');
+	        }
+	    },   
         source: [
               {value: 1, text: first},
               {value: 2, text: second}
@@ -320,7 +371,14 @@ function dateEditable(id){
 		type: 'combodate',
         format: 'YYYY-MM-DD',    
         viewformat: 'YYYY-MM-DD',    
-        template: 'D / MMMM / YYYY',    
+        template: 'D / MMMM / YYYY',
+	    validate: function(value) {
+	        if($.trim(value) == '') {
+	         return 'This field is required';
+	        }else{
+	        $('#vwSaveBillBtn').removeClass('hidden');
+	        }
+	    },    
         combodate: {
                 minYear: d.getFullYear(),
                 maxYear: d.getFullYear()+10,
@@ -503,9 +561,32 @@ $('#vwApproved').change(function(){
 	 	  	if(!data){
 	 	  		$('#edApprovedBy').val('N/A');
 	 	  		$('#App'+id).text('N/A');
+	 	  		$('#App'+id).parent('tr').removeClass('success');
+	 	  		$('#App'+id).parent('tr').addClass('warning');
 	 	  	}else{
 				$('#edApprovedBy').val(data);
 	 	  		$('#App'+id).text(data);
+	 	  		$('#App'+id).parent('tr').removeClass('warning');
+	 	  		$('#App'+id).parent('tr').addClass('success');
+	 	  	}
+		});
+});
+$('#billApproved').change(function(){
+	var id=$('#vwSaveBillBtn').val();
+	if($('#billApproved').is(':checked')){
+		var approve = 1;
+	}else{
+		var approve = 0;
+	}
+		$.post('/approveBill',{id:id,ApprovedBy:approve},function(data){
+	 	  	if(!data){
+	 	  		$('#App'+id).text('N/A');
+	 	  		$('#App'+id).parent('tr').removeClass('success');
+	 	  		$('#App'+id).parent('tr').addClass('warning');
+	 	  	}else{
+	 	  		$('#App'+id).text(data);
+	 	  		$('#App'+id).parent('tr').removeClass('warning');
+	 	  		$('#App'+id).parent('tr').addClass('success');
 	 	  	}
 		});
 });
@@ -513,8 +594,20 @@ $('#POCancelBtn').click(function(){
 	var id=$('#edPOId').text();
 		$.post('/cancelPO',{id:id},function(data){
 	 	  	$('#CancelledBy'+id).text(data);
+	    	location.reload();
+				if(document.title == 'Purchase'){
+					$(location).attr('href','/PurchaseOrders#showPOList');
+				}
+		});
+});
+$('#BillCancelBtn').click(function(){
+	var id=$('#vwSaveBillBtn').val();
+	alert(id);
+		$.post('/cancelBill',{id:id},function(data){
 	 	  	location.reload();
-	    	$(location).attr('href','/PurchaseOrders#showPOList');
+				if(document.title == 'Bills'){
+					$(location).attr('href','/Bills#BillsList');
+				}
 		});
 });
 //Verify current password
@@ -775,10 +868,14 @@ $('#saveBillPOBtn').click(function(){
 	var term = $('#billTerm').val();
 	var SalesInvoiceNo = $('#invoiceno').val();
 	var SalesInvoiceDate = $('#invoicedate').val();
-
+	if($('#billApprove').is(':checked')){
+			var approvedBy=1;
+		} else{
+			var approvedBy='';
+		}
 	TableData = storeTblValues1()
 	TableData = $.toJSON(TableData);
-	$.post('/savePOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
+	$.post('/savePOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Purchase'){

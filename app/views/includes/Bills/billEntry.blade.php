@@ -79,10 +79,14 @@
 		            	{{$PO->CancelledBy}}
 		            	@else
 		            	N/A
-		            	@endif
+		            	@endif 
 		            </td>
 		            <td>
+		            @if(isAdmin())
 		              <button class="btn btn-primary btn-xs "  onclick="editPO({{$PO->id}})"><i class="fa fa-gear"></i>Edit</button>
+		            @else
+					  <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"></i>View</button>
+		            @endif
 		              <button class="btn btn-success btn-xs "  onclick="billPO({{$PO->id}})"><i class="fa fa-check"></i>Bill</button>
 		            </td>
 		           
