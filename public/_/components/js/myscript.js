@@ -539,7 +539,8 @@ function numberWithCommas(x) {
 }
 //Document Ready
 $(document).ready(function(){
-$('.vweditable,.numberEditable,.selectEditable,.dateEditable').change(function(){
+$('.vweditable,.numberEditable,.selectEditable,.dateEditable,#invoiceno,#invoicedate,
+	#billTerm').change(function(){
 	$('#vwSaveBillBtn').removeClass('hidden');
 });	
 $( "#invoiceDate" ).datepicker();
