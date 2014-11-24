@@ -223,7 +223,7 @@ function billPO(id){
 }
 function editBill(id){
 	$('#saveBillPOBtn,#vwSaveBillBtn,#billApprove').addClass('hidden');
-	$('#BillCancelBtn,#checkAlert,#billApproved').removeClass('hidden');
+	$('#BillCancelBtn,#checkAlert,#billApproved,#vwSaveBillBtn').removeClass('hidden');
 	$('#vwSaveBillBtn').val(id);
 	$('#billPOModal').modal('show');
 	$('#billNo').text('Bill No. '+id);
@@ -294,11 +294,11 @@ function viewBill(id){
 		$('#vwBillInvoiceNo').val(data[0]['SalesInvoiceNo']);
 	});
 	$.post('/viewBillDetails',{id:id},function(data){
-	  			$(".BillPOTable > tbody").html("");
+	  			$(".BillPOTable2 > tbody").html("");
 	  			counter=1;
 	  			var total=0;
 			  		$.each(data, function(key,value) {
-	  				$('.BillPOTable >tbody').append('<tr ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
+	  				$('.BillPOTable2 >tbody').append('<tr ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td >'+value.LotNo+'</td><td >'+value.ExpiryDate+'</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.Cost).toFixed(2)+'</td>
 	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="dp ">'+value.FreebiesQty+'</td><td class="dp">'+value.FreebiesUnit+'</td><td class="dp ">'+value.CostPerQty+'</td></tr>');
@@ -318,8 +318,6 @@ function editable(id){
 		        }
 		        else if($.isNumeric(value) == '' || value==0) {
 		            return 'Please input a valid number greater than 0';
-		        }else{
-		        $('#vwSaveBillBtn').removeClass('hidden');
 		        }
 		    },
 		    emptytext:0,
@@ -340,8 +338,6 @@ function editableNumber(id){
 		        }
 		        else if($.isNumeric(value) == '' || value==0) {
 		            return 'Please input a valid number greater than 0';
-		        }else{
-		        $('#vwSaveBillBtn').removeClass('hidden');
 		        }
 		    },
 		   display: function(value) {
@@ -356,8 +352,6 @@ function editableSelect(id,first,second){
 	    validate: function(value) {
 	        if($.trim(value) == '') {
 	         return 'This field is required';
-	        }else{
-	        $('#vwSaveBillBtn').removeClass('hidden');
 	        }
 	    },   
         source: [
@@ -375,8 +369,6 @@ function dateEditable(id){
 	    validate: function(value) {
 	        if($.trim(value) == '') {
 	         return 'This field is required';
-	        }else{
-	        $('#vwSaveBillBtn').removeClass('hidden');
 	        }
 	    },    
         combodate: {
@@ -539,10 +531,10 @@ function numberWithCommas(x) {
 }
 //Document Ready
 $(document).ready(function(){
-$('.vweditable,.numberEditable,.selectEditable,.dateEditable,#invoiceno,#invoicedate,
-	#billTerm').change(function(){
-	$('#vwSaveBillBtn').removeClass('hidden');
-});	
+// $('.vweditable,.numberEditable,.selectEditable,.dateEditable,#invoiceno,#invoicedate,
+// 	#billTerm').change(function(){
+// 	$('#vwSaveBillBtn').removeClass('hidden');
+// });	
 $( "#invoiceDate" ).datepicker();
 
 $('#edTerm,#vwSupplier').change(function(){

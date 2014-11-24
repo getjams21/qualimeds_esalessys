@@ -183,7 +183,7 @@
           <div class="panel-body">
             <div class="alert alert-danger" hidden id="billError"><center><b>Please fill out Invoice No. / Invoice Date</b></center></div>
             <div class="table-responsive responsive" >
-              <table class="table table-striped table-bordered table-hover BillPOTable">
+              <table class="table table-striped table-bordered table-hover BillPOTable2">
                 <thead>
                   <tr><th colspan="10" class="success">Billing Details</th>
                       <th colspan="3" class="warning">Freebies</th>
