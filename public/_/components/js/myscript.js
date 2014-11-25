@@ -312,30 +312,23 @@ function triggerEditUser(id){
 	$.get('toEditUser',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			var usertype;
   			$.each(data, function(key,value) {
-  				if (value.UserType == 1){
-  					usertype = 'Admin';
-  				} else if (value.UserType == 11){
-  					usertype = 'Admin/Sales Rep';
-  				} else if (value.UserType == 2){
-  					usertype = 'Warehouse User';
-  				} else if (value.UserType == 3){
-  					usertype = 'Office Clerk';
-  				} else if (value.UserType == 4){
-  					usertype = 'Sales Rep';
-  				}
+  				//user type select
+  				$('select#usertype option[value="'+value.UserType+'"]').attr('selected',true);
+  				//branch select
+  				$('select#branches option[value="'+value.BranchNo+'"]').attr('selected',true);
 	  			$('#library-action').val(value.id);
 	  			$('.username').val(value.username);
 	  			$('.lastname').val(value.Lastname);
 	  			$('.firstname').val(value.Firstname);
 	  			$('.mi').val(value.MI);
-	  			$('.usertype').val(usertype);
 	  			$('.deactivate').attr('href', '/delete-user/'+id+'');
 	  			$('.delete').show();
   			});
   		}
   	});
+$('.user-pwd').hide();
+$('.password,.retype-password').removeAttr('required');
 $('#user-library').modal('show');
 }
 function money(x){
@@ -348,6 +341,16 @@ function numberWithCommas(x) {
 }
 //Document Ready
 $(document).ready(function(){
+
+$('.add-user').click(function(event) {
+	// alert('horaa');
+	$('#userForm input[type="text"]').val('');
+});
+
+$('#user-library').on('hidden.bs.modal', function () {
+    $('.user-pwd,.password,.retype-password').show();
+    $('.password,.retype-password').attr('required');
+})
 
 $('#edTerm,#vwSupplier').change(function(){
 	$('#vwSavePOBtn').removeClass('hidden');

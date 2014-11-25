@@ -53,19 +53,42 @@ class UsersController extends \BaseController {
 					');;
 		}
 
-		$input = Input::only('id','username','password','password_confirmation','Lastname','Firstname','MI','UserType','BranchNo');
-		if($input['id'] == ''){
+		if(Input::get('id') == ''){
+			$input = Input::only('username','password','password_confirmation','Lastname','Firstname','MI','UserType','BranchNo');
 			$this->registrationForm->validate($input);
-			$customer = User::create($input);
-			return Redirect::back()
-				->withFlashMessage('
-						<div class="alert alert-success" role="alert">
-							User is Successfully added.
-						</div>
-					');
+			$user = new User;
+			$user->username=Input::get('username');
+			$user->Lastname=Input::get('Lastname');
+			$user->password=Input::get('password');
+			$user->Firstname=Input::get('Firstname');
+			$user->UserType=Input::get('UserType');
+			$user->MI=Input::get('MI');
+			$user->BranchNo=Input::get('BranchNo');
+			$user->save();
+			if($user){
+				return Redirect::back()
+					->withFlashMessage('
+							<div class="alert alert-success" role="alert">
+								User is Successfully added.
+							</div>
+						');
+			}else{
+				return Redirect::back()
+					->withFlashMessage('
+							<div class="alert alert-success" role="alert">
+								Failed.
+							</div>
+						');
+			}
 		}else{
-			$user = User::find($input['id']);
-			$user->fill($input)->save();
+			$user = User::find(Input::get('id'));
+			$user->username=Input::get('username');
+			$user->Lastname=Input::get('Lastname');
+			$user->Firstname=Input::get('Firstname');
+			$user->UserType=Input::get('UserType');
+			$user->MI=Input::get('MI');
+			$user->BranchNo=Input::get('BranchNo');
+			$user->save();
 			return Redirect::back()
 				->withFlashMessage('
 						<div class="alert alert-success" role="alert">
