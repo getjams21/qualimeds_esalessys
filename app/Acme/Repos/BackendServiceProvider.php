@@ -17,5 +17,8 @@ class BackendServiceProvider extends ServiceProvider{
 		#Users
 		$this->app->bind('Acme\Repos\User\UserRepository','Acme\Repos\User\DbUserRepository');
 
+		$this->app->bind('Acme\Repos\Bills\BillsRepository','Acme\Repos\Bills\DbBillsRepository');
+		$this->app->bind('Acme\Repos\BillDetails\BillDetailsRepository','Acme\Repos\BillDetails\DbBillDetailsRepository');
+
 	}
 }

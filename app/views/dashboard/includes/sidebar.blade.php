@@ -45,6 +45,9 @@
                         <li>
                             <a href="/SalesOrders">Sales Orders</a>
                         </li>
+                        <li>
+                            <a href="/Bills">Bills</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidehead">

@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
 		<div class="row">
             <div class="col-md-9">
-              <h4><b>Purchase Order List</b></h4>
+              <h4><b>Bills</b></h4>
            </div>
            <div class="col-md-3">
            </div>
@@ -16,38 +16,38 @@
 		@endif
 		<div class="table-responsive responsive" >
 			 
-		  <table class="table  table-bordered table-hover" id="POList">
+		  <table class="table table-striped table-bordered table-hover" id="billListing">
 		  	<div class="row">
-		  		<!-- <div class="col-md-5">
-		  			
-		  		<br>
-		         </div>	 -->
 		         <div class="col-md-11">
 		         	<div class="input-group ">
                   	{{ Form::label('', 'From: '); }}
                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
+                      <input class="form-control" value="{{$lastweek}}" type="text" id="min2"  readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     {{ Form::label('', 'To: '); }}
                      <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$now}}" type="text" id="max"  max="{{$now}}" readonly required>
+                      <input class="form-control" value="{{$now}}" type="text" id="max2"  max="{{$now}}" readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     </div><br>
 		  		 	 <div class="form-group pull-left" >
 		                <div class="input-group" style="width:50%;  ">
 		                  <span class="input-group-addon">Search Keyword: </span>
-		                  <input type="text" id="mySearchTextField" class="form-control"  >
+		                  <input type="text" id="billSearchTextField" class="form-control"  >
 		                </div>
 		         	</div> 
 		         </div>	
 		     </div>   	
 			<thead>
 		      <tr>
-		      	<th>PO No</th>
+		      	<th>Bill No</th>
+		        <th>PO #</th>
 		        <th>Supplier</th>
-		        <th>PO Date</th>
+		        <th>Branch</th>
+		        <th>Bill Date</th>
+		        <th>Invoice No.</th>
+		        <th>Invoice Date</th>
 		        <th>Terms</th>
 		        <th>Prepared By</th>
 		        <th>Approved By</th>
@@ -56,37 +56,41 @@
 		      </tr>
 		     </thead> 
 		     <tbody>
-		         @foreach($POs as $PO)
+		         @foreach($bills as $bill)
 		          <tr class="
-		         <?php if($PO->IsCancelled == 1){ echo "danger";}elseif($PO->ApprovedBy != '' ){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($bill->IsCancelled == 1){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
 		          "> 
-		          	<td>{{$PO->id}}</td>
-		            <td>{{$PO->SupplierName}}</td>
-		            <td>{{dateformat($PO->PODate)}}</td>
-		            <td>@if($PO->Terms == 0)
+		          	<td>{{$bill->id}}</td>
+		            <td>{{$bill->PurchaseOrderNo}}</td>
+		            <td>{{$bill->SupplierName}}</td>
+		            <td>{{$bill->BranchName}}</td>
+		            <td>{{dateformat($bill->BillDate)}}</td>
+		            <td>{{$bill->SalesInvoiceNo}}</td>
+		              <td>{{dateformat($bill->SalesInvoiceDate)}}</td>
+		            <td>@if($bill->Terms == 0)
 		            	Cash
 		            	@else
-		            	{{$PO->Terms}} days
+		            	{{$bill->Terms}} days
 		            	@endif
 		            </td>
-		            <td >{{$PO->PreparedBy}}</td>
-		            <td  id="App{{$PO->id}}">@if($PO->ApprovedBy)
-		            	{{$PO->ApprovedBy}}
+		            <td >{{$bill->PreparedBy}}</td>
+		            <td  id="App{{$bill->id}}">@if($bill->ApprovedBy)
+		            	{{$bill->ApprovedBy}}
 		            	@else
 		            	N/A
 		            	@endif
 		            </td>
-		            <td  id="CancelledBy{{$PO->id}}">@if($PO->CancelledBy)
-		            	{{$PO->CancelledBy}}
+		            <td  id="CancelledBy{{$bill->id}}">@if($bill->CancelledBy)
+		            	{{$bill->CancelledBy}}
 		            	@else
 		            	N/A
 		            	@endif
 		            </td>
 		            <td>
-		             @if(($PO->ApprovedBy == '' || isAdmin())  && ($PO->CancelledBy == '' ) && !$PO->billed)
-		              <button class="btn btn-primary btn-xs "  onclick="editPO({{$PO->id}})"><i class="fa fa-gear"></i>Edit</button>
+		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == ''))
+		              <button class="btn btn-primary btn-xs "  onclick="editBill({{$bill->id}})"><i class="fa fa-gear"></i>Edit</button>
 		              @else
-		             <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"> View</button>
+		             <button class="btn btn-success btn-xs "  onclick="viewBill({{$bill->id}})"> View</button>
 		              @endif
 		            </td>
 		           

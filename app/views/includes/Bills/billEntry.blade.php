@@ -12,14 +12,13 @@
 		@if (Session::has('flash_message'))
 			<div class="form-group ">
 				<p>{{Session::get('flash_message') }}</p>
-			</div>
+			</div> 
 		@endif
 		<div class="table-responsive responsive" >
 			 
-		  <table class="table  table-bordered table-hover" id="POList">
+		  <table class="table table-striped table-bordered table-hover" id="POList">
 		  	<div class="row">
 		  		<!-- <div class="col-md-5">
-		  			
 		  		<br>
 		         </div>	 -->
 		         <div class="col-md-11">
@@ -58,7 +57,7 @@
 		     <tbody>
 		         @foreach($POs as $PO)
 		          <tr class="
-		         <?php if($PO->IsCancelled == 1){ echo "danger";}elseif($PO->ApprovedBy != '' ){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($PO->IsCancelled == 1){ echo "danger";}elseif($PO->ApprovedBy != ''){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$PO->id}}</td>
 		            <td>{{$PO->SupplierName}}</td>
@@ -80,17 +79,17 @@
 		            	{{$PO->CancelledBy}}
 		            	@else
 		            	N/A
-		            	@endif
+		            	@endif 
 		            </td>
 		            <td>
-		             @if(($PO->ApprovedBy == '' || isAdmin())  && ($PO->CancelledBy == '' ) && !$PO->billed)
+		            @if(isAdmin())
 		              <button class="btn btn-primary btn-xs "  onclick="editPO({{$PO->id}})"><i class="fa fa-gear"></i>Edit</button>
-		              @else
-		             <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"> View</button>
-		              @endif
+		            @else
+					  <button class="btn btn-success btn-xs "  onclick="viewPO({{$PO->id}})"></i>View</button>
+		            @endif
+		              <button class="btn btn-success btn-xs "  onclick="billPO({{$PO->id}})"><i class="fa fa-check"></i>Bill</button>
 		            </td>
 		           
-		            
 		         </tr> 
 		        @endforeach
 		      </tbody>

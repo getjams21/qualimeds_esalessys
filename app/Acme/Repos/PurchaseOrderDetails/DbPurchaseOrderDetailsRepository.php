@@ -8,7 +8,7 @@ class DbPurchaseOrderDetailsRepository extends DbRepository implements PurchaseO
 		$this->model = $model;
 	}
 	public function getAllByPO($id){
-		return PurchaseOrderDetails::selectRaw('Purchaseorderdetails.*,pc.ProductName,pc.BrandName')->join('products AS pc', 'pc.id', '=', 'Purchaseorderdetails.ProductNo')
+		return PurchaseOrderDetails::selectRaw('Purchaseorderdetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'Purchaseorderdetails.ProductNo')
 		->where('Purchaseorderdetails.PurchaseOrderNo', '=', $id)->get();
 
 	}
