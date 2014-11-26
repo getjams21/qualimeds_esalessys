@@ -76,4 +76,21 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSO', 'SOController@viewSO');
  		Route::post('/viewSODetails', 'SOController@viewSODetails');
  		Route::post('/saveEditedSO', 'SOController@saveEditedSO');
-});
+ 		Route::get('/changeSOType', 'SOController@changeSOType');
+	});
+
+#tester
+// Route::get('/tester', function()
+// {
+// 	$vwtest = VwInventorySource::selectRaw('vwinventorysource.ProductNo, vwinventorysource.ProductName, vwinventorysource.BrandName, 
+//     vwinventorysource.RetailUnit As Unit, 
+//      LotNo, ExpiryDate, (SellingPrice/RetailQtyPerWholeSaleUnit) As UnitPrice, 
+//      Sum(RetailSaleQty) Qty')
+//     ->join('products','vwinventorysource.productNo','=','products.id')
+//     ->groupBy('vwinventorysource.ProductNo','vwinventorysource.ProductName','vwinventorysource.BrandName',
+//       'vwinventorysource.RetailUnit','vwinventorysource.LotNo','vwinventorysource.ExpiryDate','vwinventorysource.SellingPrice',
+//       'RetailQtyPerWholeSaleUnit')
+//     ->get();
+
+//   dd($vwtest[0]->LotNo);
+// });
