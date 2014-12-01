@@ -3,15 +3,18 @@ use Acme\Repos\SalesOrder\SalesOrderRepository;
 use Acme\Repos\Product\ProductRepository;
 use Carbon\Carbon;
 use Acme\Repos\SalesOrderDetails\SalesOrderDetailsRepository;
+use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
 
 class SOController extends \BaseController {
 	private $salesOrderRepo;
+	private $vwInventorySource;
 	function __construct(SalesOrderRepository $salesOrderRepo,ProductRepository $productRepo,
-		SalesOrderDetailsRepository $salesOrderDetailsRepo)
+		SalesOrderDetailsRepository $salesOrderDetailsRepo,VwInventorySourceRepository $vwInventorySource)
 		{
 			$this->salesOrderRepo = $salesOrderRepo;
 			$this->productRepo = $productRepo;
 			$this->salesOrderDetailsRepo = $salesOrderDetailsRepo;
+			$this->vwInventorySource = $vwInventorySource;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -24,7 +27,7 @@ class SOController extends \BaseController {
 		$max = $this->salesOrderRepo->getMaxId();
 		$customers = Customer::lists('CustomerName','id');
 		$medReps = User::where('UserType','=','4')->lists('Lastname','id');
-		$products = $this->productRepo->getAll();
+		$products = $this->vwInventorySource->getInventorySourceWholeSale();
 		$SOs= $this->salesOrderRepo->getAllWithCus();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
@@ -34,6 +37,7 @@ class SOController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
+  			// dd($input);
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
   			// dd($TableData);
@@ -52,9 +56,10 @@ class SOController extends \BaseController {
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
-  					$SOdetail->Barcode='1';
+  					$SOdetail->Barcode=$td['Barcode'];
+  					$SOdetail->LotNo=$td['LotNo'];
+  					$SOdetail->ExpiryDate=$td['ExpiryDate'];
   					$SOdetail->Unit=$td['Unit'];
-  					$SOdetail->LotNo='1';
   					$SOdetail->Qty=$td['Qty'];
   					$SOdetail->UnitPrice=$td['UnitPrice'];
   					$SOdetail->save();
@@ -114,6 +119,18 @@ class SOController extends \BaseController {
   			}
   			return Response::json($result);
   		}
+	}
+
+	public function changeSOType(){
+		if(Request::ajax()){
+		$product = [];
+			if(Input::get('selectedValue') == '2'){
+				$products = $this->vwInventorySource->getInventorySourceRetail();
+			}else if (Input::get('selectedValue') == '1'){
+				$products = $this->vwInventorySource->getInventorySourceWholeSale();
+			}
+		return Response::json($product);
+		}
 	}
 
 	/**

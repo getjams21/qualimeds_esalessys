@@ -47,7 +47,7 @@ Route::group(["before" => "auth"], function() {
 	 		Route::get('/toEditUser','UsersController@toEditUser');
 	 		Route::get('delete-user/{id}', 'UsersController@destroy');
 	 		Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
- 	});
+ 		});
 	#Update Account
 		Route::get('update-account', 'UsersController@editAccount');
 	#Transactions
@@ -82,4 +82,22 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/billPayment', 'BillPaymentsController@billPayment');
  		Route::post('/getbillPayments', 'BillPaymentsController@getbillPayments');
  		Route::post('/getbillPaymentDetails', 'BillPaymentsController@getbillPaymentDetails');
+
+ 		Route::get('/changeSOType', 'SOController@changeSOType');
 });
+
+#tester
+// Route::get('/tester', function()
+// {
+// 	$vwtest = VwInventorySource::selectRaw('vwinventorysource.ProductNo, vwinventorysource.ProductName, vwinventorysource.BrandName, 
+//     vwinventorysource.RetailUnit As Unit, 
+//      LotNo, ExpiryDate, (SellingPrice/RetailQtyPerWholeSaleUnit) As UnitPrice, 
+//      Sum(RetailSaleQty) Qty')
+//     ->join('products','vwinventorysource.productNo','=','products.id')
+//     ->groupBy('vwinventorysource.ProductNo','vwinventorysource.ProductName','vwinventorysource.BrandName',
+//       'vwinventorysource.RetailUnit','vwinventorysource.LotNo','vwinventorysource.ExpiryDate','vwinventorysource.SellingPrice',
+//       'RetailQtyPerWholeSaleUnit')
+//     ->get();
+
+//   dd($vwtest[0]->LotNo);
+// });

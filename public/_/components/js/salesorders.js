@@ -6,11 +6,16 @@ function addSO(id){
 	var brand= $('#brand'+id).text();
 	var unit= $('#unit'+id).text();
 	var table = $('.product').DataTable();
+	var LotNo = $('#LotNo'+id).val();
+	var ExpiryDate = $('#ExpDate'+id).val();
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
 	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
 		<td>'+name+'</td>
 		<td>'+brand+'</td>
+		<td>'+'11111'+'</td>
+		<td>'+LotNo+'</td>
+		<td>'+ExpiryDate+'</td>
 		<td>'+unit+'</td>
 		<td class="light-green editable" id="prodQtySO'+id+'">'+1+'</td>
 		<td class="light-red editable" id="prodUnitSO'+id+'"></td>
@@ -237,6 +242,37 @@ function vwRemovePO(id){
 // END OF PO FUNCTIONS
 
 $(document).ready(function() {
+	
+	// $('#unit').on('change', function (e){
+	// 	var selectedValue = this.value;
+	// 	$.get('/changeSOType',{selectedValue:selectedValue},function(data){
+	// 			if(data){
+	// 				$.each(data, function(key,value) {
+	// 					var name= value.ProductName;
+	// 					var brand= value.ProductName;
+	// 					var unit= $('#unit'+id).text();
+	// 					var table = $('.product').DataTable();
+	// 					var LotNo = $('#LotNo'+id).val();
+	// 					var ExpiryDate = $('#ExpDate'+id).val();
+	// 					var index=table.row('#rowProd'+id).index();
+	// 					var curDate = new Date();
+	// 					$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
+	// 						<td>'+name+'</td>
+	// 						<td>'+brand+'</td>
+	// 						<td>'+'11111'+'</td>
+	// 						<td>'+LotNo+'</td>
+	// 						<td>'+ExpiryDate+'</td>
+	// 						<td>'+unit+'</td>
+	// 						<td class="light-green editable" id="prodQtySO'+id+'">'+1+'</td>
+	// 						<td class="light-red editable" id="prodUnitSO'+id+'"></td>
+	// 						<td class="cost" id="prodCostSO'+id+'">0.00</td>
+	// 						<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
+	// 						<i class="fa fa-times"></i> Remove</button></td></tr>');
+	// 				});
+	// 			}
+	// 		});
+	// });
+
 	// PO TERM 
 	//term check
 	$('#term2,#edTerm2').click(function() {
@@ -273,7 +309,8 @@ $(document).ready(function() {
 		// alert(TableData);
 		$.post('/saveSO',{TD:TableData,customer:customer,term:term,UserNo:UserNo},function(data){
 				if(data==1){
-					// location.reload();
+					location.reload();
+					 $(location).attr('href','/SalesOrders#showSOList');
 					 $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -287,9 +324,12 @@ $(document).ready(function() {
 			$('.SOtable tr').each(function(row, tr){
 			    TableData[row]={
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
-			        , "Unit" :$(tr).find('td:eq(4)').text()
-			        , "Qty" : $(tr).find('td:eq(5)').text()
-			        , "UnitPrice" : $(tr).find('td:eq(6)').text()
+			        , "Barcode" : $(tr).find('td:eq(4)').text()
+			        , "LotNo" : $(tr).find('td:eq(5)').text()
+			        , "ExpiryDate" : $(tr).find('td:eq(6)').text()
+			        , "Unit" : $(tr).find('td:eq(7)').text()
+			        , "Qty" : $(tr).find('td:eq(8)').text()
+			        , "UnitPrice" : $(tr).find('td:eq(9)').text()
 			    }
 			});
 			TableData.shift();

@@ -3,7 +3,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close close-modal" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Users</h4>
       </div>
       <div class="modal-body">
@@ -11,16 +11,16 @@
         	<div class="col-md-12">
 			<div class="well customerForm">
 			<div>
-			{{ Form::open(['route'=>'Users.store', 'id'=>'customerForm']) }}
+			{{ Form::open(['route'=>'Users.store', 'id'=>'userForm']) }}
 			<div class="form-group">
 				<label>Username</label>
 				<input class="form-control username" type="text" name="username" id="username" placeholder="Username" required>
 			</div>
-			<div class="form-group">
+			<div class="form-group user-pwd">
 				<label>Password</label>
 				<input type="password" class="form-control password" name="password" id="password" placeholder="Password" required></textarea>
 			</div>
-			<div class="form-group">
+			<div class="form-group user-pwd">
 				<label>Retype Password</label>
 				<input type="password" class="form-control retype-password" name="password_confirmation" placeholder="Retype Password" required></textarea>
 			</div>
@@ -49,7 +49,7 @@
 			</div>
 			<div class="form-group">
 				<label>Branch</label>
-				{{Form::select('BranchNo', $branches, 'key', array('class' => 'form-control square','id'=>'branches'));}}
+				{{Form::select('BranchNo', $branches, 'key', array('class' => 'form-control','id'=>'branches'));}}
 			</div>
 			</div>
 			</div>
@@ -57,7 +57,7 @@
 			</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
        	<button class="btn btn-success" type="submit">Submit</button>
        	<a class="deactivate" href=""><button class="btn btn-danger delete pull-left" type="button">Deactivate</button></a>
       </div>     	
@@ -72,11 +72,18 @@
 @if (Session::has('flash_message'))
 	<p>{{Session::get('flash_message') }}</p>
 @endif
+
+{{ $errors->first('username','<span class="error">:message</span>') }}
+{{ $errors->first('password','<span class="error">:message</span>') }}
+{{ $errors->first('Firstname','<span class="error">:message</span>') }}
+{{ $errors->first('Lastname','<span class="error">:message</span>') }}
+{{ $errors->first('MI','<span class="error">:message</span>') }}
+{{ $errors->first('BranchNo','<span class="error">:message</span>') }}
 <div class="panel panel-success">
 	<div class="panel-heading head">
 		<div class="container-fluid">
 			<font size="5">Users</font>
-			<button class="btn btn-success add-bank pull-right square" data-toggle="modal" data-target="#user-library">
+			<button class="btn btn-success add-user pull-right square" data-toggle="modal" data-target="#user-library">
 		  	<span class="glyphicon glyphicon-plus"></span> New User
 			</button>
 		</div>

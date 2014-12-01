@@ -13,6 +13,7 @@ class RegistrationForm extends FormValidator
 		'Lastname' => 'required',
 		'Firstname' => 'required',
 		'MI' => 'required',
-		'UserType'	=> 'required|integer'
+		'UserType'	=> 'required|integer',
+		'BranchNo' => 'required|integer'
 	];
 }
