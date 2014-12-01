@@ -16,7 +16,6 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.SalesOrders.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
@@ -92,8 +91,8 @@ display: none;
         $('#max').change( function() { oTable.fnDraw(); } );
 // list of products
        var p= $('.product').dataTable({
-           "iDisplayLength": 3,
-           "aLengthMenu": 3,
+           "iDisplayLength": 1,
+           "aLengthMenu": 1,
           "bLengthChange": false,
            "pagingType": "simple"
             });
@@ -101,8 +100,8 @@ display: none;
          p.fnFilter( $(this).val() );
         });
        var vwp= $('.vwproduct').dataTable({
-           "iDisplayLength": 3,
-           "aLengthMenu": 3,
+           "iDisplayLength": 1,
+           "aLengthMenu": 1,
           "bLengthChange": false,
            "pagingType": "simple"
             });

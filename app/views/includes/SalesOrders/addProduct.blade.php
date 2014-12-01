@@ -1,11 +1,100 @@
-<!-- VIEW PO MODAL -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editSOModal">
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="viewPOModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-title">SO no. <i id="edSOId"></i> Details
-          <b  class="pull-right" >Date: <i id="edSODate"></i></b>
+        <h4 class="modal-title" id="modal-title">PO no. <i id="vwPOId"></i> Details
+          <b  class="pull-right" >Date: <i id="vwPODate"></i></b>
+        </h4>
+      </div>
+      <div class="modal-body">
+          <div class="well">
+          <div class="row">
+          <div class="panel panel-success">
+          <div class="panel-heading head">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <div class="input-group">
+               <span class="input-group-addon panel-head square">
+                Supplier: 
+               </span>
+                {{Form::select('supplier', $supplier, 'key', array('class' => 'form-control square','id'=>'vwSupplier','disabled'=>'disabled'));}}
+              </div>
+             </div>
+              <div class="form-group">
+                <div class="input-group">
+               <span class="input-group-addon panel-head square">
+                Terms: 
+               </span>
+                <input type="text" id="vwTerm" class="form-control" readonly>
+              </div>
+            </div>
+          </div> 
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon panel-head">Prepared By: </span>
+                  <input type="text" id="vwPreparedBy" class="form-control" readonly >
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon panel-head">Approved By: </span>
+                  <input type="text" id="vwApprovedBy" class="form-control" readonly >
+                </div>
+              </div>
+            </div> 
+          </div>
+        </div>
+          <div class="panel-body">
+            <div class="table-responsive responsive" >
+              <table class="table table-striped table-bordered table-hover vwPOTable">
+                <thead>
+                  <tr>
+                    <th>Item #</th>
+                    <th>Prod. No.</th>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Unit</th>
+                    <th>Qty</th>
+                    <th>Unit Cost</th>
+                    <th>Item Cost</th>
+                  </tr>
+                 </thead> 
+                 <tbody>
+                 </tbody>
+              </table>
+              </div> <!-- table responsive-->
+              <hr class="style-fade">
+              <div class="row">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-4">
+                  <b>Total Cost:  <i id="vwTotalCost"> 0</i></b>
+                </div>
+              </div>
+            </div>
+            </div><!-- panel success-->
+          </div>
+         </div>
+        </div><!--modal body -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default square" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END OF VIEW PO MODAL -->
+<!-- VIEW PO MODAL -->
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editPOModal">
+  <div class="modal-dialog modal-lg modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="modal-title">PO no. <i id="edPOId"></i> Details
+          <b  class="pull-right" >Date: <i id="edPODate"></i></b>
         </h4>
       </div>
       <div class="modal-body">
@@ -18,9 +107,9 @@
               <div class="form-group">
                 <div class="input-group">
                <span class="input-group-addon panel-head square">
-                Customer: 
+                Supplier: 
                </span>
-                {{Form::select('vwCustomer', $customers, 'key', array('class' => 'form-control square','id'=>'vwCustomer'));}}
+                {{Form::select('vwSupplier', $supplier, 'key', array('class' => 'form-control square','id'=>'vwSupplier'));}}
               </div>
              </div>
               <div class="form-group">
@@ -65,27 +154,21 @@
               <table class="table table-striped table-bordered table-hover vwproduct">
                 <thead>
                   <tr>
-                    <th>Product No.</th>
+                    <th>No.</th>
                     <th>Product Name</th>
                     <th>Brand</th>
-                    <th>Lot No</th>
-                    <th>Expiry Date</th>
                     <th>Unit</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$product->ProductNo}}">
-                      <td id="prodId{{$product->ProductNo}}">{{$product->ProductNo}}</td>
-                      <td id="name{{$product->ProductNo}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$product->ProductNo}}">{{$product->BrandName}}</td>
-                      <td id="lotNo{{$product->ProductNo}}">{{$product->LotNo}}</td>
-                      <td id="expiryDate{{$product->ProductNo}}">{{$product->ExpiryDate}}</td>
-                      <td id="unit{{$product->ProductNo}}">{{$product->Unit}}</td>
-                      <input type="hidden" name="LotNo" id="LotNo{{$product->ProductNo}}" value="{{$product->LotNo}}">
-                      <input type="hidden" name="ExpDate" id="ExpDate{{$product->ProductNo}}" value="{{$product->ExpiryDate}}">
-                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$product->ProductNo}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="vwrowProd{{$product->id}}">
+                      <td id="vwprodId{{$product->id}}">{{$product->id}}</td>
+                      <td id="vwname{{$product->id}}">{{$product->ProductName}}</td>
+                      <td id="vwbrand{{$product->id}}">{{$product->BrandName}}</td>
+                      <td id="vwunit{{$product->id}}">{{$product->WholeSaleUnit}}</td>
+                      <td><button class="btn btn-success btn-xs square" onclick="vwaddPO({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
                   @endforeach
@@ -98,16 +181,13 @@
         </div>
           <div class="panel-body">
             <div class="table-responsive responsive" >
-              <table class="table table-striped table-bordered table-hover edSOTable">
+              <table class="table table-striped table-bordered table-hover edPOTable">
                 <thead>
                   <tr>
                     <th>Item #</th>
                     <th>Prod. No.</th>
                     <th>Product Name</th>
                     <th>Brand</th>
-                    <th>Barcode</th>
-                    <th>LotNo</th>
-                    <th>ExpiryDate</th>
                     <th>Unit</th>
                     <th>Qty</th>
                     <th>Unit Cost</th>
@@ -124,7 +204,7 @@
                 <div class="col-md-8">
                 </div>
                 <div class="col-md-4">
-                  <b>Total Cost:  <i id="edSOTotalCost"> 0</i></b>
+                  <b>Total Cost:  <i id="edPOTotalCost"> 0</i></b>
                 </div>
               </div>
             </div>
@@ -133,7 +213,7 @@
          </div>
         </div><!--modal body -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-success hidden" id="vwSaveSOBtn">Save SO</button>
+          <button type="button" class="btn btn-success hidden" id="vwSavePOBtn">Save PO</button>
         <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
       </div>
     </div>
