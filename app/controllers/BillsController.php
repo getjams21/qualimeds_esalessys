@@ -7,6 +7,10 @@ use Acme\Repos\Bills\BillsRepository;
 use Acme\Repos\BillDetails\BillDetailsRepository;
 class BillsController extends \BaseController {
 private $purchaseOrderRepo;
+private $productRepo;
+private $purchaseOrderDetailsRepo;
+private $billsRepo;
+private $billDetailsRepo;
 	function __construct(PurchaseOrderRepository $purchaseOrderRepo,ProductRepository $productRepo,
 		PurchaseOrderDetailsRepository $purchaseOrderDetailsRepo, BillsRepository $billsRepo,
 		BillDetailsRepository $billDetailsRepo)

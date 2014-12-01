@@ -15,7 +15,7 @@ class POController extends \BaseController {
 		}
 	/**
 	 * Display a listing of the resource.
-	 * GET /po
+	 * GET 
 	 *
 	 * @return Response
 	 */

@@ -36,6 +36,7 @@
 		{{ HTML::script('_/js/plugins/dataTables/jquery.dataTables.js') }}
 		{{ HTML::script('_/js/plugins/dataTables/dataTables.bootstrap.js') }}
 		{{ HTML::script('_/js/plugins/dataTables/dataTable.editable.js') }}
+		{{ HTML::script('_/js/toword.js')}}
 		@yield('script')
 		{{ HTML::script('_/js/myscript.js')}}
 		{{ HTML::script('_/js/bootstrap-datepicker.js') }}

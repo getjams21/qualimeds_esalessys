@@ -52,7 +52,7 @@ display: none;
 <script language="javascript" type="text/javascript">
    $(document).ready(function() {
      
-      $(function() {
+        $(function() {
             $( "#min" ).datepicker();
              oTable.fnDraw();
         });
@@ -119,34 +119,56 @@ $.fn.dataTable.ext.search.push(
     function( oSettings, aData, iDataIndex ) {
       if( oSettings.nTable == document.getElementById( 'POList' ) )
        {   
-          var iFini = document.getElementById('min').value;
-            var iFfin = document.getElementById('max').value;
-            var iStartDateCol = 2;
-            var iEndDateCol = 2;
-     
-            iFini=iFini.substring(6,10) + iFini.substring(3,5)+ iFini.substring(0,2);
-            iFfin=iFfin.substring(6,10) + iFfin.substring(3,5)+ iFfin.substring(0,2);
-     
-            var datofini=aData[iStartDateCol].substring(6,10) + aData[iStartDateCol].substring(3,5)+ aData[iStartDateCol].substring(0,2);
-            var datoffin=aData[iEndDateCol].substring(6,10) + aData[iEndDateCol].substring(3,5)+ aData[iEndDateCol].substring(0,2);
-     
-            if ( iFini === "" && iFfin === "" )
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth() + 1;
+          var yyyy = today.getFullYear();
+          
+          if (dd<10)
+          dd = '0'+dd;
+          
+          if (mm<10)
+          mm = '0'+mm;
+          
+          today = mm+'/'+dd+'/'+yyyy;
+          
+          if ($('#min').val() != '' || $('#max').val() != '') {
+            var iMin_temp = $('#min').val();
+            if (iMin_temp == '') {
+              iMin_temp = '01/01/1980';
+            }
+            
+            var iMax_temp = $('#max').val();
+            if (iMax_temp == '') {
+              iMax_temp = today;
+            }
+            
+            var arr_min = iMin_temp.split("/");
+            var arr_max = iMax_temp.split("/");
+            var arr_date = aData[2].split("/");
+
+            var iMin = new Date(arr_min[2], arr_min[0], arr_min[1], 0, 0, 0, 0)
+            var iMax = new Date(arr_max[2], arr_max[0], arr_max[1], 0, 0, 0, 0)
+            var iDate = new Date(arr_date[2], arr_date[0], arr_date[1], 0, 0, 0, 0)
+            
+            if ( iMin == "" && iMax == "" )
             {
                 return true;
             }
-            else if ( iFini <= datofini && iFfin === "")
+            else if ( iMin == "" && iDate < iMax )
             {
                 return true;
             }
-            else if ( iFfin >= datoffin && iFini === "")
+            else if ( iMin <= iDate && "" == iMax )
             {
                 return true;
             }
-            else if (iFini <= datofini && iFfin >= datoffin)
+            else if ( iMin <= iDate && iDate <= iMax )
             {
                 return true;
             }
             return false;
+          }
         }else if( oSettings.nTable == document.getElementById( 'billListing' ) ){
             var iFini = document.getElementById('min2').value;
             var iFfin = document.getElementById('max2').value;
@@ -180,8 +202,8 @@ $.fn.dataTable.ext.search.push(
           return true;
         }
     }
-);
-    });
+  );
+});
 </script>
 
 @stop 
