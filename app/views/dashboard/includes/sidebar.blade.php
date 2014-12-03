@@ -52,6 +52,16 @@
                 </li>
                 <li class="sidehead">
                     <a href="#">
+                        <b>Inventories</b>
+                    </a>
+                    <ul class="sidecontent collapse" >
+                        <li>
+                            <a href="/stocks-transfer">Stock Transfers</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidehead">
+                    <a href="#">
                         <b>Security</b>
                     </a>
                     <ul class="sidecontent collapse" >

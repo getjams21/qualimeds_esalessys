@@ -77,6 +77,12 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSODetails', 'SOController@viewSODetails');
  		Route::post('/saveEditedSO', 'SOController@saveEditedSO');
  		Route::get('/changeSOType', 'SOController@changeSOType');
+ 	#STOCK TRANSFER ROUTES
+ 		Route::resource('/stocks-transfer', 'STController');
+ 		Route::post('/saveST', 'STController@saveSO');
+ 		Route::post('/viewST', 'STController@viewSO');
+ 		Route::post('/viewSTDetails', 'STController@viewSODetails');
+ 		Route::post('/saveEditedST', 'STController@saveEditedSO');
 	});
 
 #tester
