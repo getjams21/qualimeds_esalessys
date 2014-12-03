@@ -122,8 +122,8 @@
             <b>Prepared By: <i id="preparedBy">{{fullname(Auth::user())}}</i></b> 
             </div>
             <div class="col-md-3">
-             @if(isAdmin())
-                <input type="checkbox" id="approved" style="width:15px; height:15px;"/ checked> Approved
+              @if(isAdmin())
+            <input type="checkbox" id="approved" style="width:15px; height:15px;"/> Approved
              @endif
              </div>
             <div class="col-md-2">

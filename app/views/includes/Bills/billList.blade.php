@@ -93,8 +93,6 @@
 		             <button class="btn btn-success btn-xs "  onclick="viewBill({{$bill->id}})"> View</button>
 		              @endif
 		            </td>
-		           
-		            
 		         </tr> 
 		        @endforeach
 		      </tbody>

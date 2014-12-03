@@ -10,6 +10,6 @@ class DbSalesOrderDetailsRepository extends DbRepository implements SalesOrderDe
 	public function getAllBySO($id){
 		return SalesOrderDetails::selectRaw('Salesorderdetails.*,pc.ProductName,pc.BrandName')
 			->join('products AS pc', 'pc.id', '=', 'Salesorderdetails.ProductNo')
-			->where('Salesorderdetails.SalesOrderNo', '=', $id)->get();
+			->where('Salesorderdetails.PurchaseOrderNo', '=', $id)->get();
 	}
 }

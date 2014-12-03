@@ -48,6 +48,9 @@
                         <li>
                             <a href="/Bills">Bills</a>
                         </li>
+                        <li>
+                            <a href="/BillPayments">Bill Payments</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidehead">

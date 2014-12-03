@@ -47,7 +47,7 @@ Route::group(["before" => "auth"], function() {
 	 		Route::get('/toEditUser','UsersController@toEditUser');
 	 		Route::get('delete-user/{id}', 'UsersController@destroy');
 	 		Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
- 	});
+ 		});
 	#Update Account
 		Route::get('update-account', 'UsersController@editAccount');
 	#Transactions
@@ -76,7 +76,15 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSO', 'SOController@viewSO');
  		Route::post('/viewSODetails', 'SOController@viewSODetails');
  		Route::post('/saveEditedSO', 'SOController@saveEditedSO');
+ 	#BILLPAYMENTS ROUTES
+ 		Route::resource('/BillPayments', 'BillPaymentsController');
+ 		Route::post('/addBillToPayment', 'BillPaymentsController@addBillToPayment');
+ 		Route::post('/billPayment', 'BillPaymentsController@billPayment');
+ 		Route::post('/getbillPayments', 'BillPaymentsController@getbillPayments');
+ 		Route::post('/getbillPaymentDetails', 'BillPaymentsController@getbillPaymentDetails');
+
  		Route::get('/changeSOType', 'SOController@changeSOType');
+
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');
@@ -84,6 +92,7 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSTDetails', 'STController@viewSODetails');
  		Route::post('/saveEditedST', 'STController@saveEditedSO');
 	});
+
 
 #tester
 // Route::get('/tester', function()

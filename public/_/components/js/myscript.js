@@ -147,7 +147,7 @@ function editPO(id){
 		 	$('#edTerm').val(data[0]['Terms']);
 		 	$('#edTerm1').removeClass('active');
 		 	$('#edTerm2').addClass('active');
-		 	$('#edTerm2').prop("disabled", false)
+		 	$('#edTerm2').prop("disabled", false);
 		 	$('#edTermBox').removeClass('hidden');
 		}
 	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
@@ -524,8 +524,69 @@ function numberWithCommas(x) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
+//BILLPAYMENTS
+function addBillToPayment(id){
+	$.post('/addBillToPayment',{id:id},function(data){
+				if($('#billId'+id).length){
+					$('#billError1').fadeIn("fast", function(){        
+				        $("#billError1").fadeOut(4000);
+				    });
+				}else{	
+					if($('#bill1').length){
+						if(!$('.supplier'+data[0]['SupplierNo']).length){
+							$('#billSupError1').fadeIn("fast", function(){        
+						        $("#billSupError1").fadeOut(4000);
+						    });
+						    return;
+						}
+					}
+						// if(data[0]['Terms'] == 0){
+						// 	var term = 'Cash';
+						// }else{
+						// 	var term = data[0]['Terms']+' days';
+						// }
+						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
+							<td class="supplier'+data[0]['SupplierNo']+'">'+data[0]['SupplierName']+'<td class="dp">'+data[0]['SalesInvoiceNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td><td>
+							<button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
+							<i class="fa fa-times"></i> Remove</button></td></tr>');
+						itemno +=1;
+							calcBillPaymentTotal();
+							$('#saveBill,.cashChecque').removeClass('hidden');
+						}
+					
+			});	
+}
+function removeBill(id){
+	$('#bill'+id).remove();
+	id +=1;
+	if( $('#bill'+id).length ) 
+	{
+	  while(id<itemno){
+			$('#bill'+id).attr('id','bill'+(id-1));
+			$('#billitemno'+(id)).attr('id','itemno'+(id-1));
+			$('#billitemno'+(id-1)).text(id-1);
+			$('#removeBill'+(id)).attr('id','removeBill'+(id-1));
+			$('#removeBill'+(id-1)).attr('onclick','removeBill('+(id-1)+')');
+			id++;
+		}
+	}
+	itemno -=1;
+	calcBillPaymentTotal();
+}
+function calcBillPaymentTotal(){
+	var total=0;
+	$('.Billcost').each(function(){
+		total += parseFloat($(this).text()); 
+	});
+	$('#BillPaymentTotalCost').text(money(total));
+	if(total ==0){
+		$('#saveBill,.cashChecque').addClass('hidden');
+	}
+}
+
 //Document Ready
 $(document).ready(function(){
+
 $('.add-user').click(function(event) {
 	// alert('horaa');
 	$('#userForm input[type="text"]').val('');
@@ -534,7 +595,7 @@ $('.add-user').click(function(event) {
 $('#user-library').on('hidden.bs.modal', function () {
     $('.user-pwd,.password,.retype-password').show();
     $('.password,.retype-password').attr('required');
-})
+});
 $( "#invoiceDate" ).datepicker();
 
 $('#edTerm,#vwSupplier').change(function(){
@@ -939,10 +1000,144 @@ $('#vwSaveBillBtn').click(function(){
 	    return TableData;
 	}	
 });
-
+// BILL PAYMENTS READY FXN
+$('#billCheque').click(function(){
+	// if($('#billCheque').is(':checked')){
+			$('.chequeDiv').removeClass('hidden');
+			$('.cashDiv').addClass('hidden');
+});
+$('#billCash').click(function(){
+			$('.cashDiv').removeClass('hidden');
+			$('.chequeDiv').addClass('hidden');
+});
+$('#cashVoucher').click(function(){
+	var itemno = 1;
+	var supplier;
+	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+		supplier = $(tr).find('td:eq(2)').text();
+		$('#cashVoucherTable').append('<tr>
+							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
+							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
+							</tr>');
+	});
+	$('.cashVoucherTotal').text($('#BillPaymentTotalCost').text());
+	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+	$('#cvReceivedFrom').text(supplier);
+	$('#wordVoucherTotal').text(words);
+	$('#cashVoucherModal').modal('show');
+});
+$('#chequeVoucher').click(function(){
+	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length ){
+		$('#chequeError').fadeIn("fast", function(){ 
+	        $("#chequeError").fadeOut(4000);
+	    });
+	    return;
+	}
+	var supplier;
+	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+		supplier = $(tr).find('td:eq(2)').text();
+	});
+	$('.chequeVoucherTotal').text($('#BillPaymentTotalCost').text());
+	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+	 $('#wordchequeTotal').text(words);
+	 $('#chequeSupplier').text(supplier);
+	 $('#chequeVoucherNo').text($('#chequeNo').val());
+	 $('#chequeVoucherBank').text($('#bankNo').find("option:selected").text());
+	 $('#chequeVoucherDueDate').text($('#chequeDueDate').val());
+	 $('#chequeVoucherModal').modal('show');
+});
+$('#saveBill').click(function(){
+	var id = $('#BPediting').val();
+	var TableData;
+	TableData = storeBillValues();	
+	TableData = $.toJSON(TableData);
+	var amount= $('#BillPaymentTotalCost').text();
+	if($('#billCash').is(':checked')){
+		var paymentType=0;
+		var cashVoucherNo=$('#cashVoucherNo').text();
+	}else if($('#billCheque').is(':checked')){
+		if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length ){
+			$('#chequeError').fadeIn("fast", function(){ 
+		        $("#chequeError").fadeOut(4000);
+		    });
+		    return;
+		}
+		var paymentType =1;
+		var checkVoucherNo =  $('#chequeVaucherNo').text();
+		var checkNo = $('#chequeNo').val();
+		var checkDueDate = $('#chequeDueDate').val();
+		var BankNo = $('#bankNo').find("option:selected").val();	
+	}
+	if($('#approvedBillPayment').is(':checked')){
+		var approved =1;
+	}else{
+		var approved =0;		
+	}
+	$.post('/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
+	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved},function(data){
+		location.reload();
+			$(location).attr('href','/BillPayments#BillPaymentList');
+	});
+	function storeBillValues(){
+		var TableData = new Array();
+		$('.BillPaymentTable > tbody  > tr').each(function(row, tr){
+		    TableData[row]={
+		    	 "BillNo" : $(tr).find('td:eq(1)').text()
+		    	 , "amount" :$(tr).find('td:eq(4)').text()
+		    }
+		});
+	    return TableData;
+	}
+	
+});
+// END OF BILL PAYMENTS READY FXN
+// EDIT BILL PAYMENT
+$('.editBillPayment').click(function(){
+	var id= $(this).val();
+	var itemno=1;
+	$('#BPediting').val(id);
+	$('.BillPaymentTable >tbody > tr').remove();
+	$.post('/getbillPayments',{id:id},function(bills){
+		$('.billPaymentEditId').text(bills['id']);
+		if(bills['PaymentType']==0){
+			$('.cashDiv').removeClass('hidden');
+			$('.chequeDiv').addClass('hidden');
+			$('#billCash').prop("checked", true);
+			$('#cashVoucherNo').text(bills['CashVoucherNo']);
+		}else if(bills['PaymentType']==1){
+			$('.chequeDiv').removeClass('hidden');
+			$('.cashDiv').addClass('hidden');
+			$('#bankNo').val(bills['BankNo']);
+			$('#billCheque').prop("checked", true);
+			$('#chequeNo').val(bills['CheckNo']);
+			var chDate = new Date(bills['CheckDueDate']);
+			$('#chequeDueDate').val((chDate.getMonth() + 1) + '/' + chDate.getDate() + '/' +  chDate.getFullYear());
+		}
+	});
+	$.post('/getbillPaymentDetails',{id:id},function(billdetails){
+		$.each(billdetails, function(key,value) {
+			$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+value.BillNo+'">'+value.BillNo+'</td>
+				<td class="supplier'+value.SupplierNo+'">'+value.SupplierName+'</td><td class="dp">'+value.InvoiceNo+'</td><td class="dp Billcost">'+money(value.Amount)+'</td><td>
+				<button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
+				<i class="fa fa-times"></i> Remove</button></td></tr>');
+			itemno +=1;
+			calcBillPaymentTotal();		
+		});
+	});
+	
+	
+	 $('#saveBill,.cashChecque').removeClass('hidden');
+	 $('#BillPaymentEditing').removeClass('hidden');
+	 $('#myTab a[href="#BillPaymentEntry"]').tab('show');
+});
+// END OF EDIT BILL PAYMENT
+// CANCEL BP EDITING
+ $('#cancelBPEditing').click(function(){
+ 	location.reload();
+ });
 });//end of ready function
 function editCategory(id){
-	$('#modalCatError').addClass('hidden')
+	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();
 	var catName= jQuery.trim($('#catName'+id).text());
 	var index=table.row('#category'+id).index();
@@ -952,8 +1147,6 @@ function editCategory(id){
 		$('#myModal').modal('show');
 		$('.modal-title').text('Edit '+catName);
 }
-
-
 function editSupplier(id){
 	var table=$('.supplier').DataTable();
 			$('.modal-title').text('Edit Supplier');

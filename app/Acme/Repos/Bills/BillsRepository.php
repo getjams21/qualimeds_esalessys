@@ -6,4 +6,5 @@ interface BillsRepository{
 	public function getMaxId();
 	public function getByIdWithSup($id);
 	public function getAllWithSup();
+	public function getAllWithSupUnpaid();
 }
