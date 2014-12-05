@@ -120,12 +120,13 @@
         <thead>
           <tr>
             <th>Item #</th>
+            <th>Prod. No</th>
             <th>Prod. Name</th>
             <th>Brand</th>
-            <th>Barcode</th>
             <th>Lot No.</th>
             <th>Expiry Date</th>
             <th>Unit</th>
+            <th>Unit Qty</th>
             <th>Qty</th>
             <th>Unit Price</th>
             <th>Item Cost</th>

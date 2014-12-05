@@ -28,7 +28,8 @@ class SOController extends \BaseController {
 	{	
 		$max = $this->salesOrderRepo->getMaxId();
 		$customers = Customer::lists('CustomerName','id');
-		$medReps = User::where('UserType','=','4')->lists('Lastname','id');
+		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->where('UserType','=','4')->lists('full_name', 'id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale();
 		// dd($products[0]->UnitPrice);
 		$SOs= $this->salesOrderRepo->getAllWithCus();
@@ -44,6 +45,7 @@ class SOController extends \BaseController {
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
   			// dd($TableData);
+  			// dd($input['CustomerNo']);
   			if(!$TableData || !$input['CustomerNo']){
   				$result = 0;
   			}else{
@@ -58,16 +60,17 @@ class SOController extends \BaseController {
   				$SO->save();
   				$result =1;
   				foreach($TableData as $td){
-  					// dd($td['Unit']);
+  					// dd($td['UnitPrice']);
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
-  					$SOdetail->Barcode=$td['Barcode'];
+  					$SOdetail->Barcode='1111';
   					$SOdetail->LotNo=$td['LotNo'];
   					$SOdetail->ExpiryDate=$td['ExpiryDate'];
   					$SOdetail->Unit=$td['Unit'];
   					$SOdetail->Qty=$td['Qty'];
   					$SOdetail->UnitPrice=$td['UnitPrice'];
+  					// dd($result);
   					$SOdetail->save();
   				}
   			}

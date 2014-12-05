@@ -2,29 +2,30 @@
 var itemno = 1;
 var counter = 1;
 function addSO(id){
+	var prodNum = $('#prodId'+id).text();
 	var name= $('#name'+id).text();
 	var brand= $('#brand'+id).text();
 	var unit= $('#unit'+id).text();
 	var table = $('.product').DataTable();
 	var LotNo = $('#lotNo'+id).text();
-	// alert(LotNo);
 	var ExpiryDate = $('#ExpDate'+id).val();
-	var unitQty = $('#unitQty'+id).val();
-	var unitPrice = $('#unitPrice'+id).val();
+	var unitQty = $('#unitQty'+id).text();
+	var unitPrice = $('#unitPrice'+id).text();
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
 	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
+		<td id="prdoNo'+itemno+'">'+prodNum+'</td>
 		<td>'+name+'</td>
 		<td>'+brand+'</td>
-		<td>'+'11111'+'</td>
 		<td>'+LotNo+'</td>
 		<td>'+ExpiryDate+'</td>
 		<td><select class="form-control square" name="unit" id="unit">
                   <option value="'+unit+'">'+unit+'</option>
                   <option value="pcs">pcs</option>
                 </select></td>
+        <td>'+unitQty+'</td>
 		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
-		<td class="light-red editable ed" id="prodUntSO'+itemno+'" value="'+itemno+'"></td>
+		<td class="light-red ed" id="prodUntSO'+itemno+'" value="'+unitPrice+'">'+unitPrice+'</td>
 		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
 		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
@@ -50,6 +51,26 @@ function addSO(id){
 			         calcCostSO(rowID);
 					}
 			});
+		$('.ed').editable({
+				send: 'never', 
+			    type: 'text',
+			    value:unitPrice,
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			        if ($.isNumeric(value) == '' || value==0) {
+			            return 'Please input a valid number greater than 0';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   		$(this).text(value);
+			   		var rowID = $(this).attr('id').substring(9);
+			   		// alert(rowID);
+			         calcCostSO(rowID);
+					}
+				});
 		$('#saveSO').removeClass('hidden');
 }
 function calcCostSO(id){
@@ -342,9 +363,8 @@ $(document).ready(function() {
 			$('.SOtable tr').each(function(row, tr){
 			    TableData[row]={
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
-			        , "Barcode" : $(tr).find('td:eq(4)').text()
-			        , "LotNo" : $(tr).find('td:eq(5)').text()
-			        , "ExpiryDate" : $(tr).find('td:eq(6)').text()
+			        , "LotNo" : $(tr).find('td:eq(4)').text()
+			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
 			        , "Unit" : $(tr).find('#unit').val()
 			        , "Qty" : $(tr).find('td:eq(8)').text()
 			        , "UnitPrice" : $(tr).find('td:eq(9)').text()
