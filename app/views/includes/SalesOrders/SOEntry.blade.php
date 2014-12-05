@@ -1,11 +1,6 @@
 <br>
-<!-- success alert -->
-<div class="alert alert-success SOsaved" role="alert" hidden>
-  Sales Order is Successfully Saved!
-</div>
-
 <div class="panel panel-success">
-	<div class="panel-heading head">
+  <div class="panel-heading head">
     <div class="row">
       <div class="col-md-9" style="padding-top:6px;">
           <b>Sales Order Entry No. {{$max+1}}</b>
@@ -15,7 +10,7 @@
       </div> 
     </div><br>
     <hr class="style-fade">
-		<div class="row">
+    <div class="row">
         <div class="col-md-4">
      {{ Form::open() }}
           <div class="input-group">
@@ -31,7 +26,9 @@
                    </span>
                    {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
               </div>
-              @endif
+           @else
+              <input type="hidden" id="medReps" value="{{Auth::user()->id}}"> 
+           @endif
               <br>
            <div class="form-group">
             <div class="input-group">
@@ -63,11 +60,11 @@
        <div class="col-md-7">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
-                <span class="input-group-addon">SO Type: </span>
+                <!-- <span class="input-group-addon">SO Type: </span>
                 <select class='form-control square' name='unit' id='unit'>
                   <option value='1'>Wholesale</option>
                   <option value='2'>Retail</option>
-                </select>
+                </select> -->
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
@@ -79,6 +76,8 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>Brand</th>
+                    <th>Lot No</th>
+                    <th>Expiry Date</th>
                     <th>Unit</th>
                     <th>Qty</th>
                     <th>Price</th>
@@ -154,14 +153,19 @@
             </div>
             <div class="col-md-3">
               @if(isAdmin())
-            <input type="checkbox" id="approved" style="width:15px; height:15px;"/> Approved
-             @endif
+                <input type="checkbox" id="approved" style="width:15px; height:15px;"/ checked> Approved
+              @endif
              </div>
             <div class="col-md-2">
              <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save SO</b></button>
              </div>
            </div>
         </div>
+        @if (Session::has('flash_message'))
+          <div class="form-group ">
+            <p>{{Session::get('flash_message') }}</p>
+          </div>
+        @endif
       </div>
     </div>
     </div>
