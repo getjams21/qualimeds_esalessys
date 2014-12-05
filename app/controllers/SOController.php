@@ -31,6 +31,7 @@ class SOController extends \BaseController {
 		$customers = Customer::lists('CustomerName','id');
 		$medReps = User::where('UserType','=','4')->lists('Lastname','id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale();
+		// dd($products[0]->UnitPrice);
 		$SOs= $this->salesOrderRepo->getAllWithCus();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
