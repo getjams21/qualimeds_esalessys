@@ -76,6 +76,7 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSO', 'SOController@viewSO');
  		Route::post('/viewSODetails', 'SOController@viewSODetails');
  		Route::post('/saveEditedSO', 'SOController@saveEditedSO');
+ 		Route::get('/changeSOType', 'SOController@changeSOType');
  	#BILLPAYMENTS ROUTES
  		Route::resource('/BillPayments', 'BillPaymentsController');
  		Route::post('/addBillToPayment', 'BillPaymentsController@addBillToPayment');
