@@ -6,11 +6,14 @@ function addSO(id){
 	var brand= $('#brand'+id).text();
 	var unit= $('#unit'+id).text();
 	var table = $('.product').DataTable();
-	var LotNo = $('#LotNo'+id).val();
+	var LotNo = $('#lotNo'+id).text();
+	// alert(LotNo);
 	var ExpiryDate = $('#ExpDate'+id).val();
+	var unitQty = $('#unitQty'+id).val();
+	var unitPrice = $('#unitPrice'+id).val();
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
-	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td><td id="productId'+itemno+'">'+id+'</td>
+	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
 		<td>'+name+'</td>
 		<td>'+brand+'</td>
 		<td>'+'11111'+'</td>
@@ -22,8 +25,8 @@ function addSO(id){
 		<td class="cost" id="prodCostSO'+id+'">0.00</td>
 		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
-	itemno +=1;
-	table.cell( index, 4 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+		itemno +=1;
+	table.cell( index, 8 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
 		$('.editable').editable({
 				send: 'never', 
 			    type: 'text',
@@ -62,7 +65,7 @@ function totalCostSO(){
 }
 function removeSO(id,prodId,index){
 	var table = $('.product').DataTable();
-		table.cell( index, 4 ).data('<button class="btn btn-success btn-xs square" 
+		table.cell( index, 8 ).data('<button class="btn btn-success btn-xs square" 
 			onclick="addSO('+prodId+')" >
 			<i class="fa fa-check-circle"></i> Add</button>').draw();
 	$('#SO'+id).remove();
