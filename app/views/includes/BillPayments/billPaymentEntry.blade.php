@@ -20,7 +20,7 @@
 	          <div class="alert alert-danger">
 	              <center>You are currently Editing Existing Bill Payment No. <i class="billPaymentEditId" ></i></center>
 	          </div>
-	          <input type="hidden" value="null" id="BPediting">
+	          <input type="hidden"  id="BPediting">
 	         <span class="pull-right"> <input type="button" class="btn btn-warning" id="cancelBPEditing" value="Cancel Editing"></span>
 	      </div>
         </div>

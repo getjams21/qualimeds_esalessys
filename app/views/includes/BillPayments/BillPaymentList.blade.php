@@ -19,7 +19,7 @@
 		  <table class="table table-striped table-bordered table-hover" id="billPaymentsList">
 		  	<div class="row">
 		         <div class="col-md-11">
-		         	<!-- <div class="input-group ">
+		         	<div class="input-group ">
                   	{{ Form::label('', 'From: '); }}
 	                    <div class="input-group date txtbox-m" id="grp-from" data-date="" >
 	                      <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
@@ -30,7 +30,7 @@
 	                      <input class="form-control" value="{{$now}}" type="text" id="max"  readonly required>
 	                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
 	                    </div>
-                    </div> -->
+                    </div>
 		        	<br>
 		  		 	 <div class="form-group pull-left" >
 		                <div class="input-group" style="width:50%;  ">

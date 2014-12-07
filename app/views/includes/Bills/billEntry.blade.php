@@ -22,18 +22,7 @@
 		  		<br>
 		         </div>	 -->
 		         <div class="col-md-11">
-		         	<div class="input-group ">
-                  	{{ Form::label('', 'From: '); }}
-                    <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
-                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                    {{ Form::label('', 'To: '); }}
-                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$now}}" type="text" id="max"  max="{{$now}}" readonly required>
-                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                    </div><br>
+		         	<br>
 		  		 	 <div class="form-group pull-left" >
 		                <div class="input-group" style="width:50%;  ">
 		                  <span class="input-group-addon">Search Keyword: </span>

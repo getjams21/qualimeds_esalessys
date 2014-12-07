@@ -1049,7 +1049,7 @@ $('#chequeVoucher').click(function(){
 $('#saveBill').click(function(){
 	var id = $('#BPediting').val();
 	var TableData;
-	TableData = storeBillValues();	
+	TableData = storeBillValues();	 
 	TableData = $.toJSON(TableData);
 	var amount= $('#BillPaymentTotalCost').text();
 	if($('#billCash').is(':checked')){
@@ -1112,6 +1112,11 @@ $('.editBillPayment').click(function(){
 			$('#chequeNo').val(bills['CheckNo']);
 			var chDate = new Date(bills['CheckDueDate']);
 			$('#chequeDueDate').val((chDate.getMonth() + 1) + '/' + chDate.getDate() + '/' +  chDate.getFullYear());
+		}
+		if(bills['ApprovedBy']){
+			$('#approvedBillPayment').prop('checked', true);
+		}else{
+			$('#approvedBillPayment').prop('checked', false);
 		}
 	});
 	$.post('/getbillPaymentDetails',{id:id},function(billdetails){
