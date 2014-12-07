@@ -17,3 +17,7 @@ function isAdmin(){
 		return false;
 	}
 }
+function money($money){
+	$newmoney = number_format($money,2);
+	return $newmoney;
+}

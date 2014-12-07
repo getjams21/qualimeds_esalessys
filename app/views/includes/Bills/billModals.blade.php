@@ -86,7 +86,6 @@
                     <th>Item Cost</th>
                     <th>Qty</th>
                     <th>Unit</th>
-                    <th>Cost</th>
                   </tr>
                  </thead> 
                  <tbody>
@@ -201,7 +200,6 @@
                     <th>Item Cost</th>
                     <th>Qty</th>
                     <th>Unit</th>
-                    <th>Cost</th>
                   </tr>
                  </thead> 
                  <tbody>

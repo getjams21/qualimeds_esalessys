@@ -210,7 +210,7 @@ function billPO(id){
 	  				$('.BillPOTable >tbody').append('<tr id="billPO'+counter+'" class="billRow"><td >'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="numberEditable danger"></td><td class="danger dateEditable">'+(d.getFullYear()+1)+'-01-01</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.CostPerQty).toFixed(2)+'</td>
-	  					<td class="dp success">'+Number(value.CostPerQty*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">0</td><td class="danger selectEditable dp"></td><td class="vweditable dp danger">0.00</td></tr>');
+	  					<td class="dp success">'+Number(value.CostPerQty*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">0</td><td class="danger selectEditable dp"></td></tr>');
 		  			total+=value.CostPerQty*value.Qty;
 	  				editable(value.ProductNo);
 	  				editableNumber(value.ProductNo);
@@ -260,7 +260,7 @@ function editBill(id){
 	  				$('.BillPOTable >tbody').append('<tr id="billPO'+counter+'" ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td class="numberEditable danger">'+value.LotNo+'</td><td class="danger dateEditable">'+value.ExpiryDate+'</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.Cost).toFixed(2)+'</td>
-	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">'+value.FreebiesQty+'</td><td class="danger selectEditable dp">'+value.FreebiesUnit+'</td><td class="vweditable dp danger">'+value.CostPerQty+'</td></tr>');
+	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="vweditable dp danger">'+value.FreebiesQty+'</td><td class="danger selectEditable dp">'+value.FreebiesUnit+'</td></tr>');
 		  			total+=value.Cost*value.Qty;
 	  				editable(value.ProductNo);
 	  				editableNumber(value.ProductNo);
@@ -301,7 +301,7 @@ function viewBill(id){
 	  				$('.BillPOTable2 >tbody').append('<tr ><td >'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td >'+value.LotNo+'</td><td >'+value.ExpiryDate+'</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.Cost).toFixed(2)+'</td>
-	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="dp ">'+value.FreebiesQty+'</td><td class="dp">'+value.FreebiesUnit+'</td><td class="dp ">'+value.CostPerQty+'</td></tr>');
+	  					<td class="dp success">'+Number(value.Cost*value.Qty).toFixed(2)+'</td><td class="dp ">'+value.FreebiesQty+'</td><td class="dp">'+value.FreebiesUnit+'</td></tr>');
 		  			total+=value.Cost*value.Qty;
 		  			counter+=1;
 	  				});
@@ -951,9 +951,9 @@ $('#saveBillPOBtn').click(function(){
 		        ,"LotNo" : $(tr).find('td:eq(5)').text()
 		        , "ExpiryDate" :$(tr).find('td:eq(6)').text()
 		        , "Qty" :$(tr).find('td:eq(7)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(8)').text()
 		        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
 		        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
-		        , "CostPerQty" : $(tr).find('td:eq(12)').text()
 		    }
 		});
 		// TableData.shift();
@@ -991,9 +991,9 @@ $('#vwSaveBillBtn').click(function(){
 		        ,"LotNo" : $(tr).find('td:eq(5)').text()
 		        , "ExpiryDate" :$(tr).find('td:eq(6)').text()
 		        , "Qty" :$(tr).find('td:eq(7)').text()
+		        , "CostPerQty" : $(tr).find('td:eq(8)').text()
 		        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
 		        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
-		        , "CostPerQty" : $(tr).find('td:eq(12)').text()
 		    }
 		});
 		// TableData.shift();

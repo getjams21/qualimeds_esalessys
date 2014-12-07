@@ -43,6 +43,7 @@
 			        <th>Invoice No.</th>
 			        <th>Invoice Date</th>
 			        <th>Terms</th>
+              <th>Amount</th>
 			        <th>Action</th>
                   </tr>
                  </thead> 
@@ -62,6 +63,7 @@
 		            	{{$bill->Terms}} days
 		            	@endif
 		            </td>
+                <td class="dp">{{money($bill->amount)}}</td>
 		            <td>
 		            	<button class="btn btn-success btn-xs "  onclick="viewBill({{$bill->id}})"> View</button>
 		            	<button class="btn btn-primary btn-xs "  onclick="addBillToPayment({{$bill->id}})"> <i class="fa fa-check-circle">Add</i></button>

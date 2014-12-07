@@ -28,7 +28,7 @@ class SessionsController extends \BaseController {
 			$user= new User;
 			$user->username='admin';
 			$user->password='admin';
-			$user->BranchNo=$branch->id;
+			$user->BranchNo=1;
 			$user->UserType=1;
 			$user->save();
 		}
