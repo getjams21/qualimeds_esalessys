@@ -1,4 +1,5 @@
 <?php
+
 use Acme\Repos\SalesOrder\SalesOrderRepository;
 use Acme\Repos\Product\ProductRepository;
 use Carbon\Carbon;
@@ -6,6 +7,7 @@ use Acme\Repos\SalesOrderDetails\SalesOrderDetailsRepository;
 use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
 
 class SOController extends \BaseController {
+	protected $SOEntryForm;
 	private $salesOrderRepo;
 	private $vwInventorySource;
 	function __construct(SalesOrderRepository $salesOrderRepo,ProductRepository $productRepo,
@@ -26,8 +28,10 @@ class SOController extends \BaseController {
 	{	
 		$max = $this->salesOrderRepo->getMaxId();
 		$customers = Customer::lists('CustomerName','id');
-		$medReps = User::where('UserType','=','4')->lists('Lastname','id');
+		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->where('UserType','=','4')->lists('full_name', 'id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale();
+		// dd($products[0]->UnitPrice);
 		$SOs= $this->salesOrderRepo->getAllWithCus();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
@@ -41,27 +45,32 @@ class SOController extends \BaseController {
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
   			// dd($TableData);
-  			if(!$TableData || !$input['customer']){
+  			// dd($input['CustomerNo']);
+  			if(!$TableData || !$input['CustomerNo']){
   				$result = 0;
   			}else{
   				$SO= new SalesOrder;
-  				$SO->CustomerNo=$input['customer'];
+  				$SO->CustomerNo=$input['CustomerNo'];
   				$SO->SalesOrderDate= Carbon::now();
   				$SO->Terms= $input['term'];
   				$SO->UserNo= $input['UserNo'];
+  				$SO->PreparedBy= $input['PreparedBy'];
+  				$SO->ApprovedBy= $input['approvedBy'];
   				$SO->BranchNo= Auth::user()->BranchNo;
   				$SO->save();
   				$result =1;
   				foreach($TableData as $td){
+  					// dd($td['UnitPrice']);
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
-  					$SOdetail->Barcode=$td['Barcode'];
+  					$SOdetail->Barcode='1111';
   					$SOdetail->LotNo=$td['LotNo'];
   					$SOdetail->ExpiryDate=$td['ExpiryDate'];
   					$SOdetail->Unit=$td['Unit'];
   					$SOdetail->Qty=$td['Qty'];
   					$SOdetail->UnitPrice=$td['UnitPrice'];
+  					// dd($result);
   					$SOdetail->save();
   				}
   			}
@@ -82,6 +91,7 @@ class SOController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$id= $input['id'];
+  			// dd($id);
   			$SOdetails = $this->salesOrderDetailsRepo->getAllBySO($id);
 		return Response::json($SOdetails);
   		}
@@ -101,19 +111,22 @@ class SOController extends \BaseController {
   			if(!$TableData || (!isAdmin() && ($SO[0]->ApprovedBy!=''))){
   				$result = 0;
   			}else{
-  				$PO[0]->SupplierNo=$input['supplier'];
-  				$PO[0]->PODate= Carbon::now();
-  				$PO[0]->Terms= $input['term'];
-  				$PO[0]->PreparedBy= fullame(Auth::user());
-  				$PO[0]->save();
+  				$SO[0]->CustomerNo=$input['customer'];
+  				$SO[0]->SalesOrderDate= Carbon::now();
+  				$SO[0]->Terms= $input['term'];
+  				$SO[0]->PreparedBy= fullname(Auth::user());
+  				$SO[0]->save();
   				foreach($TableData as $td){
-  					$POdetail= new PurchaseOrderDetails;
-  					$POdetail->PurchaseOrderNo=$id;
-  					$POdetail->ProductNo=$td['ProdNo'];
-  					$POdetail->Unit=$td['Unit'];
-  					$POdetail->Qty=$td['Qty'];
-  					$POdetail->CostPerQty=$td['CostPerQty'];
-  					$POdetail->save();
+  					$SOdetail= new SalesOrderDetails;
+  					$SOdetail->SalesOrderNo=$id;
+  					$SOdetail->ProductNo=$td['ProdNo'];
+  					$SOdetail->Barcode=$td['Barcode'];
+  					$SOdetail->LotNo=$td['LotNo'];
+  					$SOdetail->ExpiryDate=$td['ExpiryDate'];
+  					$SOdetail->Unit=$td['Unit'];
+  					$SOdetail->Qty=$td['Qty'];
+  					$SOdetail->UnitPrice=$td['CostPerQty'];
+  					$SOdetail->save();
   				}
   				$result =1;
   			}
@@ -123,19 +136,18 @@ class SOController extends \BaseController {
 
 	public function changeSOType(){
 		if(Request::ajax()){
-		$product = [];
 			if(Input::get('selectedValue') == '2'){
 				$products = $this->vwInventorySource->getInventorySourceRetail();
 			}else if (Input::get('selectedValue') == '1'){
 				$products = $this->vwInventorySource->getInventorySourceWholeSale();
 			}
-		return Response::json($product);
+		return Response::json($products);
 		}
 	}
 
 	/**
 	 * Show the form for creating a new resource.
-	 * GET /po/create
+	 * GET /so/create
 	 *
 	 * @return Response
 	 */

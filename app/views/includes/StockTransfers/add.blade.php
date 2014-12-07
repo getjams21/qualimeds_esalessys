@@ -1,54 +1,40 @@
 <br>
 <div class="panel panel-success">
-  <div class="panel-heading head">
+	<div class="panel-heading head">
     <div class="row">
       <div class="col-md-9" style="padding-top:6px;">
-          <b>Sales Order Entry No. {{$max+1}}</b>
+          <b>Stock Transfer No. {{$max+1}}</b>
       </div> 
       <div class="col-md-3" style="padding-top:6px;">
           <b >Date:&nbsp;&nbsp;{{date('F d, Y')}} </b>
       </div> 
     </div><br>
     <hr class="style-fade">
-    <div class="row">
+		<div class="row">
         <div class="col-md-4">
      {{ Form::open() }}
+     	  <div class="input-group">
+     			<span class="input-group-addon panel-head square">
+                Branch Source: &nbsp;&nbsp;<b>{{$branchSource->BranchName}}</b>
+                </span>
+          </div>
+          <br>
           <div class="input-group">
                <span class="input-group-addon panel-head square">
-                Customer: 
+                Branch Destination: 
                </span>
-               {{Form::select('customers', $customers, 'key', array('class' => 'form-control square','id'=>'customer'));}}
+               {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
           </div><br>
-           @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
-              <div class="input-group">
-                   <span class="input-group-addon panel-head square">
-                    Sales Rep: 
-                   </span>
-                   {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
-              </div>
-           @else
-              <input type="hidden" id="medReps" value="{{Auth::user()->id}}"> 
-           @endif
-              <br>
            <div class="form-group">
             <div class="input-group">
-              {{Form::label('term', 'Terms :&nbsp;&nbsp;&nbsp;')}}
               <div class="btn-group square" data-toggle="buttons">
-                <button class="btn btn-success square panel-head active" id="term1">
-                 Cash </button>
-                <button class="btn btn-success square panel-head" id="term2">
-                  Term  </button>
-                <div class="input-group hidden" id="termBox">
-                  <input type="number" min="1" name="term" id="term" value="0" class="form-control square" style="width:80px;" required>
-                  <span class="input-group-addon square">days</span>
-                </div>
+                <div class="alert alert-warning">
+	              <center>Type the desired product on the Search Bar and click Add button to add the product to Transfer.</center>
+	            </div>	
              </div>
              <p id="termError" class="error" hidden>Please enter a valid term days.</p>
              <p>{{ errors_for('term', $errors)}}</p> 
           </div><br>
-          <div class="alert alert-warning">
-              <center>Type the desired product on the Search Bar and click Add button to add the product to SO List.</center>
-            </div>
         </div>
           <!-- /input-group -->
           <!--  <div class="input-group">
@@ -73,35 +59,29 @@
               <table class="table table-striped table-bordered table-hover product">
                 <thead>
                   <tr>
-                    <th>No.</th>
-                    <th>Name</th>
+                    <th>Product No.</th>
+                    <th>Product Name</th>
                     <th>Brand</th>
                     <th>Lot No</th>
                     <th>Expiry Date</th>
                     <th>Unit</th>
-                    <th>Qty</th>
-                    <th>Price</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
-                  <?php $ctr=1 ?>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$ctr}}">
-                      <td id="prodId{{$ctr}}">{{$product->ProductNo}}</td>
-                      <td id="name{{$ctr}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$ctr}}">{{$product->BrandName}}</td>
-                      <td id="lotNo{{$ctr}}">{{$product->LotNo}}</td>
-                      <td id="expiryDate{{$ctr}}">{{$product->ExpiryDate}}</td>
-                      <td id="unit{{$ctr}}">{{$product->Unit}}</td>
-                      <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
-                      <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
-                      <input type="hidden" name="LotNo" id="LotNo{{$ctr}}" value="{{$product->LotNo}}">
-                      <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
-                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="rowProd{{$product->ProductNo}}">
+                      <td id="prodId{{$product->ProductNo}}">{{$product->ProductNo}}</td>
+                      <td id="name{{$product->ProductNo}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$product->ProductNo}}">{{$product->BrandName}}</td>
+                      <td id="lotNo{{$product->ProductNo}}">{{$product->LotNo}}</td>
+                      <td id="expiryDate{{$product->ProductNo}}">{{$product->ExpiryDate}}</td>
+                      <td id="unit{{$product->ProductNo}}">{{$product->Unit}}</td>
+                      <input type="hidden" name="LotNo" id="LotNo{{$product->ProductNo}}" value="{{$product->LotNo}}">
+                      <input type="hidden" name="ExpDate" id="ExpDate{{$product->ProductNo}}" value="{{$product->ExpiryDate}}">
+                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$product->ProductNo}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
-                    <?php $ctr++ ?>
                   @endforeach
                  </tbody>
               </table>
@@ -120,13 +100,13 @@
         <thead>
           <tr>
             <th>Item #</th>
-            <th>Prod. No</th>
+            <th>Prod. No.</th>
             <th>Prod. Name</th>
             <th>Brand</th>
+            <th>Barcode</th>
             <th>Lot No.</th>
             <th>Expiry Date</th>
             <th>Unit</th>
-            <th>Unit Qty</th>
             <th>Qty</th>
             <th>Unit Price</th>
             <th>Item Cost</th>

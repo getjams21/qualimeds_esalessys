@@ -24,7 +24,20 @@ class BackendServiceProvider extends ServiceProvider{
 		$this->app->bind('Acme\Repos\BillPaymentDetails\BillPaymentDetailsRepository','Acme\Repos\BillPaymentDetails\DbBillPaymentDetailsRepository');
 
 		#Inventory Source
-		$this->app->bind('Acme\Repos\VwInventorySource\VwInventorySourceRepository','Acme\Repos\VwInventorySource\DbVwInventorySource');
+		$this->app->bind(
+			'Acme\Repos\VwInventorySource\VwInventorySourceRepository',
+			'Acme\Repos\VwInventorySource\DbVwInventorySource'
+			);
+
+		#Stock Transfers
+		$this->app->bind(
+			'Acme\Repos\StockTransfer\StockTransferRepository',
+			'Acme\Repos\StockTransfer\DbStockTransferRepository'
+			);
+		$this->app->bind(
+			'Acme\Repos\StockTransferDetails\StockTransferDetailsRepository',
+			'Acme\Repos\StockTransferDetails\DbStockTransferDetailsRepository'
+			);
 
 	}
 }

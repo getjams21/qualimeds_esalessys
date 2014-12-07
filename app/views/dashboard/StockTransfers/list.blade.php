@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Sales')
+@section('meta-title','Stocks')
 @section('metatags')
 
 <style type="text/css">
@@ -10,30 +10,29 @@ display: none;
 @stop
 <!-- navbar -->
 @section('header')
-  @include('dashboard.includes.navbar')
+	@include('dashboard.includes.navbar')
 @stop
 @section('content')
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.SalesOrders.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 shadowed"><br>
+       	<div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist">
-              <li class="active"><a href="#showSOEntry" role="tab" data-toggle="tab"><h5><b><i>SO Entry</i></b></h5></a></li>
-              <li ><a href="#showSOList" role="tab" data-toggle="tab"><h5><b><i>SO List</i></b></h5></a></li>
+              <li class="active"><a href="#showSTEntry" role="tab" data-toggle="tab"><h5><b><i>Transfer Stocks</i></b></h5></a></li>
+              <li ><a href="#showSTList" role="tab" data-toggle="tab"><h5><b><i>Transfered Stocks</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane active" id="showSOEntry">
-                 @include('includes.SalesOrders.SOEntry')
+              <div class="tab-pane active" id="showSTEntry">
+                 @include('includes.StockTransfers.add')
               </div>
-              <div class="tab-pane " id="showSOList">
-                 @include('includes.SalesOrders.SOList')  
+              <div class="tab-pane " id="showSTList">
+                 @include('includes.StockTransfers.list')  
               </div>
             </div>
         </div>
@@ -62,10 +61,10 @@ display: none;
         });
 //PO list table     
         var oTable= $('#POList').dataTable( {
-          "order": [[ 0, "desc" ]],
-          "columnDefs": [
-                 { "width": "8%", "targets": 6 }
-           ]
+        	"order": [[ 0, "desc" ]],
+        	"columnDefs": [
+			           { "width": "8%", "targets": 6 }
+			     ]
         }); 
         $('#mySearchTextField').keyup(function(){
          oTable.fnFilter( $(this).val() );
