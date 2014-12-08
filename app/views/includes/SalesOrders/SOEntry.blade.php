@@ -96,7 +96,7 @@
                       <td id="unit{{$ctr}}">{{$product->Unit}}</td>
                       <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
                       <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
-                      <input type="hidden" name="LotNo" id="LotNo{{$ctr}}" value="{{$product->LotNo}}">
+                      <input type="hidden" name="unitQtyR" id="unitQtyR{{$ctr}}" value="{{$product->RQty}}">
                       <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
                       <td><button class="btn btn-success btn-xs square" onclick="addSO({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
@@ -112,6 +112,9 @@
        <div class="alert alert-danger " id="savePOError" hidden>
               <center><b>Please complete all inputs.</b></center>
             </div>
+        <div class="alert alert-danger " id="invalidQty" hidden>
+          <center><b>Invalid Quantity. Inputted quantity exceeded the available product count.</b></center>
+        </div>
     </div>
   </div>
     <div class="panel-body">
@@ -126,7 +129,6 @@
             <th>Lot No.</th>
             <th>Expiry Date</th>
             <th>Unit</th>
-            <th>Unit Qty</th>
             <th>Qty</th>
             <th>Unit Price</th>
             <th>Item Cost</th>

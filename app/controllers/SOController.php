@@ -60,7 +60,7 @@ class SOController extends \BaseController {
   				$SO->save();
   				$result =1;
   				foreach($TableData as $td){
-  					// dd($td['UnitPrice']);
+  					// dd($td['Unit']);
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
@@ -70,7 +70,6 @@ class SOController extends \BaseController {
   					$SOdetail->Unit=$td['Unit'];
   					$SOdetail->Qty=$td['Qty'];
   					$SOdetail->UnitPrice=$td['UnitPrice'];
-  					// dd($result);
   					$SOdetail->save();
   				}
   			}

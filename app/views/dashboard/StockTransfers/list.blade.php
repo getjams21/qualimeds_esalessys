@@ -170,5 +170,5 @@ $.fn.dataTable.ext.search.push(
 );
     });
 </script>
-{{ HTML::script('_/js/salesorders.js')}}
+{{ HTML::script('_/js/stocktransfer.js')}}
 @stop 
