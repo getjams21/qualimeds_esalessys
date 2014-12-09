@@ -9,7 +9,7 @@ class DbVwInventorySource extends DbRepository implements VwInventorySourceRepos
 	}
 	public function getInventorySourceWholeSale(){
 		return VwInventorySource::selectRaw('ProductNo, ProductName, BrandName, WholeSaleUnit As Unit, 
-			    LotNo, ExpiryDate, SellingPrice As UnitPrice, Sum(WholeSaleQty) Qty')
+			    LotNo, ExpiryDate, SellingPrice As UnitPrice, Sum(WholeSaleQty) Qty, Sum(RetailSaleQty) RQty')
 				->groupBy('ProductNo', 'ProductName', 'BrandName', 'WholeSaleUnit', 'LotNo', 'ExpiryDate', 'SellingPrice')->get();
 	}
 	public function getInventorySourceRetail(){

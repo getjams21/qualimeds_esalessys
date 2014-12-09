@@ -59,29 +59,35 @@
               <table class="table table-striped table-bordered table-hover product">
                 <thead>
                   <tr>
-                    <th>Product No.</th>
-                    <th>Product Name</th>
+                    <th>No.</th>
+                    <th>Name</th>
                     <th>Brand</th>
                     <th>Lot No</th>
                     <th>Expiry Date</th>
                     <th>Unit</th>
+                    <th>Qty</th>
+                    <th>Price</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
+                  <?php $ctr=1 ?>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$product->ProductNo}}">
-                      <td id="prodId{{$product->ProductNo}}">{{$product->ProductNo}}</td>
-                      <td id="name{{$product->ProductNo}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$product->ProductNo}}">{{$product->BrandName}}</td>
-                      <td id="lotNo{{$product->ProductNo}}">{{$product->LotNo}}</td>
-                      <td id="expiryDate{{$product->ProductNo}}">{{$product->ExpiryDate}}</td>
-                      <td id="unit{{$product->ProductNo}}">{{$product->Unit}}</td>
-                      <input type="hidden" name="LotNo" id="LotNo{{$product->ProductNo}}" value="{{$product->LotNo}}">
-                      <input type="hidden" name="ExpDate" id="ExpDate{{$product->ProductNo}}" value="{{$product->ExpiryDate}}">
-                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$product->ProductNo}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="rowProd{{$ctr}}">
+                      <td id="prodId{{$ctr}}">{{$product->ProductNo}}</td>
+                      <td id="name{{$ctr}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$ctr}}">{{$product->BrandName}}</td>
+                      <td id="lotNo{{$ctr}}">{{$product->LotNo}}</td>
+                      <td id="expiryDate{{$ctr}}">{{$product->ExpiryDate}}</td>
+                      <td id="unit{{$ctr}}">{{$product->Unit}}</td>
+                      <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
+                      <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
+                      <input type="hidden" name="unitQtyR" id="unitQtyR{{$ctr}}" value="{{$product->RQty}}">
+                      <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
+                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
+                    <?php $ctr++ ?>
                   @endforeach
                  </tbody>
               </table>
@@ -100,16 +106,15 @@
         <thead>
           <tr>
             <th>Item #</th>
-            <th>Prod. No.</th>
+            <th>Prod. No</th>
             <th>Prod. Name</th>
             <th>Brand</th>
-            <th>Barcode</th>
             <th>Lot No.</th>
             <th>Expiry Date</th>
             <th>Unit</th>
             <th>Qty</th>
             <th>Unit Price</th>
-            <th>Item Cost</th>
+            <!-- <th>Item Cost</th> -->
             <th>Remove</th>
           </tr>
          </thead> 
@@ -121,7 +126,7 @@
       <div class="col-md-8">
       </div>
       <div class="col-md-4">
-        <b>Total Cost:  <i id="SOTotalCost"> 0</i></b>
+        <!-- <b>Total Cost:  <i id="SOTotalCost"> 0</i></b> -->
       </div>
     </div>
     <hr >
@@ -138,7 +143,7 @@
               @endif
              </div>
             <div class="col-md-2">
-             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save SO</b></button>
+             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save ST</b></button>
              </div>
            </div>
         </div>

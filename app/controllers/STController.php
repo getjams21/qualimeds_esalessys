@@ -30,7 +30,7 @@ class STController extends \BaseController {
 	{
 		$max = $this->stockTransferRepo->getMaxId();
 		$branchSource = Branch::find(Auth::user()->BranchNo);
-		$branches = Branch::lists('BranchName','id');
+		$branches = Branch::where('id','!=', Auth::user()->BranchNo)->lists('BranchName','id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale();
 		// $STs= $this->stockTransferRepo->getAllWithCus();
 		$now =date("m/d/Y");

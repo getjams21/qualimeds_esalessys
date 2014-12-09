@@ -28,7 +28,6 @@ function addSO(id){
         <input id="unitAvR'+id+'" type="hidden" value="'+unitQtyR+'">
 		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
 		<td class="light-red ed" id="prodUntSO'+itemno+'" value="'+unitPrice+'">'+unitPrice+'</td>
-		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
 		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
 		$('select[id=unit'+itemno+']').on('change', function() {
@@ -62,7 +61,7 @@ function addSO(id){
 		   			$(this).text(value);
 			   		var rowID = $(this).attr('id').substring(9);
 			   		// alert(rowID);
-			         calcCostSO(rowID);
+			         // calcCostSO(rowID);
 				}
 				else{
 		   			$('#invalidQty').show().fadeOut(15000);
@@ -86,7 +85,7 @@ function addSO(id){
 			   		$(this).text(value);
 			   		var rowID = $(this).attr('id').substring(9);
 			   		// alert(rowID);
-			         calcCostSO(rowID);
+			         // calcCostSO(rowID);
 					}
 				});
 		$('#saveSO').removeClass('hidden');
