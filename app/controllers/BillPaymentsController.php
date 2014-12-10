@@ -79,6 +79,7 @@ private $billPaymentDetailsRepo;
 	  				$billPayment->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
 	  				$billPayment->CheckNo = $input['checkNo'];
 	  				$billPayment->BankNo = $input['BankNo'];
+	  				$billPayment->PayTo = $input['PayTo'];
 	  			}
 	  			$billPayment->amount=$input['amount'];
 	  			$billPayment->PreparedBy=fullname(Auth::user());
@@ -106,6 +107,7 @@ private $billPaymentDetailsRepo;
 	  				$billPayment->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
 	  				$billPayment->CheckNo = $input['checkNo'];
 	  				$billPayment->BankNo = $input['BankNo'];
+	  				$billPayment->PayTo = $input['PayTo'];
 	  			}
 	  			$billPayment->amount=$input['amount'];
 	  			$billPayment->PreparedBy=fullname(Auth::user());

@@ -9,7 +9,8 @@
       </div>
       <div class="modal-body">
       <div class="well">
-        <div class="panel panel-success" STYLE="margin-bottom:0px;">
+      <div id="cashVoucherPrintable">
+        <div class="panel panel-success" STYLE="margin-bottom:0px;" >
           <div class="panel-heading"><b>CASH VOUCHER</b></div>
           <div class="panel-body" STYLE="margin-bottom:0px;padding-bottom:4px;">
             <div class="col-md-12">
@@ -47,7 +48,7 @@
         </div> 
           <div class="panel panel-success">
             <div class="panel-body"  style="padding:0;">
-              <div class="col-md-3"  style="padding:0;">
+              <div class="col-md-3 invoice-panel"  style="padding:0;" >
                 <div class="panel panel-success" style="margin:0;">
                   <div class="panel-heading"><b>CHARGE TO ACCOUNT:</b><BR></div>
                    <i id="cashVoucherCharge">&nbsp;</i><br><br>
@@ -55,7 +56,7 @@
                   <i id="cashVoucherApproved">&nbsp;</i><br><br>
                 </div>
               </div>
-              <div class="col-md-9 " style="padding-right:0px;height:100%;">
+              <div class="col-md-9 invoice-lg-panel" style="padding-right:0px;height:100%;">
                 <div >
                   <table class="table ">
                     <tr>
@@ -72,12 +73,11 @@
                       <td style="border-left:1px solid #ddd;border-top:none;">{{fullname(Auth::user())}}</td>
                    </tr>
                   </table>
-                    
                 </div>
               </div>
-              
           </div>
         </div>
+      </div><!--printable-->
       </div><!--well -->
       </div><!--modal body -->
       <div class="modal-footer">
