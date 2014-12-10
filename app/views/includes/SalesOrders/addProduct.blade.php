@@ -21,7 +21,18 @@
                 Customer: 
                </span>
                 {{Form::select('vwCustomer', $customers, 'key', array('class' => 'form-control square','id'=>'vwCustomer'));}}
-              </div>
+              </div><br>
+              @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
+                <div class="input-group">
+                     <span class="input-group-addon panel-head square">
+                      Sales Rep: 
+                     </span>
+                     {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
+                </div>
+             @else
+                <input type="hidden" id="medReps" value="{{Auth::user()->id}}"> 
+             @endif
+                <br>
              </div>
               <div class="form-group">
                 <div class="input-group">
