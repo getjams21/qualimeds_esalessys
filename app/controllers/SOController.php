@@ -60,7 +60,7 @@ class SOController extends \BaseController {
   				$SO->save();
   				$result =1;
   				foreach($TableData as $td){
-  					// dd($td['Unit']);
+  					// dd($td['Qty']);
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
@@ -82,6 +82,7 @@ class SOController extends \BaseController {
   			$input = Input::all();
   			$id= $input['id'];
   			$SO= $this->salesOrderRepo->getByIdWithCus($id);
+  			$salesRep = $this->salesOrderRepo->getByIdWithSalesRep($id);
 		return Response::json($SO);
   		}
 	}

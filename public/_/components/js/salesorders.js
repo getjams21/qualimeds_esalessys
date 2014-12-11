@@ -31,19 +31,23 @@ function addSO(id){
 		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
 		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
+		var unitAvailable = $('#unitAv'+id).val();
 		$('select[id=unit'+itemno+']').on('change', function() {
 			// alert($('select[id=unit'+id+']').val());
 			if($(this).val() == 'pcs'){
 				unitAvailable = $('#unitAvR'+id).val();
+				$('#prodQtySO'+itemno).text('1');
 				// alert(id);
 				// $('#unitQty'+id).hide();
 			}else{
+				// alert('sulod');
+				unitAvailable = $('#unitAv'+id).val();
+				$('#prodQtySO'+itemno).text('1');
 				$('#unitQty'+id).text(unitQty);
 			}
 		});
 		itemno +=1;
 		table.cell( index, 8 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
-		var unitAvailable = $('#unitAv'+id).val();
 		$('.editable').editable({
 				send: 'never', 
 			    type: 'text',
@@ -59,13 +63,16 @@ function addSO(id){
 			    emptytext:0,
 			   display: function(value) {
 		   		if (parseFloat(value) <= parseFloat(unitAvailable)){
+		   			$('#invalidQty').hide();
 		   			$(this).text(value);
 			   		var rowID = $(this).attr('id').substring(9);
 			   		// alert(rowID);
 			         calcCostSO(rowID);
 				}
 				else{
-		   			$('#invalidQty').show().fadeOut(15000);
+					// alert('test');
+					$(this).text('1');
+		   			$('#invalidQty').show();
 		   		}
 			  }	
 			});
@@ -171,6 +178,7 @@ function editSO(id){
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
 	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
+	 	$('[name="medReps"]').val(data[0]['UserNo']);
 	 	if(data[0]['Terms'] == '0'){
 	 		$('#edTerm').val(0);
 	 		$('#edTerm1').addClass('active');
@@ -206,7 +214,7 @@ function editSO(id){
 	  					<td>'+value.Barcode+'</td>
 	  					<td>'+value.LotNo+'</td>
 						<td>'+value.ExpiryDate+'</td>
-	  					<td><select class="form-control square" name="unit" id="unit">
+	  					<td><select class="form-control square" name="unit" id="unit'+counter+'">
 		                  <option value="'+value.Unit+'">'+value.Unit+'</option>
 		                  <option value="'+nxtUnit+'">'+nxtUnit+'</option>
 		                </select></td>
@@ -216,7 +224,21 @@ function editSO(id){
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
 		  			total+=value.UnitPrice*value.Qty;
-	  				// editable(value.ProductNo);
+		  			var unitAvailable = $('#unitAv'+counter).val();
+					$('select[id=unit'+counter+']').on('change', function() {
+						// alert($('select[id=unit'+id+']').val());
+						if($(this).val() == 'pcs'){
+							unitAvailable = $('#unitAvR'+id).val();
+							$('#prodQtySO'+itemno).text('1');
+							// alert(id);
+							// $('#unitQty'+id).hide();
+						}else{
+							// alert('sulod');
+							unitAvailable = $('#unitAv'+id).val();
+							$('#prodQtySO'+itemno).text('1');
+							$('#unitQty'+id).text(unitQty);
+						}
+					});
 		  			counter+=1;
 		  			$('.vweditable').editable({
 						send: 'never', 
@@ -365,8 +387,8 @@ $(document).ready(function() {
 			        , "LotNo" : $(tr).find('td:eq(4)').text()
 			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
 			        , "Unit" : $(tr).find('td:eq(6) select option:selected').val()
-			        , "Qty" : $(tr).find('td:eq(8)').text()
-			        , "UnitPrice" : $(tr).find('td:eq(9)').text()
+			        , "Qty" : $(tr).find('td:eq(7)').text()
+			        , "UnitPrice" : $(tr).find('td:eq(8)').text()
 			    }
 			    ctr++;
 			});
