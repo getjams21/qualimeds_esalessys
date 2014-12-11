@@ -22,12 +22,12 @@
 		         	<div class="input-group ">
                   	{{ Form::label('', 'From: '); }}
                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$lastweek}}" type="text" id="min2"  readonly required>
+                      <input class="form-control" value="{{$lastweek}}" type="text" id="min"  readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     {{ Form::label('', 'To: '); }}
                      <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$now}}" type="text" id="max2"  max="{{$now}}" readonly required>
+                      <input class="form-control" value="{{$now}}" type="text" id="max"  max="{{$now}}" readonly required>
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div>
                     </div><br>

@@ -28,6 +28,10 @@ private $billPaymentDetailsRepo;
 	{
 		$max = $this->billPaymentsRepo->getMaxId();
 		$bills=$this->billsRepo->getAllWithSupUnpaid();
+		foreach($bills as $bill){
+			$amount = DB::table('purchaseorderdetails')->select(DB::raw('sum(Qty * CostPerQty) as total'))->where('PurchaseOrderNo','=',$bill->PurchaseOrderNo)->groupBy('PurchaseOrderNo')->get();
+  			$bill['amount']=$amount[0]->total ;
+		}
 		$supplier = Supplier::lists('SupplierName','id');
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
