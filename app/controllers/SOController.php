@@ -100,6 +100,7 @@ class SOController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
+  			// dd($input['UserNo']);
   			$id= $input['id'];
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
@@ -112,20 +113,21 @@ class SOController extends \BaseController {
   				$result = 0;
   			}else{
   				$SO[0]->CustomerNo=$input['customer'];
+  				$SO[0]->UserNo=$input['UserNo'];
   				$SO[0]->SalesOrderDate= Carbon::now();
   				$SO[0]->Terms= $input['term'];
   				$SO[0]->PreparedBy= fullname(Auth::user());
   				$SO[0]->save();
   				foreach($TableData as $td){
   					$SOdetail= new SalesOrderDetails;
-  					$SOdetail->SalesOrderNo=$id;
+  					$SOdetail->SalesOrderNo=$SO[0]->id;
   					$SOdetail->ProductNo=$td['ProdNo'];
-  					$SOdetail->Barcode=$td['Barcode'];
+  					$SOdetail->Barcode='1111';
   					$SOdetail->LotNo=$td['LotNo'];
   					$SOdetail->ExpiryDate=$td['ExpiryDate'];
   					$SOdetail->Unit=$td['Unit'];
   					$SOdetail->Qty=$td['Qty'];
-  					$SOdetail->UnitPrice=$td['CostPerQty'];
+  					$SOdetail->UnitPrice=$td['UnitPrice'];
   					$SOdetail->save();
   				}
   				$result =1;
