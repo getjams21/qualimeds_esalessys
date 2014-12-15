@@ -11,6 +11,21 @@ body{
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+@media print {
+   @page {size: landscape}
+   body{
+   	margin-top:0px;
+   }
+  .invoice-panel{
+  	width:25%;
+  	float:left;
+  }
+  .invoice-lg-panel{
+  	width:75%;
+  	float:left;
+  }
+  -webkit-print-color-adjust: exact; 
+}
 .blue{
 	background-color:#82CAFF;
 	color:white;

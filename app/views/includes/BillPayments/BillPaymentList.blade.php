@@ -46,6 +46,7 @@
 		        <th>Payment Date</th>
 		        <th>Payment Type</th>
 		        <th>Amount</th>
+		        <th>Pay To</th>
 		        <th>Prepared By</th>
 		        <th>Approved By</th>
 		        <th>Cancelled By</th>
@@ -66,6 +67,12 @@
 		            	@endif
 		           	</td>
 		            <td>{{$billpayment->amount}}</td>
+		            <td>@if($billpayment->PayTo)
+		            	{{$billpayment->PayTo}}
+		            	@else
+		            	N/A
+		            	@endif
+		            </td>
 		             <td >{{$billpayment->PreparedBy}}</td>
 		            <td  id="App{{$billpayment->id}}">@if($billpayment->ApprovedBy)
 		            	{{$billpayment->ApprovedBy}}

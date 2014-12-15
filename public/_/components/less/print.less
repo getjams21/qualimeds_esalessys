@@ -6,10 +6,14 @@
 @media print {
 
   * {
-    text-shadow: none !important;
-    color: #000 !important; // Black prints faster: h5bp.com/s
-    background: transparent !important;
-    box-shadow: none !important;
+      @page {size: Portrait}
+     body{
+      margin-top:0px;
+     }
+    .invoice-panel{
+      width:25%;
+    }
+    -webkit-print-color-adjust: exact; 
   }
 
   a,

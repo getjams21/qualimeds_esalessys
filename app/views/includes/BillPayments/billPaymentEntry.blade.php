@@ -38,13 +38,13 @@
                 <thead>
                   <tr>
                     <th>Bill No</th>
-			        <th>PO #</th>
-			        <th>Supplier</th>
-			        <th>Invoice No.</th>
-			        <th>Invoice Date</th>
-			        <th>Terms</th>
-              <th>Amount</th>
-			        <th>Action</th>
+      			        <th>PO #</th>
+      			        <th>Supplier</th>
+      			        <th>Invoice No.</th>
+      			        <th>Invoice Date</th>
+      			        <th>Terms</th>
+                    <th>Amount</th>
+      			        <th>Action</th>
                   </tr>
                  </thead> 
                  <tbody>
@@ -56,7 +56,7 @@
 		            <td>{{$bill->PurchaseOrderNo}}</td>
 		            <td>{{$bill->SupplierName}}</td>
 		            <td>{{$bill->SalesInvoiceNo}}</td>
-		              <td>{{dateformat($bill->SalesInvoiceDate)}}</td>
+		            <td>{{dateformat($bill->SalesInvoiceDate)}}</td>
 		            <td>@if($bill->Terms == 0)
 		            	Cash
 		            	@else
@@ -114,7 +114,7 @@
              CASH&nbsp;&nbsp;<input type="radio" checked id="billCash" name="paymentType" style="width:15px; height:15px;"/><br>
              CHEQUE&nbsp;&nbsp;<input type="radio" id="billCheque" name="paymentType" style="width:15px; height:15px;"/>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
             	<div class="cashDiv container-fluid col-md-5 " >
             		<h4>Cash Details: </h4>
             		<div class="row">
@@ -125,7 +125,8 @@
 		              	</div>
 		            </div>
             	</div>
-            	<div class="chequeDiv container-fluid col-md-7 hidden" >
+            	<div class="chequeDiv container-fluid col-md-12 hidden" >
+              <div class="col-md-6">
             		<h4>Cheque Details: </h4>
             		<div class="input-group">
 		               <span class="input-group-addon panel-head square">
@@ -133,16 +134,23 @@
 		               </span>
 		               {{Form::select('bankNo', $banks, 'key', array('class' => 'form-control square','id'=>'bankNo'));}}
 		          </div><br>
-			      <div class="input-group">
+			          <div class="input-group">
 		                <span class="input-group-addon panel-head square">Cheque No: </span>
 		                <input type="text" id="chequeNo" class="form-control"  >
-	              </div><br>
+	              </div>
+              </div>
+              <div class="col-md-6">
+                <br><br>
+                  <div class="input-group">
+                      <span class="input-group-addon panel-head square">PayTo: </span>
+                      <input type="text" id="payTo" class="form-control"  >
+                  </div><br>
 	                {{ Form::label('', 'Cheque Due Date: '); }}
                     <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
                       <input class="form-control" value="{{$now}}" type="text" id="chequeDueDate"  readonly required >
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div><br>
-		            <div class="error" id="chequeError" hidden>Please provide Check No or Check Due Date.</div>
+		            <div class="error" id="chequeError" hidden>Please provide Pay To, Check No or Check Due Date.</div>
                     <div class="row">
 	                    <div class="col-md-6 col-md-offset-6">
 	                    <div class="input-group">
@@ -152,8 +160,8 @@
 		            </div>
             	</div>
              </div>
+             </div>
             <div class="col-md-1">
-            
              </div>
            </div>
         </div>

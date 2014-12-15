@@ -1005,10 +1005,16 @@ $('#billCheque').click(function(){
 	// if($('#billCheque').is(':checked')){
 			$('.chequeDiv').removeClass('hidden');
 			$('.cashDiv').addClass('hidden');
+			var supplier;
+			$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+				supplier = $(tr).find('td:eq(2)').text();
+			});
+			$('#payTo').val(supplier);
 });
 $('#billCash').click(function(){
 			$('.cashDiv').removeClass('hidden');
 			$('.chequeDiv').addClass('hidden');
+
 });
 $('#cashVoucher').click(function(){
 	var itemno = 1;
@@ -1025,22 +1031,29 @@ $('#cashVoucher').click(function(){
 	$('#cvReceivedFrom').text(supplier);
 	$('#wordVoucherTotal').text(words);
 	$('#cashVoucherModal').modal('show');
+	$("#cashVoucherPrintable").printThis({
+	     debug: false,             
+	     importCSS: true,           
+	     printContainer: true,       
+	     pageTitle: "Cash Voucher",              
+	     removeInline: false,        
+	     printDelay: 333,           
+	     header: null,              
+	     formValues: true            
+	  });
 });
 $('#chequeVoucher').click(function(){
-	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length ){
+	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
 		$('#chequeError').fadeIn("fast", function(){ 
 	        $("#chequeError").fadeOut(4000);
 	    });
 	    return;
 	}
-	var supplier;
-	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
-		supplier = $(tr).find('td:eq(2)').text();
-	});
+	var payTo = $('#payTo').val();
 	$('.chequeVoucherTotal').text($('#BillPaymentTotalCost').text());
 	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
 	 $('#wordchequeTotal').text(words);
-	 $('#chequeSupplier').text(supplier);
+	 $('#chequeSupplier').text($('#payTo').val());
 	 $('#chequeVoucherNo').text($('#chequeNo').val());
 	 $('#chequeVoucherBank').text($('#bankNo').find("option:selected").text());
 	 $('#chequeVoucherDueDate').text($('#chequeDueDate').val());
@@ -1056,7 +1069,7 @@ $('#saveBill').click(function(){
 		var paymentType=0;
 		var cashVoucherNo=$('#cashVoucherNo').text();
 	}else if($('#billCheque').is(':checked')){
-		if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length ){
+		if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
 			$('#chequeError').fadeIn("fast", function(){ 
 		        $("#chequeError").fadeOut(4000);
 		    });
@@ -1066,7 +1079,8 @@ $('#saveBill').click(function(){
 		var checkVoucherNo =  $('#chequeVaucherNo').text();
 		var checkNo = $('#chequeNo').val();
 		var checkDueDate = $('#chequeDueDate').val();
-		var BankNo = $('#bankNo').find("option:selected").val();	
+		var BankNo = $('#bankNo').find("option:selected").val();
+		var PayTo = $('#payTo').val();	
 	}
 	if($('#approvedBillPayment').is(':checked')){
 		var approved =1;
@@ -1074,7 +1088,7 @@ $('#saveBill').click(function(){
 		var approved =0;		
 	}
 	$.post('/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
-	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved},function(data){
+	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved,PayTo:PayTo},function(data){
 		location.reload();
 			$(location).attr('href','/BillPayments#BillPaymentList');
 	});
@@ -1110,6 +1124,7 @@ $('.editBillPayment').click(function(){
 			$('#bankNo').val(bills['BankNo']);
 			$('#billCheque').prop("checked", true);
 			$('#chequeNo').val(bills['CheckNo']);
+			$('#payTo').val(bills['PayTo']);
 			var chDate = new Date(bills['CheckDueDate']);
 			$('#chequeDueDate').val((chDate.getMonth() + 1) + '/' + chDate.getDate() + '/' +  chDate.getFullYear());
 		}
