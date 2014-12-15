@@ -29,7 +29,7 @@ class SOController extends \BaseController {
 		$max = $this->salesOrderRepo->getMaxId();
 		$customers = Customer::lists('CustomerName','id');
 		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
-		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->where('UserType','=','4')->lists('full_name', 'id');
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale();
 		// dd($products[0]->UnitPrice);
 		$SOs= $this->salesOrderRepo->getAllWithCus();

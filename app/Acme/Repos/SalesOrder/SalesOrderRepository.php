@@ -6,4 +6,5 @@ interface SalesOrderRepository{
 	public function getMaxId();
 	public function getAllWithCus();
 	public function getByIdWithCus($id);
+	public function getAllApprovedSO();
 }

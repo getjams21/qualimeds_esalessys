@@ -40,10 +40,10 @@
                     </a>
                     <ul class="sidecontent collapse" >
                         <li>
-                            <a href="/PurchaseOrders">Purchase Orders</a>
+                            <a href="/PurchaseOrders">Purchase_Orders</a>
                         </li>
                         <li>
-                            <a href="/SalesOrders">Sales Orders</a>
+                            <a href="/SalesOrders">Sales_Orders</a>
                         </li>
                         <li>
                             <a href="/SalesInvoice">Sales Invoice</a>
