@@ -839,6 +839,9 @@ $('#term,#edTerm,#billTerm').blur(function() {
 $("#term,#edTerm,#billTerm,#invoiceno").keydown(function(e){
 		numberOnlyInput(e);
 });
+$(".numberOnly").keydown(function(e){
+		numberOnlyInput(e);
+});
 //END OF PO TERM
 $('#addProductPO').click(function(){
 	$('#addProductPOModal').modal('show');
@@ -1019,6 +1022,7 @@ $('#billCash').click(function(){
 $('#cashVoucher').click(function(){
 	var itemno = 1;
 	var supplier;
+	$('#cashVoucherTable > tbody > tr').remove();
 	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
 		supplier = $(tr).find('td:eq(2)').text();
 		$('#cashVoucherTable').append('<tr>
@@ -1042,6 +1046,23 @@ $('#cashVoucher').click(function(){
 	     formValues: true            
 	  });
 });
+// $('#chequeVoucher').click(function(){
+// 	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
+// 		$('#chequeError').fadeIn("fast", function(){ 
+// 	        $("#chequeError").fadeOut(4000);
+// 	    });
+// 	    return;
+// 	}
+// 	var payTo = $('#payTo').val();
+// 	$('.chequeVoucherTotal').text($('#BillPaymentTotalCost').text());
+// 	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+// 	 $('#wordchequeTotal').text(words);
+// 	 $('#chequeSupplier').text($('#payTo').val());
+// 	 $('#chequeVoucherNo').text($('#chequeNo').val());
+// 	 $('#chequeVoucherBank').text($('#bankNo').find("option:selected").text());
+// 	 $('#chequeVoucherDueDate').text($('#chequeDueDate').val());
+// 	 $('#chequeModal').modal('show');
+// });
 $('#chequeVoucher').click(function(){
 	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
 		$('#chequeError').fadeIn("fast", function(){ 
@@ -1049,15 +1070,23 @@ $('#chequeVoucher').click(function(){
 	    });
 	    return;
 	}
-	var payTo = $('#payTo').val();
-	$('.chequeVoucherTotal').text($('#BillPaymentTotalCost').text());
+	$('#checkVoucherCheckNo').text($('#chequeNo').val())
+	$('#checkVoucherBank').text($('#bankNo').find("option:selected").text())
+	$('#checkVoucherDueDate').text($('#chequeDueDate').val())
+	$('#checkVoucherPayTo').text($('#payTo').val())
+
+	// Check voucher payment details table
+	$('#checkVoucherTable > tbody > tr').remove();
+	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+		$('#checkVoucherTable').append('<tr>
+							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
+							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
+							</tr>');
+	});
+	$('.checkVoucherTotal').text($('#BillPaymentTotalCost').text());
 	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
-	 $('#wordchequeTotal').text(words);
-	 $('#chequeSupplier').text($('#payTo').val());
-	 $('#chequeVoucherNo').text($('#chequeNo').val());
-	 $('#chequeVoucherBank').text($('#bankNo').find("option:selected").text());
-	 $('#chequeVoucherDueDate').text($('#chequeDueDate').val());
-	 $('#chequeVoucherModal').modal('show');
+	// end of check voucher payment details table
+	$('#checkVoucherModal').modal('show');
 });
 $('#saveBill').click(function(){
 	var id = $('#BPediting').val();

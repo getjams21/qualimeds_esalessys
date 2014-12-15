@@ -28,14 +28,13 @@
               </table>
             </div> 
           </div>
-        </div>
+        </div><!-- panel success-->
         <div class="panel panel-success" STYLE="margin-bottom:0px;padding-bottom:4px;">
          <table class="table table-striped table-bordered table-hover" id="cashVoucherTable">
           <thead>
             <tr>
                 <td colspan="7" class="success"><center><b>PARTICULARS</b></center></td>
                 <td  class="success" style="width:20%;"><center><b>AMOUNT</b></center></td>
-               </div>
             </tr>
           </thead>
           <tbody>
@@ -53,30 +52,28 @@
                   <div class="panel-heading"><b>CHARGE TO ACCOUNT:</b><BR></div>
                    <i id="cashVoucherCharge">&nbsp;</i><br><br>
                   <div class="panel-heading"><b>APPROVED BY:</b><BR></div>
-                  <i id="cashVoucherApproved">&nbsp;</i><br><br>
+                  <i id="cashVoucherApproved">&nbsp;</i><br><br><br>
                 </div>
               </div>
-              <div class="col-md-9 invoice-lg-panel" style="padding-right:0px;height:100%;">
-                <div >
+              <div class="col-md-9 invoice-lg-panel" style="padding-right:0px;width:75%;">
                   <table class="table ">
-                    <tr>
-                      <td><b>RECEIVED from:</b> &nbsp;</td> 
-                      <td><i id="cvReceivedFrom" ></i></td>
+                    <tr >
+                      <td colspan="3"><b>RECEIVED from:</b> &nbsp;
+                      <i id="cvReceivedFrom" ></i></td>
+                    </tr ><tr >
+                      <td colspan="3"><b>the amount of: </b>&nbsp;
+                      <i id="wordVoucherTotal"></i> PESOS ONLY  </td>
                     </tr><tr>
-                      <td><b>the amount of PESOS </b>&nbsp;</td>
-                      <td><i id="wordVoucherTotal"></i> PESOS ONLY  </td>
+                      <td style="border-top:1px solid #ddd;" colspan="2"> (<i class="cashVoucherTotal"></i> PHP)</td>
+                      <td style="border-left:1px solid #ddd;" colspan="1">By:</td>
                     </tr><tr>
-                      <td style="border-top:1px solid #ddd;"> (<i class="cashVoucherTotal"></i> PHP)</td>
-                      <td style="border-left:1px solid #ddd;">By:</td>
-                    </tr><tr>
-                      <td  style="border-top:none;">in full payment of the above particulars.</td>
-                      <td style="border-left:1px solid #ddd;border-top:none;">{{fullname(Auth::user())}}</td>
+                      <td  style="border-top:none;" colspan="2">in full payment of the above particulars.</td>
+                      <td style="border-left:1px solid #ddd;border-top:none;" colspan="1">{{fullname(Auth::user())}}</td>
                    </tr>
                   </table>
-                </div>
-              </div>
-          </div>
-        </div>
+              </div><!-- col-md-9-->
+          </div><!-- panel body-->
+        </div><!-- panel success-->
       </div><!--printable-->
       </div><!--well -->
       </div><!--modal body -->
@@ -88,9 +85,70 @@
     </div>
   </div>
 </div>
-
+<!-- CHEQUE VOUCHER -->
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="checkVoucherModal">
+  <div class="modal-dialog modal-lg ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="checkmodal-title"><i id="">Check Voucher</i> Details
+          <b  class="pull-right" >Date:&nbsp;&nbsp;{{date('F d, Y')}}</b>
+        </h4>
+      </div>
+      <div class="modal-body">
+      <div class="well">
+      <div id="cashVoucherPrintable">
+        <div class="panel panel-success" STYLE="margin-bottom:0px;" >
+          <div class="panel-heading"><b>CHECK VOUCHER</b></div>
+          <div class="panel-body" STYLE="margin-bottom:0px;padding-bottom:4px;">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered table-hover" >
+                <tbody>
+                  <tr>
+                  <td ><b>Check Due Date: </b>&nbsp;&nbsp;<i id="checkVoucherDueDate"></i></td>
+                  <td ><b>Check No: </b>&nbsp;&nbsp;<i id="checkVoucherCheckNo"></i></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><b>Payto: </b>&nbsp;&nbsp;<i id="checkVoucherPayTo"></i></td>
+                </tr> 
+                <tr>
+                  <td colspan="2"><b>Bank: </b>&nbsp;&nbsp;<i id="checkVoucherBank"></i></td>
+                </tr> 
+                </tbody>
+              </table>
+              <!-- Check Details-->
+              <table class="table table-striped table-bordered table-hover" id="checkVoucherTable">
+                 <thead>
+                  <tr>
+                    <td colspan="7" class="success"><center><b>Payment Details</b></center></td>
+                    <td  class="success" style="width:20%;"><center><b>AMOUNT</b></center></td>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <td colspan="7" ><b  style="float:right;">TOTAL:</b></td>
+                  <td ><b style="float:right;padding-right:8%;" class="checkVoucherTotal"> </b></td>
+                </tfoot>
+              </table>
+            </div>
+            <b>Released By:____________________</b><b class="pull-right">Received By:_____________________</b><br><br>
+            <b>Date:___________________________</b>
+          </div><!-- panel body-->
+        </div><!-- panel success-->
+      </div><!--printable-->
+      </div><!--well -->
+      </div><!--modal body -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success " id="printCashVoucher">Print</button>  
+        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END OF CHEQUE VOUCHER -->
 <!-- CHEQUE -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="chequeVoucherModal">
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="chequeModal">
   <div class="modal-dialog modal-lg ">
     <div class="modal-content">
       <div class="modal-header">

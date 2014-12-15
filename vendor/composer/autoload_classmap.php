@@ -65,6 +65,7 @@ return array(
     'AddFKToSupplierReturns' => $baseDir . '/app/database/migrations/2014_10_26_145426_add_FK_to_SupplierReturns.php',
     'AddFKToUsers' => $baseDir . '/app/database/migrations/2014_11_11_180317_add_FK_to_Users.php',
     'AddPaytoToBillPayments' => $baseDir . '/app/database/migrations/2014_12_09_184304_add_Payto_to_BillPayments.php',
+    'AddPreparedApprovedToSO' => $baseDir . '/app/database/migrations/2014_12_10_120738_add_Prepared_Approved_to_SO.php',
     'Bank' => $baseDir . '/app/models/Bank.php',
     'BanksController' => $baseDir . '/app/controllers/BanksController.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',

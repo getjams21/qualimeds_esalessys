@@ -85,7 +85,7 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/getbillPaymentDetails', 'BillPaymentsController@getbillPaymentDetails');
 
  		Route::get('/changeSOType', 'SOController@changeSOType');
-
+ 	
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');
