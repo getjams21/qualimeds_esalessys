@@ -109,27 +109,27 @@
         </div><!--modal body -->
         <div class="modal-footer">
            <button type="button" class="btn btn-success hidden pull-left" id="saveBillSOBtn">Bill SO</button>
-        <button type="button" class="btn btn-danger  pull-left" id="BillCancelBtn">Cancel Bill</button>
+        <button type="button" class="btn btn-danger  pull-left" id="SICancelBtn">Cancel Bill</button>
            @if(isAdmin())
            <span class="alert alert-warning" id="checkAlert"> Approval status will be automatically updated upon clicking the checkbox.</span>
            <input type="checkbox" id="billApprove" style="width:18px; height:15px;"/> 
-           <input type="checkbox" id="billApproved" style="width:18px; height:15px;"/> Approved
+           <input type="checkbox" id="SIApproved" style="width:18px; height:15px;"/> Approved
            @endif
            &nbsp;&nbsp;
-        <button type="button" class="btn btn-success hidden " id="vwSaveBillBtn">Save</button>  
+        <button type="button" class="btn btn-success hidden " id="vwSaveSIBtn">Save</button>  
         <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 <!-- VIEW BILL -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="viewBillModal">
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="viewSIModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-title">Bill No. <i id="vwbillNo"></i> Details
-          <b  class="pull-right" >Bill Date: <i id="billDate"></i></b>
+        <h4 class="modal-title" id="modal-title">Invoice No. <i id="vwbillNo"></i> Details
+          <b  class="pull-right" >Invoice Date: <i id="billDate"></i></b>
         </h4>
       </div>
       <div class="modal-body">
@@ -139,10 +139,10 @@
           <div class="panel-heading head">
           <div class="row">
             <div class="col-md-4">
-             <h4> Purchase Order No: <i id="vwbillPOId"></i><br></h4>
+             <h4> Sales Order Order No: <i id="vwbillSOId"></i><br></h4>
                <div class="form-group">
                 <div class="input-group">
-                  <span class="input-group-addon panel-head square">Invoice No: </span>
+                  <span class="input-group-addon panel-head square">Ref Doc No: </span>
                   <input type="text" id="vwBillInvoiceNo" class="form-control" readonly >
                 </div>
               </div>
@@ -161,15 +161,17 @@
                <span class="input-group-addon panel-head square">
                 Customer: 
                </span>
-                {{Form::select('billSOCustomers', $customers, 'key', array('class' => 'form-control square','id'=>'billSOCustomers','disabled'=>'disabled'));}}
+                {{Form::select('vwbillSOCustomers', $customers, 'key', array('class' => 'form-control square','id'=>'billSOCustomers','disabled'=>'disabled'));}}
               </div>
              </div>
              <div class="form-group">
                 <div class="input-group">
-                  <span class="input-group-addon panel-head square">Branch: </span>
-                  <input type="text" id="vwBillBranchName" class="form-control" readonly >
-                </div>
+               <span class="input-group-addon panel-head square">
+                Customer: 
+               </span>
+                {{Form::select('vwbillSOmedReps', $medReps, 'key', array('class' => 'form-control square','id'=>'billSOmedReps','disabled'=>'disabled'));}}
               </div>
+             </div>
              <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon panel-head square">Term: </span>
@@ -184,7 +186,7 @@
           <div class="panel-body">
             <div class="alert alert-danger" hidden id="billError"><center><b>Please fill out Invoice No. / Invoice Date</b></center></div>
             <div class="table-responsive responsive" >
-              <table class="table table-striped table-bordered table-hover BillPOTable2">
+              <table class="table table-striped table-bordered table-hover BillSOTable2">
                 <thead>
                   <tr><th colspan="10" class="success">Billing Details</th>
                       <th colspan="3" class="warning">Freebies</th>

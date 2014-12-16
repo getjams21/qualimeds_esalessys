@@ -90,6 +90,12 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewSO', 'SalesInvoiceController@viewSO');
  		Route::post('/viewSODetails', 'SalesInvoiceController@viewSODetails');
  		Route::post('/saveSOBill', 'SalesInvoiceController@saveSOBill');
+ 		Route::post('/viewSI', 'SalesInvoiceController@viewSI');
+ 		Route::post('/viewSIDetails', 'SalesInvoiceController@viewSIDetails');
+ 		Route::post('/saveEditedSI', 'SalesInvoiceController@saveEditedSI');
+ 		Route::post('/approveSI', 'SalesInvoiceController@approveSI');
+ 		Route::post('/cancelSI', 'SalesInvoiceController@cancelSI');
+
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');
