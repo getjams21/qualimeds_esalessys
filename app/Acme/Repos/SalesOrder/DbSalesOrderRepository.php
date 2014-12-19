@@ -19,4 +19,12 @@ class DbSalesOrderRepository extends DbRepository implements SalesOrderRepositor
 	public function getByIdWithSalesRep($id){
 		return SalesOrder::selectRaw('Salesorders.*, CONCAT(u.Firstname," ",u.Lastname) as name')->join('users AS u', 'u.id', '=', 'Salesorders.UserNo')->where('Salesorders.id', '=', $id)->get();
 	}
+	public function getAllApprovedSO(){
+		return SalesOrder::selectRaw('SalesOrders.*,pc.CustomerName,u.Lastname,u.Firstname,u.MI')->join('Customers AS pc', 'pc.id', '=', 'SalesOrders.CustomerNo')
+		->join('Users AS u', 'u.id', '=', 'SalesOrders.UserNo')
+		->leftJoin('SalesInvoices AS b', 'b.SalesOrderNo', '=', 'SalesOrders.id')
+		->whereNotIn('SalesOrders.ApprovedBy', array(''))->where('SalesOrders.IsCancelled', '=', 0)
+		->whereNull('b.SalesOrderNo')
+		->get();
+	}
 }

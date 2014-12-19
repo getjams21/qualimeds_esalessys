@@ -136,7 +136,7 @@
 		          </div><br>
 			          <div class="input-group">
 		                <span class="input-group-addon panel-head square">Cheque No: </span>
-		                <input type="text" id="chequeNo" class="form-control"  >
+		                <input type="text" id="chequeNo" class="form-control numberOnly"  >
 	              </div>
               </div>
               <div class="col-md-6">
