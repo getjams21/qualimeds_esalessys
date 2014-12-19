@@ -61,6 +61,9 @@
                         <li>
                             <a href="/stocks-transfer">Stock Transfers</a>
                         </li>
+                        <li>
+                            <a href="/inventory-adjustment">Inventory Adjustments</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidehead">
