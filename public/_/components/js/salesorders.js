@@ -176,6 +176,7 @@ function editSO(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editSOModal').modal('show');
 	 $.post('/viewSO',{id:id},function(data){
+	 	// alert(data[0]['id']);
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
 	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
