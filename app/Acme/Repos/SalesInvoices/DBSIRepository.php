@@ -11,10 +11,10 @@ class DbSIRepository extends DbRepository implements SIRepository{
 		return SalesInvoice::max('id');
 	}
 	public function getAllWithUnpaid(){
-		return SalesInvoice::selectRaw('SalesInvoice.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Bills.SupplierNo')
-			->leftJoin('BillPaymentDetails AS b', 'b.BillNo', '=', 'Bills.id')
-			->whereNotIn('Bills.ApprovedBy', array(''))->where('Bills.IsCancelled', '=', 0)
-			->whereNull('b.BillNo')
+		return SalesInvoice::selectRaw('SalesInvoices.*,u.Lastname,u.Firstname,u.MI')->join('Users AS u', 'u.id', '=', 'SalesInvoices.UserNo')
+			->leftJoin('PaymentDetails AS b', 'b.SalesInvoiceNo', '=', 'SalesInvoices.id')
+			->whereNotIn('SalesInvoices.ApprovedBy', array(''))->where('SalesInvoices.IsCancelled', '=', 0)
+			->whereNull('b.SalesInvoiceNo')
 			->get();
 	}
 	public function getAllWithCusAndRep(){

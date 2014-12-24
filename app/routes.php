@@ -53,14 +53,14 @@ Route::group(["before" => "auth"], function() {
 	#Transactions
  	#PURCHASE ORDER ROUTES
  		Route::resource('/PurchaseOrders', 'POController');
-	 		Route::post('/savePO', 'POController@savePO');
-	 		Route::post('/viewPO', 'POController@viewPO');
-	 		Route::post('/viewPODetails', 'POController@viewPODetails');
-	 		Route::post('/saveEditedPO', 'POController@saveEditedPO');
-	 		Route::post('/approvePO', 'POController@approvePO');
-	 		Route::post('/cancelPO', 'POController@cancelPO');
-	 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
-	 		Route::post('/addProductToPO', 'POController@addProductToPO');
+ 		Route::post('/savePO', 'POController@savePO');
+ 		Route::post('/viewPO', 'POController@viewPO');
+ 		Route::post('/viewPODetails', 'POController@viewPODetails');
+ 		Route::post('/saveEditedPO', 'POController@saveEditedPO');
+ 		Route::post('/approvePO', 'POController@approvePO');
+ 		Route::post('/cancelPO', 'POController@cancelPO');
+ 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
+ 		Route::post('/addProductToPO', 'POController@addProductToPO');
 	 #BILLS ROUTES
 	 	Route::resource('/Bills', 'BillsController');
 	 	Route::post('/savePOBill', 'BillsController@savePOBill');
@@ -87,15 +87,15 @@ Route::group(["before" => "auth"], function() {
  		Route::get('/changeSOType', 'SOController@changeSOType');
  	#SALES INVOICE ROUTES
  		Route::resource('/SalesInvoice', 'SalesInvoiceController');
- 		Route::post('/viewSO', 'SalesInvoiceController@viewSO');
- 		Route::post('/viewSODetails', 'SalesInvoiceController@viewSODetails');
  		Route::post('/saveSOBill', 'SalesInvoiceController@saveSOBill');
  		Route::post('/viewSI', 'SalesInvoiceController@viewSI');
  		Route::post('/viewSIDetails', 'SalesInvoiceController@viewSIDetails');
  		Route::post('/saveEditedSI', 'SalesInvoiceController@saveEditedSI');
  		Route::post('/approveSI', 'SalesInvoiceController@approveSI');
  		Route::post('/cancelSI', 'SalesInvoiceController@cancelSI');
-
+ 	#SALES PAYMENT ROUTES
+ 		Route::resource('/SalesPayment', 'SalesPaymentController');
+ 		
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');
