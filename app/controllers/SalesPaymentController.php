@@ -33,14 +33,28 @@ class SalesPaymentController extends \BaseController {
 	public function index()
 	{
 		$max = $this->salesPayment->getMaxId();
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
+		$customers = Customer::lists('CustomerName','id');
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$invoices =  $this->SIRepo->getAllWithUnpaid();
 			foreach($invoices as $invoice){
 			$amount = DB::table('salesinvoicedetails')->select(DB::raw('sum(Qty * UnitPrice) as total'))->where('SalesInvoiceNo','=',$invoice->id)->groupBy('SalesInvoiceNo')->get();
   			$invoice['amount']=$amount[0]->total ;
-		}	
-		return $invoices;
+		}
+		return View::make('dashboard.SalesPayments.list',compact('invoices','max','now','lastweek','customers','medReps'));
 	}
-
+	public function addInvoiceToSalesPayment()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$bill= $this->SIRepo->getByidWithMedRep($id);
+  			$amount = DB::table('salesinvoicedetails')->select(DB::raw('sum(Qty * UnitPrice) as total'))->where('SalesInvoiceNo','=',$bill[0]->id)->groupBy('SalesInvoiceNo')->get();
+  			$bill[0]['amount']=$amount[0]->total ;
+		return Response::json($bill[0]);
+		}
+	}
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /salespayment/create

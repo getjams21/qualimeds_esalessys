@@ -310,16 +310,16 @@ function billSO(id){
 	$('#billNo').text('New Invoice');
 	$('#billSOModal').modal('show');
 	 $.post('/viewSO',{id:id},function(data){
-	 	$('#billSOId').text(data['id']);
-	 	$('[name="billSOCustomers"]').val(data['CustomerNo']);
-	 	$('[name="billSOmedReps"]').val(data['UserNo']);
-	 	if(data['Terms'] == '0'){
+	 	$('#billSOId').text(data[0]['id']);
+	 	$('[name="billSOCustomers"]').val(data[0]['CustomerNo']);
+	 	$('[name="billSOmedReps"]').val(data[0]['UserNo']);
+	 	if(data[0]['Terms'] == '0'){
 	 		$('#billTerm').val(0);
 	 		$('#billTerm1').addClass('active');
 	 		$('#billTerm2').removeClass('active');
 	 		$('#billTermBox').addClass('hidden');
 		}else{
-		 	$('#billTerm').val(data['Terms']);
+		 	$('#billTerm').val(data[0]['Terms']);
 		 	$('#billTerm1').removeClass('active');
 		 	$('#billTerm2').addClass('active');
 		 	$('#billTerm2').prop("disabled", false)
@@ -664,11 +664,6 @@ function addBillToPayment(id){
 						    return;
 						}
 					}
-						// if(data[0]['Terms'] == 0){
-						// 	var term = 'Cash';
-						// }else{
-						// 	var term = data[0]['Terms']+' days';
-						// }
 						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
 							<td class="supplier'+data[0]['SupplierNo']+'">'+data[0]['SupplierName']+'<td class="dp">'+data[0]['SalesInvoiceNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td><td>
 							<button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
@@ -1430,7 +1425,38 @@ $('.editBillPayment').click(function(){
  $('#cancelBPEditing').click(function(){
  	location.reload();
  });
+ //  END OF CANCEL BP EDITING
+
+
 });//end of ready function
+ //SALES PAYMENTS
+function addSItoSP(id){
+	$.post('/addInvoiceToSalesPayment',{id:id},function(data){
+				if($('#billId'+id).length){
+					$('#billError1').fadeIn("fast", function(){        
+				        $("#billError1").fadeOut(4000);
+				    });
+				}else{	
+					if($('#bill1').length){
+						if(!$('.customer'+data['CustomerNo']).length){
+							$('#billSupError1').fadeIn("fast", function(){        
+						        $("#billSupError1").fadeOut(4000);
+						    });
+						    return;
+						}
+					}
+						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
+							<td class="customer'+data['CustomerNo']+'">'+data['CustomerName']+'</td><td class="medrep'+data['UserNo']+'">'+data['Lastname']+', '+data['Firstname']+' '+data['MI']+'.<td class="dp">'+data['SalesInvoiceRefDocNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td>
+							<td><button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
+							<i class="fa fa-times"></i> Remove</button></td></tr>');
+						itemno +=1;
+							calcBillPaymentTotal();
+							editableSelect(id,'Cash','Check');
+							$('#saveBill,.cashChecque').removeClass('hidden');
+						}
+					
+			});	
+}
 function editCategory(id){
 	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();

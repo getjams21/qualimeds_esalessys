@@ -79,10 +79,12 @@ class SOController extends \BaseController {
 	public function viewSO()
 	{
 		if(Request::ajax()){
+			// dd(Input::get('id'));
   			$input = Input::all();
   			$id= $input['id'];
   			$SO= $this->salesOrderRepo->getByIdWithCus($id);
   			$salesRep = $this->salesOrderRepo->getByIdWithSalesRep($id);
+  			// dd($SO);
 		return Response::json($SO);
   		}
 	}
@@ -100,7 +102,6 @@ class SOController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
-  			// dd($input['UserNo']);
   			$id= $input['id'];
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
@@ -119,6 +120,7 @@ class SOController extends \BaseController {
   				$SO[0]->PreparedBy= fullname(Auth::user());
   				$SO[0]->save();
   				foreach($TableData as $td){
+  					// dd($td['Unit']);
   					$SOdetail= new SalesOrderDetails;
   					$SOdetail->SalesOrderNo=$SO[0]->id;
   					$SOdetail->ProductNo=$td['ProdNo'];

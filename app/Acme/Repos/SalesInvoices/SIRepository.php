@@ -6,5 +6,6 @@ interface SIRepository{
 	public function getMaxId();
 	public function getAllWithUnpaid();
 	public function getAllWithCusAndRep();
+	public function getByidWithMedRep($id);
 	
 }

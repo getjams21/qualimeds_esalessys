@@ -95,13 +95,20 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/cancelSI', 'SalesInvoiceController@cancelSI');
  	#SALES PAYMENT ROUTES
  		Route::resource('/SalesPayment', 'SalesPaymentController');
- 		
+ 		Route::post('/addInvoiceToSalesPayment', 'SalesPaymentController@addInvoiceToSalesPayment');
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');
  		Route::post('/viewST', 'STController@viewSO');
  		Route::post('/viewSTDetails', 'STController@viewSODetails');
  		Route::post('/saveEditedST', 'STController@saveEditedSO');
+
+ 	#INVENTORY ADJUSTMENT ROUTES
+ 		Route::resource('/inventory-adjustment', 'IAController');
+ 		Route::post('/saveIA', 'IAController@saveIA');
+ 		Route::post('/viewIA', 'IAController@viewIA');
+ 		Route::post('/viewIADetails', 'IAController@viewIADetails');
+ 		Route::post('/saveEditedIA', 'IAController@saveEditedIA');
 	});
 
 

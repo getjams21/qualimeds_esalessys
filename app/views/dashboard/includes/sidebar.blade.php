@@ -46,7 +46,7 @@
                             <a href="/Bills">Bills</a>
                         </li>
                         <li>
-                            <a href="/BillPayments">Bill Payments</a>
+                            <a href="/BillPayments">Bill_Payments</a>
                         </li>
                         <li>
                             <a href="/SalesOrders">Sales_Orders</a>
@@ -55,7 +55,7 @@
                             <a href="/SalesInvoice">Sales Invoice</a>
                         </li>
                         <li>
-                            <a href="/SalesPayment">Sales Payments</a>
+                            <a href="/SalesPayment">Sales_Payments</a>
                         </li>
                        
                     </ul>
@@ -67,6 +67,9 @@
                     <ul class="sidecontent collapse" >
                         <li>
                             <a href="/stocks-transfer">Stock Transfers</a>
+                        </li>
+                        <li>
+                            <a href="/inventory-adjustment">Inventory Adjustments</a>
                         </li>
                     </ul>
                 </li>

@@ -45,5 +45,14 @@ class BackendServiceProvider extends ServiceProvider{
 			'Acme\Repos\StockTransferDetails\DbStockTransferDetailsRepository'
 			);
 
+		#Inventory Adjustments
+		$this->app->bind(
+			'Acme\Repos\InventoryAdjustments\InventoryAdjustmentRepository',
+			'Acme\Repos\InventoryAdjustments\DbInventoryAdjustmentRepository'
+			);
+		$this->app->bind(
+			'Acme\Repos\InventoryAdjustmentDetails\InventoryAdjustmentDetailsRepository',
+			'Acme\Repos\InventoryAdjustmentDetails\DbInventoryAdjustmentDetailsRepository'
+			);
 	}
 }
