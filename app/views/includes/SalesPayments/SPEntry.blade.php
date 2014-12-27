@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
     <div class="row">
       <div class="col-md-9" style="padding-top:6px;">
-          <b>Bill Payment Entry No. <i class="billPaymentEditId">{{$max+1}}</i></b>
+          <b>Sales Payment Entry No. <i class="billPaymentEditId">{{$max+1}}</i></b>
       </div> 
       <div class="col-md-3" style="padding-top:6px;">
           <b >Date:&nbsp;&nbsp;{{date('F d, Y')}} </b>
@@ -14,20 +14,20 @@
      {{ Form::open() }}
             <br>
           <div class="alert alert-warning">
-              <center>Select Bill for Payment </center>
+              <center>Select Invoice for Payment </center>
           </div>
           <div id="BillPaymentEditing" class="hidden">
 	          <div class="alert alert-danger">
-	              <center>You are currently Editing Existing Bill Payment No. <i class="billPaymentEditId" ></i></center>
+	              <center>You are currently Editing Existing Invoice Payment No. <i class="billPaymentEditId" ></i></center>
 	          </div>
-	          <input type="hidden"  id="BPediting">
+	          <input type="hidden"  id="SPediting">
 	         <span class="pull-right"> <input type="button" class="btn btn-warning" id="cancelBPEditing" value="Cancel Editing"></span>
 	      </div>
         </div>
        <div class="col-md-8">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
-                <span class="input-group-addon">Search Product: </span>
+                <span class="input-group-addon">Search Invoice: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
        </div>
@@ -106,7 +106,71 @@
     </div>
     </div>
     <hr >
-    
+    <!-- CASH and CHECK START -->
+    <div class="row" >
+      <div class="col-md-12">
+      	<div class="error" id="checkBoxError" hidden>Please Select Payment Type.</div>
+        <div class="well hidden cashChecque">
+          <div class="row">
+            <div class="col-md-2">
+             CASH&nbsp;&nbsp;<input type="checkbox" checked id="SPCash" name="paymentType" style="width:15px; height:15px;"/><br>
+             CHEQUE&nbsp;&nbsp;<input type="checkbox" id="SPCheck" name="paymentType" style="width:15px; height:15px;"/>
+            </div>
+            <div class="col-md-10">
+            	<div class="chequeDiv container-fluid col-md-12 hidden" >
+            		<div class="row " >
+            		<div class="cashDiv hidden">
+            			<div class="col-md-6">
+            				<h4>Cash Details: </h4>
+		                    <div class="input-group">
+		                      <span class="input-group-addon panel-head square">Amount: </span>
+		                      <input type="text" id="cashAmount" class="form-control clearEdit"  >
+		                    </div>
+	                	</div>
+		            </div>	
+		            </div>
+            	 <div class="row">
+             	 <div class="col-md-6">
+              		
+            		<h4>Cheque Details: </h4>
+
+                  <div class="input-group checkamount">
+                      <span class="input-group-addon panel-head square ">Amount: </span>
+                      <input type="text" id="checkAmount" class="form-control clearEdit"  >
+                  </div>
+            		<br>
+			          <div class="input-group">
+		                <span class="input-group-addon panel-head square">Cheque No: </span>
+		                <input type="text" id="chequeNo" class="form-control numberOnly clearEdit"  >
+	              	</div>
+              </div>
+              <div class="col-md-6">
+                <br><br>
+               	 <div class="input-group">
+	               <span class="input-group-addon panel-head square">
+	                Bank: 
+	               </span>
+	               {{Form::select('bankNo', $banks, 'key', array('class' => 'form-control square','id'=>'bankNo'));}}
+	          	</div>
+	                {{ Form::label('', 'Cheque Due Date: '); }}
+                    <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
+                      <input class="form-control" value="{{$now}}" type="text" id="chequeDueDate"  readonly required >
+                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div><br>
+		            <div class="error" id="chequeError" hidden>Please provide all necessary information.</div>
+		            <div class="error" id="amountError" hidden>Amount doesn't match.</div>
+                    
+            	</div>
+           	 </div>
+             </div>
+             </div>
+            <div class="col-md-1">
+             </div>
+           </div>
+        </div>
+      </div>
+    </div>
+     <!-- CASH and CHECK END -->
     <div class="row">
       <div class="col-md-12">
         <div class="well">
@@ -116,11 +180,11 @@
             </div>
             <div class="col-md-3">
               @if(isAdmin())
-            <input type="checkbox" id="approvedBillPayment" style="width:15px; height:15px;"/> Approved
+            <input type="checkbox" id="approvedSP" style="width:15px; height:15px;"/> Approved
              @endif
              </div>
             <div class="col-md-2">
-             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveBill" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save Payment</b></button>
+             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSP" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save Payment</b></button>
              </div>
            </div>
         </div>

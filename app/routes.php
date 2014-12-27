@@ -96,6 +96,10 @@ Route::group(["before" => "auth"], function() {
  	#SALES PAYMENT ROUTES
  		Route::resource('/SalesPayment', 'SalesPaymentController');
  		Route::post('/addInvoiceToSalesPayment', 'SalesPaymentController@addInvoiceToSalesPayment');
+ 		Route::post('/salesPay', 'SalesPaymentController@salesPay');
+ 		Route::post('/getSP', 'SalesPaymentController@getSP');
+ 		Route::post('/getSPDetails', 'SalesPaymentController@getSPDetails');
+ 		Route::post('/getSPInvoices', 'SalesPaymentController@getSPInvoices');
  	#STOCK TRANSFER ROUTES
  		Route::resource('/stocks-transfer', 'STController');
  		Route::post('/saveST', 'STController@saveSO');

@@ -33,7 +33,7 @@ display: none;
                  @include('includes.SalesPayments.SPEntry')
               </div>
               <div class="tab-pane " id="SalesPaymentList">
-                LIst here
+                @include('includes.SalesPayments.SPList')
               </div>
             </div>
         </div>

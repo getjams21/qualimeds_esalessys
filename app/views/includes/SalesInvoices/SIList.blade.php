@@ -44,7 +44,7 @@
 		      	<th>Invoice No</th>
 		        <th>SO #</th>
 		        <th>Invoice Date</th>
-		        <th>Ref Doc No.</th>
+		        <th>Invoice No.</th>
 		        <th>Terms</th>
 		        <th>Customer</th>
 		        <th>Med Rep</th>

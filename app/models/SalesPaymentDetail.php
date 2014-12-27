@@ -4,6 +4,7 @@ class SalesPaymentDetail extends \Eloquent {
 	protected $table = 'paymentdetails';
 	protected $guarded = ['id'];
 	protected $fillable = [
+		'PaymentNo',
 		'SalesInvoiceNo',
 		'PaymentType',
 		'CheckNo',

@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
 		<div class="row">
             <div class="col-md-9">
-              <h4><b>Bill Payments</b></h4>
+              <h4><b>Sales Payments</b></h4>
            </div>
            <div class="col-md-3">
            </div>
@@ -42,11 +42,10 @@
 		     </div>   	
 			<thead>
 		      <tr>
-		      	<th>BillPayment No</th>
+		      	<th>Payment No</th>
 		        <th>Payment Date</th>
 		        <th>Payment Type</th>
-		        <th>Amount</th>
-		        <th>Pay To</th>
+		        <th>Total Amount</th>
 		        <th>Prepared By</th>
 		        <th>Approved By</th>
 		        <th>Cancelled By</th>
@@ -54,25 +53,23 @@
 		      </tr>
 		     </thead> 
 		     <tbody>
-		         @foreach($billpayments as $billpayment)
+		         @foreach($salesPayments as $billpayment)
 		          <tr class="
 		         <?php if($billpayment->IsCancelled == 1){ echo "danger";}elseif($billpayment->ApprovedBy != ''){echo "success";}else if($billpayment->IsCancelled == 0 && $billpayment->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$billpayment->id}}</td>
 		            <td>{{dateformat($billpayment->PaymentDate)}}</td>
-		            <td>@if($billpayment->PaymentType == 0)
+		            <td>@if($billpayment->cash == 1)
 		            	Cash
-		            	@else
-		            	Cheque
+		            	@endif
+		            	@if($billpayment->check == 1 && $billpayment->cash == 1)
+		            	and
+		            	@endif
+		            	@if($billpayment->check == 1)
+		            	Check
 		            	@endif
 		           	</td>
 		            <td>{{money($billpayment->amount)}}</td>
-		            <td>@if($billpayment->PayTo)
-		            	{{$billpayment->PayTo}}
-		            	@else
-		            	N/A
-		            	@endif
-		            </td>
 		             <td >{{$billpayment->PreparedBy}}</td>
 		            <td  id="App{{$billpayment->id}}">@if($billpayment->ApprovedBy)
 		            	{{$billpayment->ApprovedBy}}
@@ -88,9 +85,9 @@
 		            </td>
 		            <td>
 		             @if(($billpayment->ApprovedBy == '' || isAdmin()) && ($billpayment->CancelledBy == ''))
-		              <button class="btn btn-primary btn-xs editBillPayment" value="{{$billpayment->id}}"><i class="fa fa-gear"></i>Edit</button>
+		              <button class="btn btn-primary btn-xs editSP" value="{{$billpayment->id}}"><i class="fa fa-gear"></i>Edit</button>
 		              @else
-		             <button class="btn btn-success btn-xs viewBillPayment" value="{{$billpayment->id}}" > View</button>
+		             <button class="btn btn-success btn-xs viewSP" value="{{$billpayment->id}}" > View</button>
 		              @endif
 		            </td>
 		         </tr> 
