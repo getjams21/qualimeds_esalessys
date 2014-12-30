@@ -1,11 +1,11 @@
 <!-- VIEW PO MODAL -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editSOModal">
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editIAModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-title">SO no. <i id="edSOId"></i> Details
-          <b  class="pull-right" >Date: <i id="edSODate"></i></b>
+        <h4 class="modal-title" id="modal-title">Adjustment no. <i id="edIAId"></i> Details
+          <b  class="pull-right" >Date: <i id="edIADate"></i></b>
         </h4>
       </div>
       <div class="modal-body">
@@ -15,35 +15,17 @@
           <div class="panel-heading head">
           <div class="row">
             <div class="col-md-4">
-              <div class="form-group">
-               <div class="input-group">
+              <div class="input-group">
                  <span class="input-group-addon panel-head square">
                   Branch: 
                  </span>
-                     {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
-                </div><br>
-                <div class="input-group">
-                     <label>Remarks:</label>
-                     {{ Form::textarea('remarks', null, ['class'=>'form-control square','size' => '50x5','id'=>'remarks', 'required']) }}
-                </div>
-                <br>
-             </div>
-              <div class="form-group">
-                <div class="input-group">
-              {{Form::label('term', 'Terms :&nbsp;&nbsp;&nbsp;')}}
-              <div class="btn-group square" data-toggle="buttons">
-                <button class="btn btn-success square panel-head dis" id="edTerm1" >
-                 Cash </button>
-                <button class="btn btn-success square panel-head dis" id="edTerm2" >
-                  Term  </button>
-                <div class="input-group hidden" id="edTermBox" >
-                  <input type="number" min="1" name="term" id="edTerm" class="form-control square dis" style="width:80px;" required >
-                  <span class="input-group-addon square">days</span>
-                </div>
-             </div>
-             <p id="termError" class="error" hidden> Please enter a valid term days.</p>
-          </div>
+                 {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
+            </div><br>
+            <div class="input-group">
+                 <label>Remarks:</label>
+                 {{ Form::textarea('remarks', null, ['class'=>'form-control square','size' => '50x5','id'=>'remarks', 'required']) }}
             </div>
+            <br>
             <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">Prepared By: </span>
@@ -73,32 +55,22 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>Brand</th>
-                    <th>Lot No</th>
-                    <th>Expiry Date</th>
-                    <th>Unit</th>
-                    <th>Qty</th>
-                    <th>Price</th>
+                    <th>Wholesale Unit</th>
+                    <th>Retail Unit</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
-                  <?php $ctr=1 ?>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$ctr}}">
-                      <td id="prodId{{$ctr}}">{{$product->ProductNo}}</td>
-                      <td id="name{{$ctr}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$ctr}}">{{$product->BrandName}}</td>
-                      <td id="lotNo{{$ctr}}">{{$product->LotNo}}</td>
-                      <td id="expiryDate{{$ctr}}">{{$product->ExpiryDate}}</td>
-                      <td id="unit{{$ctr}}">{{$product->Unit}}</td>
-                      <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
-                      <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
-                      <input type="hidden" name="unitQtyR" id="unitQtyR{{$ctr}}" value="{{$product->RQty}}">
-                      <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
-                      <td><button class="btn btn-success btn-xs square" onclick="vwaddSO({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="rowProd{{$product->id}}">
+                      <td id="prodId{{$product->id}}">{{$product->id}}</td>
+                      <td id="name{{$product->id}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
+                      <td id="wholesale{{$product->id}}">{{$product->WholeSaleUnit}}</td>
+                      <td id="retail{{$product->id}}">{{$product->RetailUnit}}</td>
+                      <td><button class="btn btn-success btn-xs square" onclick="vwaddIA({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
-                    <?php $ctr++ ?>
                   @endforeach
                  </tbody>
               </table>
@@ -143,7 +115,7 @@
          </div>
         </div><!--modal body -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-success hidden" id="vwSaveSOBtn">Save SO</button>
+          <button type="button" class="btn btn-success hidden" id="vwSaveSOBtn">Save Edited Adjustment</button>
         <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
       </div>
     </div>

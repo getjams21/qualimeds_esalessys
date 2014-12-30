@@ -41,11 +41,8 @@ class SOController extends \BaseController {
 	{
 		if(Request::ajax()){
   			$input = Input::all();
-  			// dd($input);
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
-  			// dd($TableData);
-  			// dd($input['CustomerNo']);
   			if(!$TableData || !$input['CustomerNo']){
   				$result = 0;
   			}else{
@@ -103,7 +100,7 @@ class SOController extends \BaseController {
 		if(Request::ajax()){
   			$input = Input::all();
   			$id= $input['id'];
-  			$TableData = stripcslashes($input['TD']);
+  			$TableData = stripslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
   			$SO=$this->salesOrderRepo->getByIdWithCus($id);
   			$SOdetails = $this->salesOrderDetailsRepo->getAllBySO($id);
