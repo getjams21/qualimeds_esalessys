@@ -310,16 +310,16 @@ function billSO(id){
 	$('#billNo').text('New Invoice');
 	$('#billSOModal').modal('show');
 	 $.post('/viewSO',{id:id},function(data){
-	 	$('#billSOId').text(data['id']);
-	 	$('[name="billSOCustomers"]').val(data['CustomerNo']);
-	 	$('[name="billSOmedReps"]').val(data['UserNo']);
-	 	if(data['Terms'] == '0'){
+	 	$('#billSOId').text(data[0]['id']);
+	 	$('[name="billSOCustomers"]').val(data[0]['CustomerNo']);
+	 	$('[name="billSOmedReps"]').val(data[0]['UserNo']);
+	 	if(data[0]['Terms'] == '0'){
 	 		$('#billTerm').val(0);
 	 		$('#billTerm1').addClass('active');
 	 		$('#billTerm2').removeClass('active');
 	 		$('#billTermBox').addClass('hidden');
 		}else{
-		 	$('#billTerm').val(data['Terms']);
+		 	$('#billTerm').val(data[0]['Terms']);
 		 	$('#billTerm1').removeClass('active');
 		 	$('#billTerm2').addClass('active');
 		 	$('#billTerm2').prop("disabled", false)
@@ -664,11 +664,6 @@ function addBillToPayment(id){
 						    return;
 						}
 					}
-						// if(data[0]['Terms'] == 0){
-						// 	var term = 'Cash';
-						// }else{
-						// 	var term = data[0]['Terms']+' days';
-						// }
 						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
 							<td class="supplier'+data[0]['SupplierNo']+'">'+data[0]['SupplierName']+'<td class="dp">'+data[0]['SalesInvoiceNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td><td>
 							<button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
@@ -704,7 +699,7 @@ function calcBillPaymentTotal(){
 	});
 	$('#BillPaymentTotalCost').text(money(total));
 	if(total ==0){
-		$('#saveBill,.cashChecque').addClass('hidden');
+		$('#saveBill,.cashChecque,#saveSP').addClass('hidden');
 	}
 }
 
@@ -1292,6 +1287,8 @@ $('#cashVoucher').click(function(){
 	     formValues: true            
 	  });
 });
+
+
 // $('#chequeVoucher').click(function(){
 // 	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
 // 		$('#chequeError').fadeIn("fast", function(){ 
@@ -1334,6 +1331,8 @@ $('#chequeVoucher').click(function(){
 	// end of check voucher payment details table
 	$('#checkVoucherModal').modal('show');
 });
+
+
 $('#saveBill').click(function(){
 	var id = $('#BPediting').val();
 	var TableData;
@@ -1430,7 +1429,185 @@ $('.editBillPayment').click(function(){
  $('#cancelBPEditing').click(function(){
  	location.reload();
  });
+ //  END OF CANCEL BP EDITING
+
+// SALES PAYMENT CHECK AND CASH FUNCTION
+$('#SPCheck').click(function(){
+	if($('#SPCheck').is(':checked')){
+			$('.chequeDiv').removeClass('hidden');
+		if($('#SPCash').is(':checked')){	
+			$('.cashDiv').removeClass('hidden');
+		}
+	}else{
+		$('.chequeDiv').addClass('hidden');
+	}
+});
+$('#SPCash').click(function(){
+	if($('#SPCash').is(':checked')){
+		$('.cashDiv').removeClass('hidden');
+	}else{
+		$('.cashDiv').addClass('hidden');
+	}
+});
+//SALES PAYMENTS SAVING FUNCTIONS
+$('#saveSP').click(function(){
+	if(!$('#SPCash').is(':checked') && !$('#SPCheck').is(':checked')){
+		$('#checkBoxError').fadeIn("fast", function(){ 
+			        $("#checkBoxError").fadeOut(4000);
+			});
+			return;
+	}	
+	var id = $('#SPediting').val();
+	var TableData;
+	var cash =0;
+	var check =0;
+	TableData = storeSPValues();	 
+	TableData = $.toJSON(TableData);
+	var cashAmount= $('#BillPaymentTotalCost').text();
+	if($('#SPCash').is(':checked')){
+		cash =1;
+		if($('#SPCheck').is(':checked')){
+			if(!$('#cashAmount').val().length){
+				$('#chequeError').fadeIn("fast", function(){ 
+		        $("#chequeError").fadeOut(4000);
+		    	});
+		   	return;
+			}
+			cashAmount= $('#cashAmount').val();
+		}
+	}
+	if($('#SPCheck').is(':checked')){
+		check =1;
+		if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#checkAmount').val().length){
+			$('#chequeError').fadeIn("fast", function(){ 
+		        $("#chequeError").fadeOut(4000);
+		    });
+		    return;
+		}
+		var checkNo = $('#chequeNo').val();
+		var checkDueDate = $('#chequeDueDate').val();
+		var BankNo = $('#bankNo').find("option:selected").val();
+		var checkAmount = $('#checkAmount').val();
+	}
+	if(($('#SPCash').is(':checked') && $('#SPCheck').is(':checked'))){
+		if((parseInt(cashAmount) + parseInt(checkAmount)) != parseInt($('#BillPaymentTotalCost').text())) {
+			$('#amountError').fadeIn("fast", function(){ 
+			        $("#amountError").fadeOut(4000);
+			});
+			return;
+		}
+	}
+	if(!$('#SPCash').is(':checked') && $('#SPCheck').is(':checked')){
+		if(parseInt(checkAmount) != parseInt($('#BillPaymentTotalCost').text())) {
+			$('#amountError').fadeIn("fast", function(){ 
+			        $("#amountError").fadeOut(4000);
+			});
+			return;
+		}
+	}	
+	if($('#approvedSP').is(':checked')){
+		var approved =1;
+	}else{
+		var approved =0;		
+	}
+	$.post('/salesPay',{id:id,TD:TableData,cash:cash,check:check,cashAmount:cashAmount,
+		checkAmount:checkAmount,checkNo:checkNo,checkDueDate:checkDueDate,
+		BankNo:BankNo,approved:approved},function(data){
+		location.reload();
+			$(location).attr('href','/SalesPayment#SalesPaymentList');
+	});
+	function storeSPValues(){
+		var TableData = new Array();
+		$('.BillPaymentTable > tbody  > tr').each(function(row, tr){
+		    TableData[row]={
+		    	 "invoiceNo" : $(tr).find('td:eq(1)').text()
+		    	 , "amount" :$(tr).find('td:eq(5)').text()
+		    }
+		});
+	    return TableData;
+	}
+	
+});
+// EDIT SALES PAYMENT
+$('.editSP').click(function(){
+	var id= $(this).val();
+	var itemno=1;
+	$('#SPediting').val(id);
+	$('.BillPaymentTable >tbody > tr').remove();
+	$.post('/getSP',{id:id},function(bills){
+		$('.billPaymentEditId').text(bills['id']);
+		if(bills['ApprovedBy']){
+			$('#approvedSP').prop('checked', true);
+		}else{
+			$('#approvedSP').prop('checked', false);
+		}
+	});
+	$('#SPCash,#SPCheck,.cashDiv,.clearEdit').prop('checked',false);
+	$('.clearEdit').val('');
+	$('.cashDiv').addClass('hidden');
+	$.post('/getSPDetails',{id:id},function(SPdetails){
+		$.each(SPdetails, function(key,value) {
+			if(value.PaymentType==0){
+				$('#SPCash').prop('checked',true);
+				$('.cashDiv').removeClass('hidden');
+				$('#cashAmount').val(money(value.amount));
+			}
+			if(value.PaymentType==1){
+				$('#SPCheck').prop('checked',true);
+				$('#chequeNo').val(value.CheckNo);
+				var chDate = new Date(value.CheckDueDate);
+				$('#chequeDueDate').val((chDate.getMonth() + 1) + '/' + chDate.getDate() + '/' +  chDate.getFullYear());
+				$('#bankNo').val(value.BankNo);
+				$('#checkAmount').val(money(value.amount));
+				$('.chequeDiv').removeClass('hidden');
+			}
+		});
+	});
+	$.post('/getSPInvoices',{id:id},function(SPI){
+		$.each(SPI, function(key,value) {
+			$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
+				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp Billcost">'+money(value.amount)+'</td>
+				<td><button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
+				<i class="fa fa-times"></i> Remove</button></td></tr>');
+			itemno +=1;
+			calcBillPaymentTotal();		
+		});
+	});
+	
+	
+	 $('#saveSP,.cashChecque').removeClass('hidden');
+	 $('#BillPaymentEditing').removeClass('hidden');
+	 $('#myTab a[href="#SalesPaymentEntry"]').tab('show');
+});
+// END OF EDIT BILL PAYMENT
 });//end of ready function
+ //SALES PAYMENTS
+function addSItoSP(id){
+	$.post('/addInvoiceToSalesPayment',{id:id},function(data){
+				if($('#billId'+id).length){
+					$('#billError1').fadeIn("fast", function(){        
+				        $("#billError1").fadeOut(4000);
+				    });
+				}else{	
+					if($('#bill1').length){
+						if(!$('.customer'+data['CustomerNo']).length){
+							$('#billSupError1').fadeIn("fast", function(){        
+						        $("#billSupError1").fadeOut(4000);
+						    });
+						    return;
+						}
+					}
+						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
+							<td class="customer'+data['CustomerNo']+'">'+data['CustomerName']+'</td><td class="medrep'+data['UserNo']+'">'+data['Lastname']+', '+data['Firstname']+' '+data['MI']+'.<td class="dp">'+data['SalesInvoiceRefDocNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td>
+							<td><button class="btn btn-danger btn-xs square" id="removeBill'+itemno+'" onclick="removeBill('+itemno+')">
+							<i class="fa fa-times"></i> Remove</button></td></tr>');
+						itemno +=1;
+							calcBillPaymentTotal();
+							$('#saveSP,.cashChecque').removeClass('hidden');
+						}
+					
+			});	
+}
 function editCategory(id){
 	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();

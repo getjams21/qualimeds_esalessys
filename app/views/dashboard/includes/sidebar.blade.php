@@ -43,17 +43,21 @@
                             <a href="/PurchaseOrders">Purchase_Orders</a>
                         </li>
                         <li>
+                            <a href="/Bills">Bills</a>
+                        </li>
+                        <li>
+                            <a href="/BillPayments">Bill_Payments</a>
+                        </li>
+                        <li>
                             <a href="/SalesOrders">Sales_Orders</a>
                         </li>
                         <li>
                             <a href="/SalesInvoice">Sales Invoice</a>
                         </li>
                         <li>
-                            <a href="/Bills">Bills</a>
+                            <a href="/SalesPayment">Sales_Payments</a>
                         </li>
-                        <li>
-                            <a href="/BillPayments">Bill Payments</a>
-                        </li>
+                       
                     </ul>
                 </li>
                 <li class="sidehead">

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Bill_Payments')
+@section('meta-title','Sales_Payments')
 @section('metatags')
 
 <style type="text/css">
@@ -16,8 +16,7 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.Bills.billModals')
-@include('includes.BillPayments.billPaymentModals')
+@include('includes.SalesPayments.SIviewModal')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
@@ -25,16 +24,16 @@ display: none;
         <div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist" id="myTab">
-              <li class="active"><a href="#BillPaymentEntry" role="tab" data-toggle="tab"><h5><b><i>Bill Payment Entry</i></b></h5></a></li>
-              <li ><a href="#BillPaymentList" role="tab" data-toggle="tab"><h5><b><i>Bill Payment List</i></b></h5></a></li>
+              <li class="active"><a href="#SalesPaymentEntry" role="tab" data-toggle="tab"><h5><b><i>Sales Payment Entry</i></b></h5></a></li>
+              <li ><a href="#SalesPaymentList" role="tab" data-toggle="tab"><h5><b><i>Sales Payment List</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane active" id="BillPaymentEntry">
-                 @include('includes.BillPayments.billPaymentEntry')  
+              <div class="tab-pane active" id="SalesPaymentEntry">
+                 @include('includes.SalesPayments.SPEntry')
               </div>
-              <div class="tab-pane " id="BillPaymentList">
-                 @include('includes.BillPayments.billPaymentList')  
+              <div class="tab-pane " id="SalesPaymentList">
+                @include('includes.SalesPayments.SPList')
               </div>
             </div>
         </div>

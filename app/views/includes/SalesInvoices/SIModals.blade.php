@@ -17,7 +17,7 @@
              <h4> SalesOrder No: <i id="billSOId"></i><br></h4>
                <div class="form-group">
                 <div class="input-group">
-                  <span class="input-group-addon panel-head square">Ref. Doc. No. : </span>
+                  <span class="input-group-addon panel-head square">Invoice No. : </span>
                   <input type="text" id="invoiceno" class="form-control" >
                 </div>
               </div>
@@ -142,7 +142,7 @@
              <h4> Sales Order Order No: <i id="vwbillSOId"></i><br></h4>
                <div class="form-group">
                 <div class="input-group">
-                  <span class="input-group-addon panel-head square">Ref Doc No: </span>
+                  <span class="input-group-addon panel-head square">Invoice No: </span>
                   <input type="text" id="vwBillInvoiceNo" class="form-control" readonly >
                 </div>
               </div>

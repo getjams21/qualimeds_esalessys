@@ -56,7 +56,7 @@ display: none;
              billTable.fnDraw();
         });
         $(function() {
-            $( "#max" ).datepicker('setEndDate', $( "#max" ).val());
+            $( "#max" ).datepicker();
              billTable.fnDraw();
         });
          $(function() {
