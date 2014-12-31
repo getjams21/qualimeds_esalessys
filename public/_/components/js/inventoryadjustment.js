@@ -176,7 +176,6 @@ function viewPO(id){
 function editIA(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editIAModal').modal('show');
-	var curDate = new Date();
 	 $.post('/viewIA',{id:id},function(data){
 	 	$('#edIAId').text(data[0]['id']);
 	 	$('#edIADate').text(data[0]['AdjustmentDate']);
@@ -193,25 +192,26 @@ function editIA(id){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
+	  			// var ExpiryDate = substring(value.)
 			  		$.each(data, function(key,value) {
 			  		if (value.Unit == 'box' || value.Unit == 'Box'){
 			  			var nxtUnit = 'Pcs';
 			  		}else if (value.Unit == 'pcs' || value.Unit == 'Pcs'){
 			  			var nxtUnit = 'Box';
 			  		}
+			  		var itemCost = parseFloat(value.CostPerQty)*parseFloat(value.Qty);
 	  				$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td>
-	  					<td class="editable-default" id="lotNo'+id+'"><i></i></td>
-						<td class="dateEditable">'+curDate.getFullYear()+'-'+curDate.getMonth()+'-'+curDate.getDate()+'
-						</td>
+	  					<td class="editable-default" id="lotNo'+id+'"><i>'+value.LotNo+'</i></td>
+						<td class="dateEditable">'+value.ExpiryDate+'</td>
 	  					<td><select class="form-control square" name="unit" id="unit">
 		                  <option value="'+value.Unit+'">'+value.Unit+'</option>
 		                  <option value="'+nxtUnit+'">'+nxtUnit+'</option>
 		                </select></td>
-	  					<td class="vweditable" id="edQty'+counter+'">'+value.Qty+'</td>
-	  					<td class="vweditable" id="edUnt'+counter+'">'+value.CostPerQty+'</td>
-	  					<td class="cost"id="edCost'+counter+'">'+(value.CostPerQty*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					<td class="vweditable" id="edQty'+counter+'">'+parseInt(value.Qty)+'</td>
+	  					<td class="vweditable" id="edUnt'+counter+'">'+money(value.CostPerQty)+'</td>
+	  					<td class="cost"id="edCost'+counter+'">'+itemCost.toFixed(2)+'</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
 		  			total+=value.CostPerQty*value.Qty;
@@ -220,7 +220,7 @@ function editIA(id){
 		  			$('.editable-default').editable({
 						send: 'never', 
 					    type: 'text',
-					    value:1,
+					    value:value.LotNo,
 					    validate: function(value) {
 					        if($.trim(value) == '') {
 					         return 'This field is required';
@@ -267,20 +267,20 @@ function editIA(id){
 							}
 					});
 				});
-				$('#edSOTotalCost').text(total);
+				// $('#edSOTotalCost').text(money(parseFloat(total)));
 				function edcalcCost(id){
 					// alert(id);
 					var qty = $('#edQty'+id).text();
 					var unit = $('#edUnt'+id).text();
-					$('#edCost'+id).text(qty*unit);
+					$('#edCost'+id).text(money(parseFloat(qty*unit)));
 					edtotalCost();
 				}
 				function edtotalCost(){
 					var total=0;
 					$('.cost').each(function(){
-						total += parseInt($(this).text()); 
+						total += parseFloat($(this).text()); 
 					});
-					$('#edSOTotalCost').text(total);
+					$('#edSOTotalCost').text(money(parseFloat(total)));
 					if(total == 0){
 						$('#vwSaveSOBtn').addClass('hidden');
 					}else{
@@ -397,9 +397,9 @@ function edcalcCostSO(id){
 function edtotalCostSO(){
 	var total=0;
 	$('.cost').each(function(){
-		total += parseFloat($(this).text()); 
+		total += parseFloat($(this).text());
 	});
-	$('#edSOTotalCost').text(total.toFixed(2));
+	$('#edSOTotalCost').text(money(parseFloat(total)));
 	if(total = 0){
 		$('#vwSaveSOBtn').addClass('hidden');
 	}
@@ -501,7 +501,6 @@ $(document).ready(function() {
 		var Remarks = $('#remarks').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
-		// alert(TableData);
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
