@@ -38,8 +38,6 @@ function addSO(id){
 			if($(this).val() == 'pcs'){
 				unitAvailable = $('#unitAvR'+id).val();
 				$('#prodQtySO'+itemno).text('1');
-				// alert(id);
-				// $('#unitQty'+id).hide();
 			}else{
 				// alert('sulod');
 				unitAvailable = $('#unitAv'+id).val();

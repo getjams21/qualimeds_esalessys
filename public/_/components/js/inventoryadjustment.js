@@ -27,7 +27,7 @@ function addIA(id){
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
 		
 		itemno +=1;
-		table.cell( index, 5 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+		// table.cell( index, 5 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
 		// var unitAvailable = $('#unitAv'+id).val();
 		$('.editable-default').editable({
 				send: 'never', 
@@ -118,9 +118,9 @@ function totalCostSO(){
 }
 function removeIA(id,prodId,index){
 	var table = $('.product').DataTable();
-		table.cell( index, 5 ).data('<button class="btn btn-success btn-xs square" 
-			onclick="addIA('+prodId+')" >
-			<i class="fa fa-check-circle"></i> Add</button>').draw();
+		// table.cell( index, 5 ).data('<button class="btn btn-success btn-xs square" 
+		// 	onclick="addIA('+prodId+')" >
+		// 	<i class="fa fa-check-circle"></i> Add</button>').draw();
 	$('#SO'+id).remove();
 	id +=1;
 	if( $('#SO'+id).length ) 
@@ -175,23 +175,12 @@ function viewPO(id){
 }
 function editIA(id){
 	$('#vwSaveBtn').addClass('hidden');
-	$('#editSOModal').modal('show');
-	 $.post('/viewSO',{id:id},function(data){
-	 	$('#edSOId').text(data[0]['id']);
-	 	$('#edSODate').text(data[0]['SalesOrderDate']);
-	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
-	 	if(data[0]['Terms'] == '0'){
-	 		$('#edTerm').val(0);
-	 		$('#edTerm1').addClass('active');
-	 		$('#edTerm2').removeClass('active');
-	 		$('#edTermBox').addClass('hidden');
-		}else{
-		 	$('#edTerm').val(data[0]['Terms']);
-		 	$('#edTerm1').removeClass('active');
-		 	$('#edTerm2').addClass('active');
-		 	$('#edTerm2').prop("disabled", false)
-		 	$('#edTermBox').removeClass('hidden');
-		}
+	$('#editIAModal').modal('show');
+	 $.post('/viewIA',{id:id},function(data){
+	 	$('#edIAId').text(data[0]['id']);
+	 	$('#edIADate').text(data[0]['AdjustmentDate']);
+	 	$('select#branch option[value="'+data[0]['BranchNo']+'"]').attr('selected',true);
+	 	$('#remarks').text(data[0]['Remarks']);
 	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
 	 	if(data[0]['ApprovedBy'] == ''){
 	 		$('#edApprovedBy').val('N/A');
@@ -199,34 +188,65 @@ function editIA(id){
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post('/viewSODetails',{id:id},function(data){
+	 $.post('/viewIADetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
+	  			// var ExpiryDate = substring(value.)
 			  		$.each(data, function(key,value) {
 			  		if (value.Unit == 'box' || value.Unit == 'Box'){
 			  			var nxtUnit = 'Pcs';
 			  		}else if (value.Unit == 'pcs' || value.Unit == 'Pcs'){
 			  			var nxtUnit = 'Box';
 			  		}
+			  		var itemCost = parseFloat(value.CostPerQty)*parseFloat(value.Qty);
 	  				$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td>
-	  					<td>'+value.Barcode+'</td>
-	  					<td>'+value.LotNo+'</td>
-						<td>'+value.ExpiryDate+'</td>
+	  					<td class="editable-default" id="lotNo'+id+'"><i>'+value.LotNo+'</i></td>
+						<td class="dateEditable">'+value.ExpiryDate+'</td>
 	  					<td><select class="form-control square" name="unit" id="unit">
 		                  <option value="'+value.Unit+'">'+value.Unit+'</option>
 		                  <option value="'+nxtUnit+'">'+nxtUnit+'</option>
 		                </select></td>
-	  					<td class="vweditable" id="edQty'+value.ProductNo+'">'+value.Qty+'</td>
-	  					<td class="vweditable" id="edUnt'+value.ProductNo+'">'+value.UnitPrice+'</td>
-	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.UnitPrice*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					<td class="vweditable" id="edQty'+counter+'">'+parseInt(value.Qty)+'</td>
+	  					<td class="vweditable" id="edUnt'+counter+'">'+money(value.CostPerQty)+'</td>
+	  					<td class="cost"id="edCost'+counter+'">'+itemCost.toFixed(2)+'</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
-		  			total+=value.UnitPrice*value.Qty;
+		  			total+=value.CostPerQty*value.Qty;
 	  				// editable(value.ProductNo);
 		  			counter+=1;
+		  			$('.editable-default').editable({
+						send: 'never', 
+					    type: 'text',
+					    value:value.LotNo,
+					    validate: function(value) {
+					        if($.trim(value) == '') {
+					         return 'This field is required';
+					        }
+					    },
+					    emptytext:0,
+					   display: function(value) {
+					   	$(this).text(value);
+					  	}	
+					});
+					$('.dateEditable').editable({
+					type: 'combodate',
+				        format: 'YYYY-MM-DD',    
+				        viewformat: 'YYYY-MM-DD',    
+				        template: 'D / MMMM / YYYY',
+					    validate: function(value) {
+					        if($.trim(value) == '') {
+					         return 'This field is required';
+					        }
+					    },    
+				        combodate: {
+				                minYear: d.getFullYear(),
+				                maxYear: d.getFullYear()+10,
+				                minuteStep: 1
+				           }
+			    	});
 		  			$('.vweditable').editable({
 						send: 'never', 
 					    type: 'text',
@@ -247,20 +267,20 @@ function editIA(id){
 							}
 					});
 				});
-				$('#edSOTotalCost').text(total);
+				// $('#edSOTotalCost').text(money(parseFloat(total)));
 				function edcalcCost(id){
 					// alert(id);
 					var qty = $('#edQty'+id).text();
 					var unit = $('#edUnt'+id).text();
-					$('#edCost'+id).text(qty*unit);
+					$('#edCost'+id).text(money(parseFloat(qty*unit)));
 					edtotalCost();
 				}
 				function edtotalCost(){
 					var total=0;
-					$('.ecost').each(function(){
-						total += parseInt($(this).text()); 
+					$('.cost').each(function(){
+						total += parseFloat($(this).text()); 
 					});
-					$('#edSOTotalCost').text(total);
+					$('#edSOTotalCost').text(money(parseFloat(total)));
 					if(total == 0){
 						$('#vwSaveSOBtn').addClass('hidden');
 					}else{
@@ -269,27 +289,119 @@ function editIA(id){
 				}
 	      });
 }
-function vwaddPO(id){
-	var name= $('#vwname'+id).text();
-	var brand= $('#vwbrand'+id).text();
-	var unit= $('#vwunit'+id).text();
-	var table = $('.vwproduct').DataTable();
-	var index=table.row('#vwrowProd'+id).index();
-	if($('#vwProd'+id).length){prodError
-		 $('#prodError').fadeIn("fast", function(){        
-	        $("#prodError").fadeOut(4000);
-	    });
-	}else{
-	$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
-	  					<td>'+name+'</td>
-	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable" id="edQty'+id+'">'+1+'</td><td class="vweditable" id="edUnit'+id+'">'+1+'</td>
-	  					<td class="ecost"id="edCost'+id+'">1</td><td><button class="btn btn-danger 
-	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
-						<i class="fa fa-times" ></i> Remove</button></td></tr>');
-	
-		counter +=1;
-		editable(id);
+function vwaddIA(id){
+	var name= $('#name'+id).text();
+	var brand= $('#brand'+id).text();
+	var unit= $('#wholesale'+id).text();
+	var table = $('.product').DataTable();
+	var unitPrice = 0.00;
+	var index=table.row('#rowProd'+id).index();
+	var curDate = new Date();
+	$('.edSOTable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
+		<td id="prdoNo'+itemno+'">'+id+'</td>
+		<td>'+name+'</td>
+		<td>'+brand+'</td>
+		<td class="editable-default" id="lotNo'+id+'"><i></i></td>
+		<td class="dateEditable">'+curDate.getFullYear()+'-'+curDate.getMonth()+'-'+curDate.getDate()+'
+		</td>
+		<td><select class="form-control square" name="unit" id="unit'+itemno+'">
+                  <option value="'+unit+'">'+unit+'</option>
+                  <option value="pcs">pcs</option>
+                </select></td>
+		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
+		<td class="light-red ed" id="prodUntSO'+itemno+'">0.00</td>
+		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
+		<td><button class="btn btn-danger btn-xs square" id="removeIA'+itemno+'" onclick="removeIA('+itemno+','+id+','+index+')">
+		<i class="fa fa-times"></i> Remove</button></td></tr>');
+		
+		itemno +=1;
+		// table.cell( index, 5 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+		// var unitAvailable = $('#unitAv'+id).val();
+		$('.editable-default').editable({
+				send: 'never', 
+			    type: 'text',
+			    value:1,
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   	$(this).text(value);
+			  	}	
+			});
+		$('.dateEditable').editable({
+		type: 'combodate',
+	        format: 'YYYY-MM-DD',    
+	        viewformat: 'YYYY-MM-DD',    
+	        template: 'D / MMMM / YYYY',
+		    validate: function(value) {
+		        if($.trim(value) == '') {
+		         return 'This field is required';
+		        }
+		    },    
+	        combodate: {
+	                minYear: d.getFullYear(),
+	                maxYear: d.getFullYear()+10,
+	                minuteStep: 1
+	           }
+    	});
+		$('.editable').editable({
+				send: 'never', 
+			    type: 'text',
+			    value:1,
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			        if ($.isNumeric(value) == '' || value==0) {
+			            return 'Please input a valid number greater than 0';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   	$(this).text(value);
+			   		var rowID = $(this).attr('id').substring(9);
+			        edcalcCostSO(rowID);
+			  	}	
+			});
+		$('.ed').editable({
+				send: 'never', 
+			    type: 'text',
+			    value:unitPrice,
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			        if ($.isNumeric(value) == '' || value==0) {
+			            return 'Please input a valid number greater than 0';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   		$(this).text(value);
+			   		var rowID = $(this).attr('id').substring(9);
+			   		// alert(rowID);
+			         edcalcCostSO(rowID);
+					}
+				});
 		$('#vwSaveSOBtn').removeClass('hidden');
+}
+function edcalcCostSO(id){
+	var qty = parseInt($('#prodQtySO'+id).text());
+	var unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
+	$('#prodCostSO'+id).text(parseFloat(qty*unit).toFixed(2));
+	edtotalCostSO();
+}
+function edtotalCostSO(){
+	var total=0;
+	$('.cost').each(function(){
+		total += parseFloat($(this).text());
+	});
+	$('#edSOTotalCost').text(money(parseFloat(total)));
+	if(total = 0){
+		$('#vwSaveSOBtn').addClass('hidden');
 	}
 }
 function vwRemovePO(id){
@@ -308,7 +420,7 @@ function vwRemovePO(id){
 	}
 	counter -=1;
 	edtotalCost();
-	$('#vwSavePOBtn').removeClass('hidden');
+	$('#vwSaveSOBtn').removeClass('hidden');
 }
 // END OF PO FUNCTIONS
 
@@ -345,7 +457,6 @@ $(document).ready(function() {
 		var Remarks = $('#remarks').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
-		alert(TableData['Unit']);
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
@@ -354,7 +465,7 @@ $(document).ready(function() {
 		}
 		$.post('/saveIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
-					alert(data);
+					// alert(data);
 					location.reload();
 					 $(location).attr('href','/inventory-adjustment#showIAList');
 					 // $('.SOsaved').show().fadeOut(5000);
@@ -385,32 +496,43 @@ $(document).ready(function() {
 	});
 	$('#vwSaveSOBtn').click(function(){
 		var TableData;
-		var id = $('#edSOId').text();
-		var customer = $('[name="vwCustomer"]').val();
-		var term = $('#edTerm').val();
-		TableData = storeTblValues()
+		var id = $('#edIAId').text();
+		var BranchNo = $('#branch').val();
+		var Remarks = $('#remarks').val();
+		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
-
-		$.post('/saveEditedSO',{TD:TableData,customer:customer,term:term,id:id},function(data){
+		var PreparedBy= $('#preparedBy').text();
+			if($('#approved').is(':checked')){
+			var approvedBy=PreparedBy;
+		} else{
+			var approvedBy='';
+		}
+		$.post('/saveEditedIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
 				if(data==1){
+					// alert(data);
 					location.reload();
+					 $(location).attr('href','/inventory-adjustment#showIAList');
+					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
-					alert('invalid move');
+					$('#savePOError').fadeIn("fast", function(){        
+				        $("#savePOError").fadeOut(4000);
+				    });
 				}
 			});
 		function storeTblValues()
 		{
 			var TableData = new Array();
+			var ctr = 1;
 			$('.edSOTable tr').each(function(row, tr){
 			    TableData[row]={
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
-			        , "Barcode" :$(tr).find('td:eq(4)').text()
-			        , "LotNo" :$(tr).find('td:eq(5)').text()
-			        , "ExpiryDate" : $(tr).find('td:eq(6)').text()
-			        , "Unit" :$(tr).find('#unit').val()
-			        , "Qty" : $(tr).find('td:eq(8)').text()
-			        , "CostPerQty" : $(tr).find('td:eq(9)').text()
+			        , "LotNo" : $(tr).find('td:eq(4)').text()
+			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
+			        , "Unit" : $(tr).find('td:eq(6) select option:selected').val()
+			        , "Qty" : $(tr).find('td:eq(7)').text()
+			        , "CostPerQty" : $(tr).find('td:eq(8)').text()
 			    }
+			    ctr++;
 			});
 			TableData.shift();
 		    return TableData;
