@@ -49,7 +49,7 @@ class SessionsController extends \BaseController {
 		{
 			$branch=Branch::find(Auth::user()->BranchNo);
 			Session::put('Branch',$branch->BranchName);
-			return Redirect::intended('/');
+			return Redirect::to('/dashboard');
 		}
 		return Redirect::to('login')->withInput()->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Invalid credentials provided!</b></div>');
 	}

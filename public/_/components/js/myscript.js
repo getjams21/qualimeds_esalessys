@@ -754,13 +754,13 @@ $('#billApproved').change(function(){
 	}
 		$.post('/approveBill',{id:id,ApprovedBy:approve},function(data){
 	 	  	if(!data){
-	 	  		$('#App'+id).text('N/A');
-	 	  		$('#App'+id).parent('tr').removeClass('success');
-	 	  		$('#App'+id).parent('tr').addClass('warning');
+	 	  		$('#AppBill'+id).text('N/A');
+	 	  		$('#AppBill'+id).parent('tr').removeClass('success');
+	 	  		$('#AppBill'+id).parent('tr').addClass('warning');
 	 	  	}else{
-	 	  		$('#App'+id).text(data);
-	 	  		$('#App'+id).parent('tr').removeClass('warning');
-	 	  		$('#App'+id).parent('tr').addClass('success');
+	 	  		$('#AppBill'+id).text(data);
+	 	  		$('#AppBill'+id).parent('tr').removeClass('warning');
+	 	  		$('#AppBill'+id).parent('tr').addClass('success');
 	 	  	}
 		});
 });

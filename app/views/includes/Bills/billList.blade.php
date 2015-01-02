@@ -74,7 +74,7 @@
 		            	@endif
 		            </td>
 		            <td >{{$bill->PreparedBy}}</td>
-		            <td  id="App{{$bill->id}}">@if($bill->ApprovedBy)
+		            <td  id="AppBill{{$bill->id}}">@if($bill->ApprovedBy)
 		            	{{$bill->ApprovedBy}}
 		            	@else
 		            	N/A
