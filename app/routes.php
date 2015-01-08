@@ -21,7 +21,6 @@ Route::get('/', ['as'=>'home', function(){
 }])->before('auth');
 // Reroute generic links to the correct user paths (from /a to /a/{uid})
 Route::get('{path}', ['before' => 'auth|reroute']);
-
 #AUTH GET ROUTES
 Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 	
@@ -53,7 +52,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 });
 
 #AUTH POST ROUTES
-Route::group(["before" => "auth"], function() {
+Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 	#Transactions
  	#PURCHASE ORDER ROUTES
  		Route::post('/savePO', 'POController@savePO');
@@ -141,7 +140,7 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 
 #ADMIN POST ROUTES
 #File Maintenance Filters
-Route::group(["before" => "admin"], function(){
+Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function(){
  	#Product Categories
  		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
  		Route::post('/editCategory', 'ProductCategoriesController@editCategory');

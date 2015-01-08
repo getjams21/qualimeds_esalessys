@@ -6,23 +6,22 @@ $(function() {
     });
     var hash = window.location.hash;
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
-	 
 });
-to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
-window.oncontextmenu = function () {
-   return false;
-}
-document.onkeydown = function (e) { 
-    if (window.event.keyCode == 123 ||  e.button==2)    
-    return false;
-}
-
+// to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
+// window.oncontextmenu = function () {
+//    return false;
+// }
+// document.onkeydown = function (e) { 
+//     if (window.event.keyCode == 123 ||  e.button==2)    
+//     return false;
+// }
+var reroute='/user/'+$('meta[name="_token"]').attr('content');
 //PO FUNCTIONS
 var itemno = 1;
 var counter = 1;
 var d = new Date();
 function addPO(id){
-		$.post('/addProductToPO',{id:id},function(data){
+		$.post(reroute+'/addProductToPO',{id:id},function(data){
 				if($('#productId'+id).length){
 					$('#prodError1').fadeIn("fast", function(){        
 				        $("#prodError1").fadeOut(4000);
@@ -92,7 +91,7 @@ function removePO(id){
 }
 function viewPO(id){
 	$('#viewPOModal').modal('show');
-	$.post('/viewPO',{id:id},function(data){
+	$.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#vwPOId').text(data[0]['id']);
 	 	$('#vwPODate').text(data[0]['PODate']);
 	 	$('#vwSupplier').val(data[0]['SupplierNo']);
@@ -116,7 +115,7 @@ function viewPO(id){
 	     	$('#vwCancelMsg').text('This PO has been approved by '+data[0]['ApprovedBy']);
 	 	}
 	});
-	$.post('/viewPODetails',{id:id},function(data){
+	$.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
 	  			var total=0;
@@ -134,7 +133,7 @@ function viewPO(id){
 function editPO(id){
 	$('#vwSavePOBtn').addClass('hidden');
 	$('#editPOModal').modal('show');
-	 $.post('/viewPO',{id:id},function(data){
+	 $.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#edPOId').text(data[0]['id']);
 	 	$('#edPODate').text(data[0]['PODate']);
 	 	$('[name="vwSupplier"]').val(data[0]['SupplierNo']);
@@ -162,7 +161,7 @@ function editPO(id){
 	 		}
 	 	}
 	      });
-	 $.post('/viewPODetails',{id:id},function(data){
+	 $.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".edPOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -185,7 +184,7 @@ function billPO(id){
 	$('#vwSaveBillBtn,#BillCancelBtn,#checkAlert,#billApproved').addClass('hidden');
 	$('#billNo').text('New Bill');
 	$('#billPOModal').modal('show');
-	 $.post('/viewPO',{id:id},function(data){
+	 $.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#billPOId').text(data[0]['id']);
 	 	$('[name="billPOSupplier"]').val(data[0]['SupplierNo']);
 	 	$('#billBranchName').val(data[0]['BranchName']);
@@ -202,7 +201,7 @@ function billPO(id){
 		 	$('#billTermBox').removeClass('hidden');
 		}
 	      });
-	 $.post('/viewPODetails',{id:id},function(data){
+	 $.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".BillPOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -227,7 +226,7 @@ function editBill(id){
 	$('#vwSaveBillBtn').val(id);
 	$('#billPOModal').modal('show');
 	$('#billNo').text('Bill No. '+id);
-	$.post('/viewBill',{id:id},function(data){
+	$.post(reroute+'/viewBill',{id:id},function(data){
 		$('#billPOId').text(data[0]['PurchaseOrderNo']);
 	 	$('[name="billPOSupplier"]').val(data[0]['SupplierNo']);
 	 	$('#billBranchName').val(data[0]['BranchName']);
@@ -252,7 +251,7 @@ function editBill(id){
 		$('#invoicedate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
 		$('#invoiceno').val(data[0]['SalesInvoiceNo']);
 	});
-	$.post('/viewBillDetails',{id:id},function(data){
+	$.post(reroute+'/viewBillDetails',{id:id},function(data){
 	  			$(".BillPOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -274,7 +273,7 @@ function editBill(id){
 function viewBill(id){
 	$('#viewBillModal').modal('show');
 	$('#vwbillNo').text(id);
-	$.post('/viewBill',{id:id},function(data){
+	$.post(reroute+'/viewBill',{id:id},function(data){
 		$('#vwbillPOId').text(data[0]['PurchaseOrderNo']);
 	 	$('[name="vwBillSupplier"]').val(data[0]['SupplierNo']);
 	 	$('#vwBillBranchName').val(data[0]['BranchName']);
@@ -288,7 +287,7 @@ function viewBill(id){
 		$('#vwBillInvoiceDate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
 		$('#vwBillInvoiceNo').val(data[0]['SalesInvoiceNo']);
 	});
-	$.post('/viewBillDetails',{id:id},function(data){
+	$.post(reroute+'/viewBillDetails',{id:id},function(data){
 	  			$(".BillPOTable2 > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -309,7 +308,7 @@ function billSO(id){
 	$('#vwSaveBillBtn,#SICancelBtn,#checkAlert,#SIApproved').addClass('hidden');
 	$('#billNo').text('New Invoice');
 	$('#billSOModal').modal('show');
-	 $.post('/viewSO',{id:id},function(data){
+	 $.post(reroute+'/viewSO',{id:id},function(data){
 	 	$('#billSOId').text(data[0]['id']);
 	 	$('[name="billSOCustomers"]').val(data[0]['CustomerNo']);
 	 	$('[name="billSOmedReps"]').val(data[0]['UserNo']);
@@ -326,7 +325,7 @@ function billSO(id){
 		 	$('#billTermBox').removeClass('hidden');
 		}
 	      });
-	 $.post('/viewSODetails',{id:id},function(data){
+	 $.post(reroute+'/viewSODetails',{id:id},function(data){
 	  			$(".BillSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -351,7 +350,7 @@ $('#SICancelBtn,#checkAlert,#SIApproved,#vwSaveSIBtn').removeClass('hidden');
 $('#vwSaveSIBtn').val(id);
 $('#billSOModal').modal('show');
 $('#billNo').text('Invoice No. '+id);
-	$.post('/viewSI',{id:id},function(data){
+	$.post(reroute+'/viewSI',{id:id},function(data){
 		$('#billSOId').text(data['SalesOrderNo']);
 	 	$('[name="billSOCustomers"]').val(data['CustomerNo']);
 	 	$('[name="billSOmedReps"]').val(data['UserNo']);
@@ -376,7 +375,7 @@ $('#billNo').text('Invoice No. '+id);
 		$('#invoicedate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
 		$('#invoiceno').val(data['SalesInvoiceRefDocNo']);
 	});
-	$.post('/viewSIDetails',{id:id},function(data){
+	$.post(reroute+'/viewSIDetails',{id:id},function(data){
   			$(".BillSOTable > tbody").html("");
   			counter=1;
   			var total=0;
@@ -402,7 +401,7 @@ $('#billNo').text('Invoice No. '+id);
 function viewSI(id){
 	$('#viewSIModal').modal('show');
 	$('#vwbillNo').text(id);
-	$.post('/viewSI',{id:id},function(data){
+	$.post(reroute+'/viewSI',{id:id},function(data){
 		$('#vwbillSOId').text(data['SalesOrderNo']);
 	 	$('[name="vwbillSOCustomers"]').val(data['CustomerNo']);
 	 	$('[name="vwbillSOmedReps"]').val(data['UserNo']);
@@ -416,7 +415,7 @@ function viewSI(id){
 		$('#vwBillInvoiceDate').val((InvDate.getMonth() + 1) + '/' + InvDate.getDate() + '/' +  InvDate.getFullYear());
 		$('#vwBillInvoiceNo').val(data['SalesInvoiceRefDocNo']);
 	});
-	$.post('/viewSIDetails',{id:id},function(data){
+	$.post(reroute+'/viewSIDetails',{id:id},function(data){
 	  			$(".BillSOTable2 > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -650,7 +649,7 @@ function numberWithCommas(x) {
 }
 //BILLPAYMENTS
 function addBillToPayment(id){
-	$.post('/addBillToPayment',{id:id},function(data){
+	$.post(reroute+'/addBillToPayment',{id:id},function(data){
 				if($('#billId'+id).length){
 					$('#billError1').fadeIn("fast", function(){        
 				        $("#billError1").fadeOut(4000);
@@ -730,7 +729,7 @@ $('#vwApproved').change(function(){
 	}else{
 		var approve = 0;
 	}
-		$.post('/approvePO',{id:id,ApprovedBy:approve},function(data){
+		$.post(reroute+'/approvePO',{id:id,ApprovedBy:approve},function(data){
 	 	  	if(!data){
 	 	  		$('#edApprovedBy').val('N/A');
 	 	  		$('#App'+id).text('N/A');
@@ -752,7 +751,7 @@ $('#billApproved').change(function(){
 	}else{
 		var approve = 0;
 	}
-		$.post('/approveBill',{id:id,ApprovedBy:approve},function(data){
+		$.post(reroute+'/approveBill',{id:id,ApprovedBy:approve},function(data){
 	 	  	if(!data){
 	 	  		$('#AppBill'+id).text('N/A');
 	 	  		$('#AppBill'+id).parent('tr').removeClass('success');
@@ -773,7 +772,7 @@ $('#SIApproved').change(function(){
 	}else{
 		var approve = 0;
 	}
-		$.post('/approveSI',{id:id,ApprovedBy:approve},function(data){
+		$.post(reroute+'/approveSI',{id:id,ApprovedBy:approve},function(data){
 	 	  	if(!data){
 	 	  		$('#App'+id).text('N/A');
 	 	  		$('#App'+id).parent('tr').removeClass('success');
@@ -788,7 +787,7 @@ $('#SIApproved').change(function(){
 // END OF SI APPROVAL
 $('#POCancelBtn').click(function(){
 	var id=$('#edPOId').text();
-		$.post('/cancelPO',{id:id},function(data){
+		$.post(reroute+'/cancelPO',{id:id},function(data){
 	 	  	$('#CancelledBy'+id).text(data);
 	    	location.reload();
 				if(document.title == 'Purchase'){
@@ -799,7 +798,7 @@ $('#POCancelBtn').click(function(){
 $('#BillCancelBtn').click(function(){
 	var id=$('#vwSaveBillBtn').val();
 	alert(id);
-		$.post('/cancelBill',{id:id},function(data){
+		$.post(reroute+'/cancelBill',{id:id},function(data){
 	 	  	location.reload();
 				if(document.title == 'Bills'){
 					$(location).attr('href','/Bills#BillsList');
@@ -808,7 +807,7 @@ $('#BillCancelBtn').click(function(){
 });
 $('#SICancelBtn').click(function(){
 	var id=$('#vwSaveSIBtn').val();
-		$.post('/cancelSI',{id:id},function(data){
+		$.post(reroute+'/cancelSI',{id:id},function(data){
 	 	  	location.reload();
 				if(document.title == 'Invoice'){
 					$(location).attr('href','/SalesInvoice#showSIList');
@@ -893,7 +892,7 @@ $('#saveCategory').click(function(e){
       	$('#catError').removeClass('hidden');
       }else{
       	  var table=  $('.category').dataTable(); 
-	 	  $.post('/addCategory',{ProdCatName:category},function(data){
+	 	  $.post(reroute+'/addCategory',{ProdCatName:category},function(data){
 	 	  	if(data == 0){
 	 	  		$('#catError').text('Category already exists!');
       			$('#catError').removeClass('hidden');
@@ -927,7 +926,7 @@ $('#categoryBtn').click(function(){
       	$('#modalCatError').text('Text field is empty!');
       	$('#modalCatError').removeClass('hidden');
       }else{
-      		$.post('/editCategory',{id:id,ProdCatName:ProdCatName},function(data){
+      		$.post(reroute+'/editCategory',{id:id,ProdCatName:ProdCatName},function(data){
       			if(data == 0){
 		 	  		$('#modalCatError').text('Category already exists!');
 	      			$('#modalCatError').removeClass('hidden');
@@ -1011,7 +1010,7 @@ $('#savePO').click(function(){
 	TableData = storeTblValues()
 	TableData = $.toJSON(TableData);
 
-	$.post('/savePO',{TD:TableData,supplier:supplier,term:term,preparedBy:preparedBy,approvedBy:approvedBy},function(data){
+	$.post(reroute+'/savePO',{TD:TableData,supplier:supplier,term:term,preparedBy:preparedBy,approvedBy:approvedBy},function(data){
 			if(data==1){
 				location.reload();
 				 $('#successModal').modal('show');
@@ -1045,7 +1044,7 @@ $('#vwSavePOBtn').click(function(){
 	TableData = storeTblValues()
 	TableData = $.toJSON(TableData);
 
-	$.post('/saveEditedPO',{TD:TableData,supplier:supplier,term:term,id:id},function(data){
+	$.post(reroute+'/saveEditedPO',{TD:TableData,supplier:supplier,term:term,id:id},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Purchase'){
@@ -1083,7 +1082,7 @@ $('#saveBillPOBtn').click(function(){
 		}
 	TableData = storeTblValues1()
 	TableData = $.toJSON(TableData);
-	$.post('/savePOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
+	$.post(reroute+'/savePOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Purchase'){
@@ -1124,7 +1123,7 @@ $('#vwSaveBillBtn').click(function(){
 
 	TableData = storeTblValues1()
 	TableData = $.toJSON(TableData);
-	$.post('/saveEditedPOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
+	$.post(reroute+'/saveEditedPOBill',{TD:TableData,term:term,id:id,SalesInvoiceNo:SalesInvoiceNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Purchase_Orders'){
@@ -1170,7 +1169,7 @@ $('#saveBillSOBtn').click(function(){
 		}
 	TableData = storeTblValuesSI()
 	TableData = $.toJSON(TableData);
-	$.post('/saveSOBill',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
+	$.post(reroute+'/saveSOBill',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Invoice'){
@@ -1212,7 +1211,7 @@ $('#vwSaveSIBtn').click(function(){
 
 	TableData = storeTblValues1()
 	TableData = $.toJSON(TableData);
-	$.post('/saveEditedSI',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
+	$.post(reroute+'/saveEditedSI',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate},function(data){
 			if(data==1){
 				location.reload();
 				if(document.title == 'Invoice'){
@@ -1288,7 +1287,6 @@ $('#cashVoucher').click(function(){
 	  });
 });
 
-
 // $('#chequeVoucher').click(function(){
 // 	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
 // 		$('#chequeError').fadeIn("fast", function(){ 
@@ -1361,7 +1359,7 @@ $('#saveBill').click(function(){
 	}else{
 		var approved =0;		
 	}
-	$.post('/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
+	$.post(reroute+'/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
 	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved,PayTo:PayTo},function(data){
 		location.reload();
 			$(location).attr('href','/BillPayments#BillPaymentList');
@@ -1385,7 +1383,7 @@ $('.editBillPayment').click(function(){
 	var itemno=1;
 	$('#BPediting').val(id);
 	$('.BillPaymentTable >tbody > tr').remove();
-	$.post('/getbillPayments',{id:id},function(bills){
+	$.post(reroute+'/getbillPayments',{id:id},function(bills){
 		$('.billPaymentEditId').text(bills['id']);
 		if(bills['PaymentType']==0){
 			$('.cashDiv').removeClass('hidden');
@@ -1408,7 +1406,7 @@ $('.editBillPayment').click(function(){
 			$('#approvedBillPayment').prop('checked', false);
 		}
 	});
-	$.post('/getbillPaymentDetails',{id:id},function(billdetails){
+	$.post(reroute+'/getbillPaymentDetails',{id:id},function(billdetails){
 		$.each(billdetails, function(key,value) {
 			$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+value.BillNo+'">'+value.BillNo+'</td>
 				<td class="supplier'+value.SupplierNo+'">'+value.SupplierName+'</td><td class="dp">'+value.InvoiceNo+'</td><td class="dp Billcost">'+money(value.Amount)+'</td><td>
@@ -1510,7 +1508,7 @@ $('#saveSP').click(function(){
 	}else{
 		var approved =0;		
 	}
-	$.post('/salesPay',{id:id,TD:TableData,cash:cash,check:check,cashAmount:cashAmount,
+	$.post(reroute+'/salesPay',{id:id,TD:TableData,cash:cash,check:check,cashAmount:cashAmount,
 		checkAmount:checkAmount,checkNo:checkNo,checkDueDate:checkDueDate,
 		BankNo:BankNo,approved:approved},function(data){
 		location.reload();
@@ -1534,7 +1532,7 @@ $('.editSP').click(function(){
 	var itemno=1;
 	$('#SPediting').val(id);
 	$('.BillPaymentTable >tbody > tr').remove();
-	$.post('/getSP',{id:id},function(bills){
+	$.post(reroute+'/getSP',{id:id},function(bills){
 		$('.billPaymentEditId').text(bills['id']);
 		if(bills['ApprovedBy']){
 			$('#approvedSP').prop('checked', true);
@@ -1545,7 +1543,7 @@ $('.editSP').click(function(){
 	$('#SPCash,#SPCheck,.cashDiv,.clearEdit').prop('checked',false);
 	$('.clearEdit').val('');
 	$('.cashDiv').addClass('hidden');
-	$.post('/getSPDetails',{id:id},function(SPdetails){
+	$.post(reroute+'/getSPDetails',{id:id},function(SPdetails){
 		$.each(SPdetails, function(key,value) {
 			if(value.PaymentType==0){
 				$('#SPCash').prop('checked',true);
@@ -1563,7 +1561,7 @@ $('.editSP').click(function(){
 			}
 		});
 	});
-	$.post('/getSPInvoices',{id:id},function(SPI){
+	$.post(reroute+'/getSPInvoices',{id:id},function(SPI){
 		$.each(SPI, function(key,value) {
 			$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
 				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp Billcost">'+money(value.amount)+'</td>
@@ -1582,8 +1580,9 @@ $('.editSP').click(function(){
 // END OF EDIT BILL PAYMENT
 });//end of ready function
  //SALES PAYMENTS
+ 
 function addSItoSP(id){
-	$.post('/addInvoiceToSalesPayment',{id:id},function(data){
+	$.post(reroute+'/addInvoiceToSalesPayment',{id:id},function(data){
 				if($('#billId'+id).length){
 					$('#billError1').fadeIn("fast", function(){        
 				        $("#billError1").fadeOut(4000);
@@ -1608,6 +1607,21 @@ function addSItoSP(id){
 					
 			});	
 }
+// Adding Payment  Type to list
+
+var paymentItem=1;
+function addPaymentType(){
+	var type = $('#paymentType').val();
+	if(type == 0){
+		$('#cashCheckTable').append('<tr>
+			<td colspan="4">Cash</td>
+			<td class="editable error"></td>
+			<td><button class="btn btn-danger btn-xs square" id="removePT'+paymentItem+'" onclick="removePT('+paymentItem+')">
+			<i class="fa fa-times"></i> Remove</button></td></tr>');
+	}
+	editable(paymentItem);
+	paymentItem++;
+}
 function editCategory(id){
 	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();
@@ -1623,7 +1637,7 @@ function editSupplier(id){
 	var table=$('.supplier').DataTable();
 			$('.modal-title').text('Edit Supplier');
 	      	$('#supplierModal').modal('show');
-		$.post('/fetchSupplier',{id:id},function(data){
+		$.post(reroute+'/fetchSupplier',{id:id},function(data){
 			$('#txtSupID').val(data['id']);
 	      	$('#SupplierName').val(data['SupplierName']);
 	      	$('#Address').val(data['Address']);
@@ -1637,7 +1651,7 @@ function editProduct(id){
 	var table=$('.product').DataTable();
 			$('.modal-title').text('Edit Product');
 	      	$('#productModal').modal('show');
-		$.post('/fetchProduct',{id:id},function(data){
+		$.post(reroute+'/fetchProduct',{id:id},function(data){
 			$('#txtProdID').val(data['id']);
 	      	$('#ProductCatNo').val(data['ProductCatNo']);
 	      	$('#ProductName').val(data['ProductName']);

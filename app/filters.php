@@ -95,6 +95,6 @@ Route::filter('csrf', function() {
 
 Route::filter('reroute', function ()
 {
-	
 	return Redirect::to('user/'. Auth::user()->id .'/'. Route::input('path'));
+
 });
