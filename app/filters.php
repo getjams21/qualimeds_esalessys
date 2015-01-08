@@ -81,3 +81,20 @@ Route::filter('csrf', function() {
     if (Session::token() != $token)
         throw new Illuminate\Session\TokenMismatchException;
 });
+
+/*
+|--------------------------------------------------------------------------
+| Generic Reroute Filter
+|--------------------------------------------------------------------------
+|
+| The "generic reroute" filter takes generic logged in user paths and rewrites them to
+| include the user's id in the path name, as is expected.
+|
+| Must be used in conjunction (and after) the auth filter
+*/
+
+Route::filter('reroute', function ()
+{
+	
+	return Redirect::to('user/'. Auth::user()->id .'/'. Route::input('path'));
+});

@@ -73,7 +73,7 @@ App::error(function(Laracasts\Validation\FormValidationException $exception, $co
 });
 App::error(function(Symfony \ Component \ HttpKernel \ Exception \ NotFoundHttpException $exception, $code)
 {
-	return Redirect::to('/404');
+	return 'Page not Found';
 });
 
 // App::error(function(Laracasts\Validation\FormValidationException $exception, $code)

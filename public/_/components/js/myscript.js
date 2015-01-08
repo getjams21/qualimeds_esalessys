@@ -8,15 +8,15 @@ $(function() {
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 	 
 });
-//to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
-// window.oncontextmenu = function () {
-//    return false;
-// }
-// document.onkeydown = function (e) { 
-//     if (window.event.keyCode == 123 ||  e.button==2)    
-//     return false;
-// }
-//
+to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
+window.oncontextmenu = function () {
+   return false;
+}
+document.onkeydown = function (e) { 
+    if (window.event.keyCode == 123 ||  e.button==2)    
+    return false;
+}
+
 //PO FUNCTIONS
 var itemno = 1;
 var counter = 1;
@@ -754,13 +754,13 @@ $('#billApproved').change(function(){
 	}
 		$.post('/approveBill',{id:id,ApprovedBy:approve},function(data){
 	 	  	if(!data){
-	 	  		$('#App'+id).text('N/A');
-	 	  		$('#App'+id).parent('tr').removeClass('success');
-	 	  		$('#App'+id).parent('tr').addClass('warning');
+	 	  		$('#AppBill'+id).text('N/A');
+	 	  		$('#AppBill'+id).parent('tr').removeClass('success');
+	 	  		$('#AppBill'+id).parent('tr').addClass('warning');
 	 	  	}else{
-	 	  		$('#App'+id).text(data);
-	 	  		$('#App'+id).parent('tr').removeClass('warning');
-	 	  		$('#App'+id).parent('tr').addClass('success');
+	 	  		$('#AppBill'+id).text(data);
+	 	  		$('#AppBill'+id).parent('tr').removeClass('warning');
+	 	  		$('#AppBill'+id).parent('tr').addClass('success');
 	 	  	}
 		});
 });
