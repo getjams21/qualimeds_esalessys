@@ -113,6 +113,13 @@ Route::group(["before" => "auth"], function() {
  		Route::post('/viewIA', 'IAController@viewIA');
  		Route::post('/viewIADetails', 'IAController@viewIADetails');
  		Route::post('/saveEditedIA', 'IAController@saveEditedIA');
+
+ 	#Return Good Stocks (Customer Returns)
+ 		Route::resource('/customer-return', 'CRController');
+ 		Route::post('/saveCR', 'CRController@saveCR');
+ 		Route::post('/viewCR', 'CRController@viewCR');
+ 		Route::post('/viewCRDetails', 'CRController@viewCRDetails');
+ 		Route::post('/saveEditedCR', 'CRController@saveEditedCR');
 	});
 
 

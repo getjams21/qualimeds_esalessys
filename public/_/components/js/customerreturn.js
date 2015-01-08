@@ -1,6 +1,7 @@
+var sample = 'sample';
 var itemno = 1;
 var counter = 1;
-function addIA(id){
+function addCR(id){
 	var name= $('#name'+id).text();
 	var brand= $('#brand'+id).text();
 	var unit= $('#wholesale'+id).text();
