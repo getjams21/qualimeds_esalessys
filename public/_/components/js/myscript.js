@@ -8,14 +8,14 @@ $(function() {
 	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 	 
 });
-to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
-window.oncontextmenu = function () {
-   return false;
-}
-document.onkeydown = function (e) { 
-    if (window.event.keyCode == 123 ||  e.button==2)    
-    return false;
-}
+//to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
+// window.oncontextmenu = function () {
+//    return false;
+// }
+// document.onkeydown = function (e) { 
+//     if (window.event.keyCode == 123 ||  e.button==2)    
+//     return false;
+// }
 
 //PO FUNCTIONS
 var itemno = 1;
