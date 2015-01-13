@@ -1,4 +1,5 @@
-//PO FUNCTIONS
+//SO FUNCTIONS
+var reroute='/user/'+$('meta[name="_token"]').attr('content');
 var itemno = 1;
 var counter = 1;
 function addSO(id){
@@ -138,8 +139,9 @@ function removeSO(id,prodId,index){
 	totalCost();
 }
 function viewPO(id){
+	alert(reroute);
 	$('#viewPOModal').modal('show');
-	$.post('/viewPO',{id:id},function(data){
+	$.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#vwPOId').text(data[0]['id']);
 	 	$('#vwPODate').text(data[0]['PODate']);
 	 	$('#vwSupplier').val(data[0]['SupplierNo']);
@@ -155,7 +157,7 @@ function viewPO(id){
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	$.post('/viewPODetails',{id:id},function(data){
+	$.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
 	  			var total=0;
@@ -173,7 +175,7 @@ function viewPO(id){
 function editSO(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editSOModal').modal('show');
-	 $.post('/viewSO',{id:id},function(data){
+	 $.post(reroute+'/viewSO',{id:id},function(data){
 	 	// alert(data[0]['id']);
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
@@ -199,7 +201,7 @@ function editSO(id){
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post('/viewSODetails',{id:id},function(data){
+	 $.post(reroute+'/viewSODetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -495,7 +497,7 @@ $(document).ready(function() {
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveSO',{TD:TableData,CustomerNo:CustomerNo,term:term,UserNo:UserNo,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
+		$.post(reroute+'/saveSO',{TD:TableData,CustomerNo:CustomerNo,term:term,UserNo:UserNo,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
 					location.reload();
 					 $(location).attr('href','/SalesOrders#showSOList');
@@ -534,7 +536,7 @@ $(document).ready(function() {
 		TableData = storeTblValues()
 		TableData = $.toJSON(TableData);
 
-		$.post('/saveEditedSO',{TD:TableData,customer:customer,UserNo:UserNo,term:term,id:id},function(data){
+		$.post(reroute+'/saveEditedSO',{TD:TableData,customer:customer,UserNo:UserNo,term:term,id:id},function(data){
 				if(data==1){
 					location.reload();
 				}else if(data==0){

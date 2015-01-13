@@ -16,6 +16,7 @@
      	  <div class="input-group">
      			<span class="input-group-addon panel-head square">
                 Branch Source: &nbsp;&nbsp;<b>{{$branchSource->BranchName}}</b>
+                <input type="hidden" id="branchNo" value="{{Auth::user()->BranchNo}}">
                 </span>
           </div>
           <br>
@@ -32,25 +33,14 @@
 	              <center>Type the desired product on the Search Bar and click Add button to add the product to Transfer.</center>
 	            </div>	
              </div>
-             <p id="termError" class="error" hidden>Please enter a valid term days.</p>
-             <p>{{ errors_for('term', $errors)}}</p> 
           </div><br>
         </div>
-          <!-- /input-group -->
-          <!--  <div class="input-group">
-              <button type="button" class="btn btn-success  square" style="white-space: normal;" id="addProductPO" ><i class="fa fa-plus-square" ></i> <b> Add Products for PO</b></button>
-          </div> --><!-- /input-group -->
-                 </div>
+        </div>
        <div class="col-md-1">
        </div>
        <div class="col-md-7">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
-                <!-- <span class="input-group-addon">SO Type: </span>
-                <select class='form-control square' name='unit' id='unit'>
-                  <option value='1'>Wholesale</option>
-                  <option value='2'>Retail</option>
-                </select> -->
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
@@ -143,7 +133,7 @@
               @endif
              </div>
             <div class="col-md-2">
-             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save ST</b></button>
+             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveST" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save ST</b></button>
              </div>
            </div>
         </div>

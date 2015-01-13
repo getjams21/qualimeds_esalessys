@@ -1,3 +1,4 @@
+var reroute='/user/'+$('meta[name="_token"]').attr('content');
 var itemno = 1;
 var counter = 1;
 function addIA(id){
@@ -141,7 +142,7 @@ function removeIA(id,prodId,index){
 }
 function viewPO(id){
 	$('#viewPOModal').modal('show');
-	$.post('/viewPO',{id:id},function(data){
+	$.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#vwPOId').text(data[0]['id']);
 	 	$('#vwPODate').text(data[0]['PODate']);
 	 	$('#vwSupplier').val(data[0]['SupplierNo']);
@@ -157,7 +158,7 @@ function viewPO(id){
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	$.post('/viewPODetails',{id:id},function(data){
+	$.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
 	  			var total=0;
@@ -175,7 +176,7 @@ function viewPO(id){
 function editIA(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editIAModal').modal('show');
-	 $.post('/viewIA',{id:id},function(data){
+	 $.post(reroute+'/viewIA',{id:id},function(data){
 	 	$('#edIAId').text(data[0]['id']);
 	 	$('#edIADate').text(data[0]['AdjustmentDate']);
 	 	$('select#branch option[value="'+data[0]['BranchNo']+'"]').attr('selected',true);
@@ -187,7 +188,7 @@ function editIA(id){
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post('/viewIADetails',{id:id},function(data){
+	 $.post(reroute+'/viewIADetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -462,7 +463,7 @@ $(document).ready(function() {
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
+		$.post(reroute+'/saveIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();
@@ -506,7 +507,7 @@ $(document).ready(function() {
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveEditedIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
+		$.post(reroute+'/saveEditedIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();

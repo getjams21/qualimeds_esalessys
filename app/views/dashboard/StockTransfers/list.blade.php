@@ -16,6 +16,7 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
+@include('includes.StockTransfers.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
@@ -23,8 +24,8 @@ display: none;
        	<div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist">
-              <li class="active"><a href="#showSTEntry" role="tab" data-toggle="tab"><h5><b><i>Transfer Stocks</i></b></h5></a></li>
-              <li ><a href="#showSTList" role="tab" data-toggle="tab"><h5><b><i>Transfered Stocks</i></b></h5></a></li>
+              <li class="active"><a href="#showSTEntry" role="tab" data-toggle="tab"><h5><b><i>ST Entry</i></b></h5></a></li>
+              <li ><a href="#showSTList" role="tab" data-toggle="tab"><h5><b><i>ST List</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">

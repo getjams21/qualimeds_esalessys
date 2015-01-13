@@ -107,7 +107,7 @@
     </div>
     <hr >
     <!-- CASH and CHECK START -->
-    <div class="row" >
+    <!-- <div class="row" >
       <div class="col-md-12">
       	<div class="error" id="checkBoxError" hidden>Please Select Payment Type.</div>
         <div class="well hidden cashChecque">
@@ -169,8 +169,49 @@
            </div>
         </div>
       </div>
-    </div>
+    </div> -->
      <!-- CASH and CHECK END -->
+     <!-- CASH and CHECK table -->
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="well cashChecque">
+          <div class="table-responsive responsive" >
+            <table class="table table-striped table-bordered table-hover"
+            id="cashCheckTable">
+              <thead>
+                <tr>
+                  <th colspan="5">
+                    <div class="input-group" >
+                   <span class="input-group-addon panel-head square">
+                    Payment Type: 
+                   </span>
+                      <select id="paymentType" class="form-control square" style="width:200%;">
+                        <option value="0">Cash</option>
+                        <option value="1">Check</option>
+                      </select>
+                    </div>
+                  </th>
+                  <th>
+                    <input type="button"  class="btn btn-primary btn-md square"  onclick="addPaymentType()" value='Add Payment'> </button>
+                  </th>
+                </tr>
+                <tr>
+                  <th>Type</th>
+                  <th>Bank</th>
+                  <th>CheckNo</th>
+                  <th>Due Date</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+               </thead> 
+               <tbody>
+               </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- END of CASH and CHECK table -->
     <div class="row">
       <div class="col-md-12">
         <div class="well">
