@@ -1647,8 +1647,8 @@ function addPaymentType(){
 			    },
 			    emptytext:0,
 			   display: function(value) {
-			   		PTcalcCost();
 			   		$(this).text(Number(value).toFixed(2));
+			   		PTcalcCost();
 					}
 		});
 
