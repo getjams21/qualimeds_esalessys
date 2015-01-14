@@ -10,8 +10,8 @@ class DbStockTransferRepository extends DbRepository implements StockTransferRep
 	public function getMaxId(){
 		return StockTransfer::max('id');;
 	}
-	public function getAllWithCus(){
-		// return StockTransfer::selectRaw('Stocktransfers.*,b.BranchName')->join('Branches AS b', 'b.id', '=', 'Salesorders.CustomerNo')->get();
+	public function getAllWithBranch(){
+		return StockTransfer::selectRaw('Stocktransfers.*,b.BranchName')->join('Branches AS b', 'b.id', '=', 'Stocktransfers.BranchDestinationNo')->get();
 	}
 	public function getByIdWithCus($id){
 		// return StockTransfer::selectRaw('Salesorders.*,c.CustomerName')->join('Customers AS c', 'c.id', '=', 'Salesorders.CustomerNo')->where('Salesorders.id', '=', $id)->get();

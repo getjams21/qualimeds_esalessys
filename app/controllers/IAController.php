@@ -2,7 +2,6 @@
 use Acme\Repos\InventoryAdjustments\InventoryAdjustmentRepository;
 use Carbon\Carbon;
 use Acme\Repos\InventoryAdjustmentDetails\InventoryAdjustmentDetailsRepository;
-// use Acme\Repos\InventoryAdjustmentDetails\InventoryAdjustmentDetailsRepository;
 use Acme\Repos\Product\ProductRepository;
 
 class IAController extends \BaseController {

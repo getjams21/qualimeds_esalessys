@@ -1,46 +1,39 @@
 <br>
 <div class="panel panel-success">
-	<div class="panel-heading head">
+  <div class="panel-heading head">
     <div class="row">
       <div class="col-md-9" style="padding-top:6px;">
-          <b>Stock Transfer No. {{$max+1}}</b>
+          <b>Inventory Adjustment No. {{$max+1}}</b>
       </div> 
       <div class="col-md-3" style="padding-top:6px;">
           <b >Date:&nbsp;&nbsp;{{date('F d, Y')}} </b>
       </div> 
     </div><br>
     <hr class="style-fade">
-		<div class="row">
+    <div class="row">
         <div class="col-md-4">
-     {{ Form::open() }}
-     	  <div class="input-group">
-     			<span class="input-group-addon panel-head square">
-                Branch Source: &nbsp;&nbsp;<b>{{$branchSource->BranchName}}</b>
-                <input type="hidden" id="branchNo" value="{{Auth::user()->BranchNo}}">
-                </span>
-          </div>
-          <br>
-          <div class="input-group">
-               <span class="input-group-addon panel-head square">
-                Branch Destination: 
-               </span>
-               {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
-          </div><br>
-           <div class="form-group">
+         {{ Form::open() }}
             <div class="input-group">
-              <div class="btn-group square" data-toggle="buttons">
-                <div class="alert alert-warning">
-	              <center>Type the desired product on the Search Bar and click Add button to add the product to Transfer.</center>
-	            </div>	
-             </div>
-          </div><br>
-        </div>
+                 <span class="input-group-addon panel-head square">
+                  Branch: 
+                 </span>
+                 {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
+            </div><br>
+            <div class="input-group">
+                 <label>Remarks:</label>
+                 {{ Form::textarea('remarks', null, ['class'=>'form-control square','size' => '50x5','id'=>'remarks', 'required']) }}
+            </div>
         </div>
        <div class="col-md-1">
        </div>
        <div class="col-md-7">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
+                <!-- <span class="input-group-addon">SO Type: </span>
+                <select class='form-control square' name='unit' id='unit'>
+                  <option value='1'>Wholesale</option>
+                  <option value='2'>Retail</option>
+                </select> -->
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
@@ -52,32 +45,22 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>Brand</th>
-                    <th>Lot No</th>
-                    <th>Expiry Date</th>
-                    <th>Unit</th>
-                    <th>Qty</th>
-                    <th>Price</th>
+                    <th>Wholesale Unit</th>
+                    <th>Retail Unit</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
-                  <?php $ctr=1 ?>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$ctr}}">
-                      <td id="prodId{{$ctr}}">{{$product->ProductNo}}</td>
-                      <td id="name{{$ctr}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$ctr}}">{{$product->BrandName}}</td>
-                      <td id="lotNo{{$ctr}}">{{$product->LotNo}}</td>
-                      <td id="expiryDate{{$ctr}}">{{$product->ExpiryDate}}</td>
-                      <td id="unit{{$ctr}}">{{$product->Unit}}</td>
-                      <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
-                      <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
-                      <input type="hidden" name="unitQtyR" id="unitQtyR{{$ctr}}" value="{{$product->RQty}}">
-                      <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
-                      <td><button class="btn btn-success btn-xs square" onclick="addSO({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="rowProd{{$product->id}}">
+                      <td id="prodId{{$product->id}}">{{$product->id}}</td>
+                      <td id="name{{$product->id}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
+                      <td id="wholesale{{$product->id}}">{{$product->WholeSaleUnit}}</td>
+                      <td id="retail{{$product->id}}">{{$product->RetailUnit}}</td>
+                      <td><button class="btn btn-success btn-xs square" onclick="addIA({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
-                    <?php $ctr++ ?>
                   @endforeach
                  </tbody>
               </table>
@@ -88,11 +71,14 @@
        <div class="alert alert-danger " id="savePOError" hidden>
               <center><b>Please complete all inputs.</b></center>
             </div>
+        <div class="alert alert-danger " id="invalidQty" hidden>
+          <center><b>Invalid Quantity. Inputted quantity exceeded the available product count.</b></center>
+        </div>
     </div>
   </div>
     <div class="panel-body">
     <div class="table-responsive responsive" >
-      <table class="table  table-bordered table-hover SOtable">
+      <table class="table  table-bordered table-hover IAtable">
         <thead>
           <tr>
             <th>Item #</th>
@@ -104,7 +90,7 @@
             <th>Unit</th>
             <th>Qty</th>
             <th>Unit Price</th>
-            <!-- <th>Item Cost</th> -->
+            <th>Item Cost</th>
             <th>Remove</th>
           </tr>
          </thead> 
@@ -116,7 +102,7 @@
       <div class="col-md-8">
       </div>
       <div class="col-md-4">
-        <!-- <b>Total Cost:  <i id="SOTotalCost"> 0</i></b> -->
+        <b>Total Cost:  <i id="SOTotalCost"> 0</i></b>
       </div>
     </div>
     <hr >
@@ -133,7 +119,8 @@
               @endif
              </div>
             <div class="col-md-2">
-             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveST" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save ST</b></button>
+              <input type="hidden" id='id' >
+             <button type="button" class="btn btn-success square btn-sm hidden" id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save Adjustment</b></button>
              </div>
            </div>
         </div>

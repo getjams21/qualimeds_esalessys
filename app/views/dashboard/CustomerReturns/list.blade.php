@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Stocks')
+@section('meta-title','Return Good Stocks')
 @section('metatags')
 
 <style type="text/css">
@@ -16,7 +16,6 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.StockTransfers.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
@@ -24,16 +23,16 @@ display: none;
        	<div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist">
-              <li class="active"><a href="#showSTEntry" role="tab" data-toggle="tab"><h5><b><i>ST Entry</i></b></h5></a></li>
-              <li ><a href="#showSTList" role="tab" data-toggle="tab"><h5><b><i>ST List</i></b></h5></a></li>
+              <li class="active"><a href="#showCREntry" role="tab" data-toggle="tab"><h5><b><i>Adjust Inventories</i></b></h5></a></li>
+              <li ><a href="#showCRList" role="tab" data-toggle="tab"><h5><b><i>Adjusted Inventories</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane active" id="showSTEntry">
-                 @include('includes.StockTransfers.add')
+              <div class="tab-pane active" id="showIAEntry">
+                 @include('includes.CustomerReturn.add')
               </div>
-              <div class="tab-pane " id="showSTList">
-                 @include('includes.StockTransfers.list')  
+              <div class="tab-pane " id="showIAList">
+                 @include('includes.CustomerReturn.list')  
               </div>
             </div>
         </div>
@@ -70,23 +69,6 @@ display: none;
         $('#mySearchTextField').keyup(function(){
          oTable.fnFilter( $(this).val() );
         })
-       //  var vw= $('#vwPOTable').DataTable( {
-       //    "order": [[ 0, "desc" ]],
-       //    "bPaginate": false,
-       //    "bFilter":false,
-       //     "columnDefs": [ {
-       //      "searchable": false,
-       //      "orderable": false,
-       //      "targets": 0
-       //     } ],
-       //     "order": [[ 1, 'asc' ]]
-       //  }
-       //  );
-       //   vw.on( 'order.dt search.dt', function () {
-       //  vw.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-       //      cell.innerHTML = i+1;
-       //  } );
-       // } ).draw();
 
         $('#min').change( function() { oTable.fnDraw(); } );
         $('#max').change( function() { oTable.fnDraw(); } );
@@ -171,5 +153,5 @@ $.fn.dataTable.ext.search.push(
 );
     });
 </script>
-{{ HTML::script('_/js/stocktransfer.js')}}
+{{ HTML::script('_/js/customerreturn.js')}}
 @stop 

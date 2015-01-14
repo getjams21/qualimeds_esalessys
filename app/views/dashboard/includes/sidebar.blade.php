@@ -71,6 +71,9 @@
                         <li>
                             <a href="/inventory-adjustment">Inventory Adjustments</a>
                         </li>
+                        <li>
+                            <a href="/customer-return">Return Good Stocks</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidehead">

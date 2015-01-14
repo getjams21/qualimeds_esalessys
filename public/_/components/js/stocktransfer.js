@@ -1,4 +1,5 @@
 //PO FUNCTIONS
+var reroute='/user/'+$('meta[name="_token"]').attr('content');
 var itemno = 1;
 var counter = 1;
 function addSO(id){
@@ -88,7 +89,7 @@ function addSO(id){
 			         // calcCostSO(rowID);
 					}
 				});
-		$('#saveSO').removeClass('hidden');
+		$('#saveST').removeClass('hidden');
 }
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
@@ -103,7 +104,7 @@ function totalCostSO(){
 	});
 	$('#SOTotalCost').text(total.toFixed(2));
 	if(total = 0){
-		$('#saveSO').addClass('hidden');
+		$('#saveST').addClass('hidden');
 	}
 }
 function removeSO(id,prodId,index){
@@ -132,7 +133,7 @@ function removeSO(id,prodId,index){
 }
 function viewPO(id){
 	$('#viewPOModal').modal('show');
-	$.post('/viewPO',{id:id},function(data){
+	$.post(reroute+'/viewPO',{id:id},function(data){
 	 	$('#vwPOId').text(data[0]['id']);
 	 	$('#vwPODate').text(data[0]['PODate']);
 	 	$('#vwSupplier').val(data[0]['SupplierNo']);
@@ -148,7 +149,7 @@ function viewPO(id){
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	$.post('/viewPODetails',{id:id},function(data){
+	$.post(reroute+'/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
 	  			var total=0;
@@ -163,25 +164,13 @@ function viewPO(id){
 	  				$('#vwTotalCost').text(total);
 	      });
 }
-function editSO(id){
+function editST(id){
 	$('#vwSaveBtn').addClass('hidden');
-	$('#editSOModal').modal('show');
-	 $.post('/viewSO',{id:id},function(data){
+	$('#editSTModal').modal('show');
+	 $.post(reroute+'/viewSO',{id:id},function(data){
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
 	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
-	 	if(data[0]['Terms'] == '0'){
-	 		$('#edTerm').val(0);
-	 		$('#edTerm1').addClass('active');
-	 		$('#edTerm2').removeClass('active');
-	 		$('#edTermBox').addClass('hidden');
-		}else{
-		 	$('#edTerm').val(data[0]['Terms']);
-		 	$('#edTerm1').removeClass('active');
-		 	$('#edTerm2').addClass('active');
-		 	$('#edTerm2').prop("disabled", false)
-		 	$('#edTermBox').removeClass('hidden');
-		}
 	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
 	 	if(data[0]['ApprovedBy'] == ''){
 	 		$('#edApprovedBy').val('N/A');
@@ -189,7 +178,7 @@ function editSO(id){
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post('/viewSODetails',{id:id},function(data){
+	 $.post(reroute+'/viewSODetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -329,24 +318,24 @@ $(document).ready(function() {
 		$('#addProductPOModal').modal('show');
 	});
 	//SAVE SO
-	$('#saveSO').click(function(){
+	$('#saveST').click(function(){
 		var TableData;
-		var CustomerNo = $('#customer').val();
-		var term = $('#term').val();
-		var UserNo = $('#medReps').val();
+		var branchSource = $('#branchNo').val();
+		var branchDest = $('#branch').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
 		// alert(TableData);
+		// return false;
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveSO',{TD:TableData,CustomerNo:CustomerNo,term:term,UserNo:UserNo,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
+		$.post(reroute+'/saveST',{TD:TableData,branchSource:branchSource,branchDest:branchDest,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
 					location.reload();
-					 $(location).attr('href','/SalesOrders#showSOList');
+					 $(location).attr('href','/stocks-transfer#showSTList');
 					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -364,8 +353,8 @@ $(document).ready(function() {
 			        , "LotNo" : $(tr).find('td:eq(4)').text()
 			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
 			        , "Unit" : $(tr).find('td:eq(6) select option:selected').val()
-			        , "Qty" : $(tr).find('td:eq(8)').text()
-			        , "UnitPrice" : $(tr).find('td:eq(9)').text()
+			        , "Qty" : $(tr).find('td:eq(7)').text()
+			        , "CostPerUnit" : $(tr).find('td:eq(8)').text()
 			    }
 			    ctr++;
 			});
@@ -381,7 +370,7 @@ $(document).ready(function() {
 		TableData = storeTblValues()
 		TableData = $.toJSON(TableData);
 
-		$.post('/saveEditedSO',{TD:TableData,customer:customer,term:term,id:id},function(data){
+		$.post(reroute+'/saveEditedSO',{TD:TableData,customer:customer,term:term,id:id},function(data){
 				if(data==1){
 					location.reload();
 				}else if(data==0){
