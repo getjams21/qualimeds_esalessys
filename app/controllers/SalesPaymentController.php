@@ -163,6 +163,13 @@ class SalesPaymentController extends \BaseController {
 	  			}
 		return Response::json($input);
 	}
+	public function fetchBanks()
+	{
+		if(Request::ajax()){
+  			$banks= Bank::all();
+		return Response::json($banks);
+		}
+	}
 	
 
 

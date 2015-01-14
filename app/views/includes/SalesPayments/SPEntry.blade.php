@@ -174,6 +174,7 @@
      <!-- CASH and CHECK table -->
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
+        <div class="error" id="checkBoxError" hidden>Payment is greater than the Total.</div>
         <div class="well cashChecque">
           <div class="table-responsive responsive" >
             <table class="table table-striped table-bordered table-hover"
@@ -206,6 +207,13 @@
                </thead> 
                <tbody>
                </tbody>
+               <tfoot>
+                  <tr>
+                    <td colspan="4" class="dp"><b>TOTAL:</b></td>
+                    <td><i id="paymentTypeTotal">0.00</i></td>
+                    <td></td>
+                  </tr>
+               </tfoot>
             </table>
           </div>
         </div>
