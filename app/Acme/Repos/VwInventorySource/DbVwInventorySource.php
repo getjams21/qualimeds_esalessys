@@ -7,9 +7,10 @@ class DbVwInventorySource extends DbRepository implements VwInventorySourceRepos
 	public function __construct(VwInventorySource $model){
 		$this->model = $model;
 	}
-	public function getInventorySourceWholeSale(){
+	public function getInventorySourceWholeSale($branchNo){
 		return VwInventorySource::selectRaw('ProductNo, ProductName, BrandName, WholeSaleUnit As Unit, 
 			    LotNo, ExpiryDate, SellingPrice As UnitPrice, Sum(WholeSaleQty) Qty, Sum(RetailSaleQty) RQty')
+				->where('BranchNo','=',$branchNo)
 				->groupBy('ProductNo', 'ProductName', 'BrandName', 'WholeSaleUnit', 'LotNo', 'ExpiryDate', 'SellingPrice')->get();
 	}
 	public function getInventorySourceRetail(){

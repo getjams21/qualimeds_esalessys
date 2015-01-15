@@ -94,9 +94,9 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/getSPInvoices', 'SalesPaymentController@getSPInvoices');
  	#STOCK TRANSFER ROUTES
  		Route::post('/saveST', 'STController@saveST');
- 		Route::post('/viewST', 'STController@viewSO');
- 		Route::post('/viewSTDetails', 'STController@viewSODetails');
- 		Route::post('/saveEditedST', 'STController@saveEditedSO');
+ 		Route::post('/viewST', 'STController@viewST');
+ 		Route::post('/viewSTDetails', 'STController@viewSTDetails');
+ 		Route::post('/saveEditedST', 'STController@saveEditedST');
 
  	#INVENTORY ADJUSTMENT ROUTES
  		Route::post('/saveIA', 'IAController@saveIA');

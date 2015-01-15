@@ -1,4 +1,3 @@
-<!-- VIEW PO MODAL -->
 <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editSOModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">

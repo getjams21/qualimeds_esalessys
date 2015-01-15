@@ -30,7 +30,7 @@ class SOController extends \BaseController {
 		$customers = Customer::lists('CustomerName','id');
 		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
 		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
-		$products = $this->vwInventorySource->getInventorySourceWholeSale();
+		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);
 		// dd($products[0]->UnitPrice);
 		$SOs= $this->salesOrderRepo->getAllWithCus();
 		$now =date("m/d/Y");

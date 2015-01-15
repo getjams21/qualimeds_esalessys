@@ -167,7 +167,7 @@ function viewPO(id){
 function editST(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editSTModal').modal('show');
-	 $.post(reroute+'/viewSO',{id:id},function(data){
+	 $.post(reroute+'/viewST',{id:id},function(data){
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
 	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
@@ -177,8 +177,8 @@ function editST(id){
 	 	}else{
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
-	      });
-	 $.post(reroute+'/viewSODetails',{id:id},function(data){
+	 });
+	 $.post(reroute+'/viewSTDetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;

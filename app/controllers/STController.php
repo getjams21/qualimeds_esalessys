@@ -31,7 +31,7 @@ class STController extends \BaseController {
 		$max = $this->stockTransferRepo->getMaxId();
 		$branchSource = Branch::find(Auth::user()->BranchNo);
 		$branches = Branch::where('id','!=', Auth::user()->BranchNo)->lists('BranchName','id');
-		$products = $this->vwInventorySource->getInventorySourceWholeSale();
+		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);
 		$STs= $this->stockTransferRepo->getAllWithBranch();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
@@ -77,10 +77,8 @@ class STController extends \BaseController {
 			// dd(Input::get('id'));
   			$input = Input::all();
   			$id= $input['id'];
-  			$SO= $this->salesOrderRepo->getByIdWithCus($id);
-  			$salesRep = $this->salesOrderRepo->getByIdWithSalesRep($id);
-  			// dd($SO);
-		return Response::json($SO);
+  			$ST= $this->stockTransferRepo->getByIdWithBranch($id);
+		return Response::json($ST);
   		}
 	}
 	public function viewSTDetails()
@@ -89,8 +87,8 @@ class STController extends \BaseController {
   			$input = Input::all();
   			$id= $input['id'];
   			// dd($id);
-  			$SOdetails = $this->salesOrderDetailsRepo->getAllBySO($id);
-		return Response::json($SOdetails);
+  			$STdetails = $this->stockTransferDetailsRepo->getAllByST($id);
+		return Response::json($STdetails);
   		}
 	}
 	public function saveEditedST()
@@ -133,7 +131,7 @@ class STController extends \BaseController {
   		}
 	}
 
-	public function changeSOType(){
+	public function changeSTType(){
 		if(Request::ajax()){
 			if(Input::get('selectedValue') == '2'){
 				$products = $this->vwInventorySource->getInventorySourceRetail();

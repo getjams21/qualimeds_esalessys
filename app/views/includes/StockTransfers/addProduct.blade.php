@@ -1,4 +1,3 @@
-<!-- VIEW PO MODAL -->
 <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editSTModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">
@@ -17,7 +16,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
-                <span class="input-group-addon panel-head square">
+                      <span class="input-group-addon panel-head square">
                       Branch Source: &nbsp;&nbsp;<b>{{$branchSource->BranchName}}</b>
                       <input type="hidden" id="branchNo" value="{{Auth::user()->BranchNo}}">
                       </span>
@@ -29,18 +28,14 @@
                      </span>
                      {{Form::select('branches', $branches, 'key', array('class' => 'form-control square','id'=>'branch'));}}
                 </div><br>
-              </div>
-            </div>
-            <div class="form-group">
+                <div class="form-group">
                 <div class="input-group">
-                  <span class="input-group-addon">Prepared By: </span>
-                  <input type="text" id="edPreparedBy" class="form-control" readonly >
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-addon">Approved By: </span>
-                  <input type="text" id="edApprovedBy" class="form-control" readonly >
+                  <div class="btn-group square" data-toggle="buttons">
+                    <div class="alert alert-warning">
+                    <center>Type the desired product on the Search Bar and click Add button to add the product to Transfer.</center>
+                  </div>  
+                 </div>
+                </div><br>
                 </div>
               </div>
           </div> 
@@ -94,6 +89,7 @@
             </div> 
           </div>
         </div>
+        </div>
           <div class="panel-body">
             <div class="table-responsive responsive" >
               <table class="table table-striped table-bordered table-hover edSOTable">
@@ -134,7 +130,6 @@
         <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
       </div>
     </div>
-  </div>
 </div>
 <!-- END OF VIEW PO MODAL -->
 
