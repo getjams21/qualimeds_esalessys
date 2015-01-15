@@ -104,6 +104,8 @@ class SalesPaymentController extends \BaseController {
   			$input = Input::all();
   			$TableData = stripcslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
+  			$PaymentType = stripcslashes($input['PT']);
+  			$PaymentType = json_decode($PaymentType,TRUE);
   			if($input['approved'] == 1){
   				$approve = fullname(Auth::user());
   			}else{
@@ -136,22 +138,38 @@ class SalesPaymentController extends \BaseController {
 	  			$SP->ApprovedBy=$approve;
 	  			$SP->save();
 	  		}
-	  				if($input['cash']==1){
-	  					$SPCash = new SalesPaymentDetail;
-	  					$SPCash->PaymentNo = $SP->id;
-	  					$SPCash->PaymentType = 0;
-	  					$SPCash->amount = $input['cashAmount'];
-	  					$SPCash->save();
-	  				}
-	  				if($input['check']==1){
-	  					$SPCheck = new SalesPaymentDetail;
-	  					$SPCheck->PaymentNo = $SP->id;
-	  					$SPCheck->PaymentType = 1;
-	  					$SPCheck->CheckNo = $input['checkNo'];
-	  					$SPCheck->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
-	  					$SPCheck->amount = $input['checkAmount'];
-	  					$SPCheck->BankNo = $input['BankNo'];
-	  					$SPCheck->save();
+	  				// if($input['cash']==1){
+	  				// 	$SPCash = new SalesPaymentDetail;
+	  				// 	$SPCash->PaymentNo = $SP->id;
+	  				// 	$SPCash->PaymentType = 0;
+	  				// 	$SPCash->amount = $input['cashAmount'];
+	  				// 	$SPCash->save();
+	  				// }
+	  				// if($input['check']==1){
+	  				// 	$SPCheck = new SalesPaymentDetail;
+	  				// 	$SPCheck->PaymentNo = $SP->id;
+	  				// 	$SPCheck->PaymentType = 1;
+	  				// 	$SPCheck->CheckNo = $input['checkNo'];
+	  				// 	$SPCheck->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
+	  				// 	$SPCheck->amount = $input['checkAmount'];
+	  				// 	$SPCheck->BankNo = $input['BankNo'];
+	  				// 	$SPCheck->save();
+	  				// }
+	  				foreach($PaymentType as $pt){
+	  					$SPInvoice= new SalesPaymentDetail;
+	  					$SPInvoice->paymentNo=$SP->id;
+	  					if($pt['PaymentType'] == 'Cash'){
+		  					$SPInvoice->PaymentType=0;
+		  					$SPInvoice->amount=$pt['amount'];
+		  					$SPInvoice->save();
+		  				}else if($pt['PaymentType'] == 'Check'){
+		  					$SPInvoice->PaymentType=1;
+		  					$SPInvoice->BankNo=$pt['BankNo'];
+		  					$SPInvoice->CheckNo=$pt['CheckNo'];
+		  					$SPInvoice->CheckDueDate=\Carbon\Carbon::createFromFormat('Y-m-d', $pt['CheckDueDate'])->toDateTimeString();
+		  					$SPInvoice->amount=$pt['amount'];
+		  					$SPInvoice->save();
+		  				}
 	  				}
 	  				foreach($TableData as $td){
 	  					$SPInvoice= new SalesPaymentInvoice;
