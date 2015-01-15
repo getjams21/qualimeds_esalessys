@@ -1451,68 +1451,26 @@ $('#SPCash').click(function(){
 });
 //SALES PAYMENTS SAVING FUNCTIONS
 $('#saveSP').click(function(){
-	if(!$('#SPCash').is(':checked') && !$('#SPCheck').is(':checked')){
+	if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
 		$('#checkBoxError').fadeIn("fast", function(){ 
 			        $("#checkBoxError").fadeOut(4000);
-			});
-			return;
+		});
+		return;
 	}	
 	var id = $('#SPediting').val();
 	var TableData;
-	var cash =0;
-	var check =0;
 	TableData = storeSPValues();	 
 	TableData = $.toJSON(TableData);
+	PaymentTypes = storePTValues();	 
+	PaymentTypes = $.toJSON(PaymentTypes);
+	alert(PaymentTypes);
 	var cashAmount= $('#BillPaymentTotalCost').text();
-	if($('#SPCash').is(':checked')){
-		cash =1;
-		if($('#SPCheck').is(':checked')){
-			if(!$('#cashAmount').val().length){
-				$('#chequeError').fadeIn("fast", function(){ 
-		        $("#chequeError").fadeOut(4000);
-		    	});
-		   	return;
-			}
-			cashAmount= $('#cashAmount').val();
-		}
-	}
-	if($('#SPCheck').is(':checked')){
-		check =1;
-		if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#checkAmount').val().length){
-			$('#chequeError').fadeIn("fast", function(){ 
-		        $("#chequeError").fadeOut(4000);
-		    });
-		    return;
-		}
-		var checkNo = $('#chequeNo').val();
-		var checkDueDate = $('#chequeDueDate').val();
-		var BankNo = $('#bankNo').find("option:selected").val();
-		var checkAmount = $('#checkAmount').val();
-	}
-	if(($('#SPCash').is(':checked') && $('#SPCheck').is(':checked'))){
-		if((parseInt(cashAmount) + parseInt(checkAmount)) != parseInt($('#BillPaymentTotalCost').text())) {
-			$('#amountError').fadeIn("fast", function(){ 
-			        $("#amountError").fadeOut(4000);
-			});
-			return;
-		}
-	}
-	if(!$('#SPCash').is(':checked') && $('#SPCheck').is(':checked')){
-		if(parseInt(checkAmount) != parseInt($('#BillPaymentTotalCost').text())) {
-			$('#amountError').fadeIn("fast", function(){ 
-			        $("#amountError").fadeOut(4000);
-			});
-			return;
-		}
-	}	
 	if($('#approvedSP').is(':checked')){
 		var approved =1;
 	}else{
 		var approved =0;		
 	}
-	$.post(reroute+'/salesPay',{id:id,TD:TableData,cash:cash,check:check,cashAmount:cashAmount,
-		checkAmount:checkAmount,checkNo:checkNo,checkDueDate:checkDueDate,
-		BankNo:BankNo,approved:approved},function(data){
+	$.post(reroute+'/salesPay',{id:id,TD:TableData,PT:PaymentTypes,approved:approved},function(data){
 		location.reload();
 			$(location).attr('href','/SalesPayment#SalesPaymentList');
 	});
@@ -1522,6 +1480,27 @@ $('#saveSP').click(function(){
 		    TableData[row]={
 		    	 "invoiceNo" : $(tr).find('td:eq(1)').text()
 		    	 , "amount" :$(tr).find('td:eq(5)').text()
+		    }
+		});
+	    return TableData;
+	}
+	function storePTValues(){
+		var TableData = new Array();
+		$('#cashCheckTable > tbody  > tr').each(function(row, tr){
+			if($(tr).find('td:eq(0)').text() == 'Cash'){
+				TableData[row]={
+			    	 "PaymentType" : $(tr).find('td:eq(0)').text()
+			    	 ,"amount" : $(tr).find('td:eq(1)').text()
+			    }
+			}
+			else if(($(tr).find('td:eq(0)').text() == 'Check')){
+			    TableData[row]={
+			    	 "PaymentType" : $(tr).find('td:eq(0)').text()
+			    	 ,"BankNo" :$(tr).find('.bankSelect ').find("option:selected").val()
+			    	 ,"CheckNo" : $(tr).find('td:eq(2)').text()
+			    	 ,"CheckDueDate" : $(tr).find('td:eq(3)').text()
+			    	 ,"amount" : $(tr).find('td:eq(4)').text()
+			    }
 		    }
 		});
 	    return TableData;
@@ -1615,15 +1594,74 @@ var paymentItem=1;
 function addPaymentType(){
 	var type = $('#paymentType').val();
 	if(type == 0){
-		$('#cashCheckTable').append('<tr>
+		$('#cashCheckTable').append('<tr id="PT'+paymentItem+'">
 			<td colspan="4">Cash</td>
-			<td class="editable error"></td>
+			<td class="PTeditable danger PTcost">'+($('#BillPaymentTotalCost').text()-$('#paymentTypeTotal').text())+'</td>
 			<td><button class="btn btn-danger btn-xs square" id="removePT'+paymentItem+'" onclick="removePT('+paymentItem+')">
 			<i class="fa fa-times"></i> Remove</button></td></tr>');
 	}
-	editable(paymentItem);
+	if(type == 1){
+		$('#cashCheckTable').append('<tr id="PT'+paymentItem+'">
+			<td>Check</td>
+			<td><select class="bankSelect form-control square"></select></td><td class="numberEditable danger"></td>
+			<td class="dateEditable danger">'+(d.getFullYear()+1)+'-01-01</td>
+			<td class="PTeditable danger PTcost">'+($('#BillPaymentTotalCost').text()-$('#paymentTypeTotal').text())+'</td>
+			<td><button class="btn btn-danger btn-xs square" id="removePT'+paymentItem+'" onclick="removePT('+paymentItem+')">
+			<i class="fa fa-times"></i> Remove</button></td></tr>');
+		$.post(reroute+'/fetchBanks',function(data){
+			$.each(data, function(key,value) {
+				$('.bankSelect').each(function(){
+					if(!$(this).find('option[value='+value.id +']').length){
+						$(this).append( $('<option></option>').val(value.id).html(value.BankName) );
+					}
+				});
+			});
+		});
+	}
+	editableNumber(paymentItem);
+		$('.PTeditable').editable({
+				send: 'never', 
+			    type: 'text',
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			        else if($.isNumeric(value) == '' || value==0) {
+			            return 'Please input a valid number greater than 0';
+			        }
+			    },
+			    emptytext:0,
+			   display: function(value) {
+			   		$(this).text(Number(value).toFixed(2));
+			   		PTcalcCost();
+					}
+		});
+
+	dateEditable(paymentItem);
 	paymentItem++;
 }
+function removePT(id){
+	$('#PT'+id).remove();
+	id +=1;
+	if( $('#PT'+id).length ) 
+	{
+	  while(id<itemno){
+			$('#PT'+id).attr('id','PT'+(id-1));
+			$('#removePT'+(id)).attr('id','removePT'+(id-1));
+			$('#removePT'+(id-1)).attr('onclick','removePT('+(id-1)+')');
+			id++;
+		}
+	}
+	paymentItem -=1;
+	PTcalcCost();
+}
+function PTcalcCost(){
+		var total=0;
+		$('.PTcost').each(function(){
+			total += parseFloat($(this).text()); 
+		});
+		$('#paymentTypeTotal').text(Number(total).toFixed(2));
+	}
 function editCategory(id){
 	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();
