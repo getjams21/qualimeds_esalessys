@@ -31,7 +31,7 @@ class STController extends \BaseController {
 		$max = $this->stockTransferRepo->getMaxId();
 		$branchSource = Branch::find(Auth::user()->BranchNo);
 		$branches = Branch::where('id','!=', Auth::user()->BranchNo)->lists('BranchName','id');
-		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);
+		$products = $this->vwInventorySource->getInventorySourceForST(Auth::user()->BranchNo);
 		$STs= $this->stockTransferRepo->getAllWithBranch();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));

@@ -3,4 +3,5 @@
 interface VwInventorySourceRepository{
 	public function getInventorySourceWholeSale($branchNo);
 	public function getInventorySourceRetail();
+	public function getInventorySourceForST($branchNo);
 }

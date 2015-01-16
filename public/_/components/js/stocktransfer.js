@@ -28,15 +28,12 @@ function addSO(id){
         <input id="unitAv'+id+'" type="hidden" value="'+unitQty+'">
         <input id="unitAvR'+id+'" type="hidden" value="'+unitQtyR+'">
 		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
-		<td class="light-red ed" id="prodUntSO'+itemno+'" value="'+unitPrice+'">'+unitPrice+'</td>
+		<td class="" id="prodUntSO'+itemno+'" value="'+unitPrice+'">'+unitPrice+'</td>
 		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
 		<i class="fa fa-times"></i> Remove</button></td></tr>');
 		$('select[id=unit'+itemno+']').on('change', function() {
-			// alert($('select[id=unit'+id+']').val());
 			if($(this).val() == 'pcs'){
 				unitAvailable = $('#unitAvR'+id).val();
-				// alert(id);
-				// $('#unitQty'+id).hide();
 			}else{
 				$('#unitQty'+id).text(unitQty);
 			}
@@ -191,7 +188,6 @@ function editST(id){
 	  				$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td>
-	  					<td>'+value.Barcode+'</td>
 	  					<td>'+value.LotNo+'</td>
 						<td>'+value.ExpiryDate+'</td>
 	  					<td><select class="form-control square" name="unit" id="unit">
@@ -199,11 +195,11 @@ function editST(id){
 		                  <option value="'+nxtUnit+'">'+nxtUnit+'</option>
 		                </select></td>
 	  					<td class="vweditable" id="edQty'+value.ProductNo+'">'+value.Qty+'</td>
-	  					<td class="vweditable" id="edUnt'+value.ProductNo+'">'+value.UnitPrice+'</td>
-	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.UnitPrice*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					<td class="" id="edUnt'+value.ProductNo+'">'+value.CostPerUnit+'</td>
+	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.CostPerUnit*value.Qty)+'</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
-		  			total+=value.UnitPrice*value.Qty;
+		  			total+=value.CostPerUnit*value.Qty;
 	  				// editable(value.ProductNo);
 		  			counter+=1;
 		  			$('.vweditable').editable({
@@ -248,7 +244,7 @@ function editST(id){
 				}
 	      });
 }
-function vwaddPO(id){
+function vwaddSO(id){
 	var name= $('#vwname'+id).text();
 	var brand= $('#vwbrand'+id).text();
 	var unit= $('#vwunit'+id).text();
@@ -259,7 +255,7 @@ function vwaddPO(id){
 	        $("#prodError").fadeOut(4000);
 	    });
 	}else{
-	$('.edPOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
+	$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
 	  					<td>'+name+'</td>
 	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable" id="edQty'+id+'">'+1+'</td><td class="vweditable" id="edUnit'+id+'">'+1+'</td>
 	  					<td class="ecost"id="edCost'+id+'">1</td><td><button class="btn btn-danger 

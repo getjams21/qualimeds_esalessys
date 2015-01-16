@@ -25,4 +25,11 @@ class DbVwInventorySource extends DbRepository implements VwInventorySourceRepos
 		      'RetailQtyPerWholeSaleUnit')
 		    ->get();
 	}
+	public function getInventorySourceForST($branchNo){
+		return VwInventorySource::selectRaw('ProductNo, ProductName, BrandName, WholeSaleUnit As Unit, 
+			    LotNo, ExpiryDate, SellingPrice As UnitPrice, Sum(WholeSaleQty) Qty, Sum(RetailSaleQty) RQty')
+				->where('BranchNo','=',$branchNo)
+				->groupBy('ProductNo', 'ProductName', 'BrandName', 'WholeSaleUnit', 'LotNo', 'ExpiryDate', 'CostPerQty')
+				->get();
+	}
 }
