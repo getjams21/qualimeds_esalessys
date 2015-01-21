@@ -196,7 +196,7 @@ function editST(id){
 		                </select></td>
 	  					<td class="vweditable" id="edQty'+value.ProductNo+'">'+value.Qty+'</td>
 	  					<td class="" id="edUnt'+value.ProductNo+'">'+value.CostPerUnit+'</td>
-	  					<td class="ecost"id="edCost'+value.ProductNo+'">'+(value.CostPerUnit*value.Qty)+'</td><td><button class="btn btn-danger 
+	  					<td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
 		  			total+=value.CostPerUnit*value.Qty;
@@ -237,7 +237,7 @@ function editST(id){
 					});
 					$('#edSOTotalCost').text(total);
 					if(total == 0){
-						$('#vwSaveSOBtn').addClass('hidden');
+						// $('#vwSaveSOBtn').addClass('hidden');
 					}else{
 						$('#vwSaveSOBtn').removeClass('hidden');
 					}
@@ -245,26 +245,54 @@ function editST(id){
 	      });
 }
 function vwaddSO(id){
-	var name= $('#vwname'+id).text();
-	var brand= $('#vwbrand'+id).text();
-	var unit= $('#vwunit'+id).text();
+	var name= $('#name'+id).text();
+	var lotno = $('#lotNo'+id).text();
+	var brand= $('#brand'+id).text();
+	var unit= $('#unit'+id).text();
+	var expDate = $('#expiryDate'+id).text();
+	var price = $('#unitprice'+id).text();
 	var table = $('.vwproduct').DataTable();
-	var index=table.row('#vwrowProd'+id).index();
-	if($('#vwProd'+id).length){prodError
+	var index=table.row('#rowProd'+id).index();
+	if($('#Prod'+id).length){prodError
 		 $('#prodError').fadeIn("fast", function(){        
 	        $("#prodError").fadeOut(4000);
 	    });
 	}else{
-	$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+id+'">'+id+'</td>
-	  					<td>'+name+'</td>
-	  					<td>'+brand+'</td><td>'+unit+'</td><td class="vweditable" id="edQty'+id+'">'+1+'</td><td class="vweditable" id="edUnit'+id+'">'+1+'</td>
-	  					<td class="ecost"id="edCost'+id+'">1</td><td><button class="btn btn-danger 
-	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
-						<i class="fa fa-times" ></i> Remove</button></td></tr>');
-	
+	if (unit == 'box' || unit == 'Box'){
+		var nxtUnit = 'Pcs';
+	}else if (unit == 'pcs' || unit == 'Pcs'){
+		var nxtUnit = 'Box';
+	}
+	$('.edSOTable >tbody').append('
+		<tr id="vwPO'+counter+'">
+			<td id="vwItemno'+counter+'">'+counter+'</td>
+			<td id="vwProd'+id+'">'+id+'</td>
+	  		<td>'+name+'</td>
+			<td>'+brand+'</td>
+			<td>'+lotno+'</td>
+			<td>'+expDate+'</td>
+			<td><select class="form-control square" name="unit" id="unit">
+              <option value="'+unit+'">'+unit+'</option>
+              <option value="'+nxtUnit+'">'+nxtUnit+'</option>
+            </select></td>>
+			<td class="vweditable" id="edQty'+id+'">'+1+'</td>
+			<td class="vweditable" id="edUnit'+id+'">'+price+'</td>
+	  		<td><button class="btn btn-danger btn-xs square dis" id="vwRemovePO'+counter+'" 
+	  		onclick="vwRemovePO('+counter+')" ><i class="fa fa-times" ></i> Remove</button></td>
+		</tr>
+	');
+		var unitAvailable = $('#unitQty'+id).val();
+		// $('select[id=unit'+counter+']').on('change', function() {
+		// 	if($(this).val() == 'pcs'){
+		// 		unitAvailable = $('#unitAvR'+id).val();
+		// 	}else{
+		// 		$('#unitQty'+id).text(unitQty);
+		// 	}
+		// });
+		table.cell( index, 8 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
 		counter +=1;
 		editable(id);
-		$('#vwSaveSOBtn').removeClass('hidden');
+		// $('#vwSaveSOBtn').removeClass('hidden');
 	}
 }
 function vwRemovePO(id){

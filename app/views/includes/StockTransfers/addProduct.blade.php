@@ -47,8 +47,8 @@
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="vwmyInputTextField" class="form-control"  >
               </div>
-       </div>
-      <div class=" responsive" >
+              </div>
+            <div class=" responsive" >
               <table class="table table-striped table-bordered table-hover vwproduct">
                 <thead>
                   <tr>
@@ -104,7 +104,6 @@
                     <th>Unit</th>
                     <th>Qty</th>
                     <th>Unit Cost</th>
-                    <th>Item Cost</th>
                     <th>Action</th>
                   </tr>
                  </thead> 
@@ -122,13 +121,13 @@
               </div>
             </div>
             </div><!-- panel success-->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success" id="vwSaveSOBtn">Save ST</button>
+            <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
+          </div>
           </div>
          </div>
         </div><!--modal body -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success hidden" id="vwSaveSOBtn">Save SO</button>
-        <button type="button" class="btn btn-default " data-dismiss="modal">Cancel</button>
-      </div>
     </div>
 </div>
 <!-- END OF VIEW PO MODAL -->
