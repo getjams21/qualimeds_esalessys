@@ -1463,7 +1463,6 @@ $('#saveSP').click(function(){
 	TableData = $.toJSON(TableData);
 	PaymentTypes = storePTValues();	 
 	PaymentTypes = $.toJSON(PaymentTypes);
-	alert(PaymentTypes);
 	var cashAmount= $('#BillPaymentTotalCost').text();
 	if($('#approvedSP').is(':checked')){
 		var approved =1;
