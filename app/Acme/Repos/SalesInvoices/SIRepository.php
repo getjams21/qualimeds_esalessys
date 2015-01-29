@@ -7,5 +7,5 @@ interface SIRepository{
 	public function getAllWithUnpaid();
 	public function getAllWithCusAndRep();
 	public function getByidWithMedRep($id);
-	
+	public function getAllByCustomer($id);
 }

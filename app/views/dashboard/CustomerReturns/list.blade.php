@@ -29,10 +29,9 @@ display: none;
             <!-- Tab panes -->
             <div class="tab-content">
               <div class="tab-pane active" id="showIAEntry">
-                 @include('includes.CustomerReturn.add')
+                 @include('includes.CustomerReturns.add')
               </div>
               <div class="tab-pane " id="showIAList">
-                 @include('includes.CustomerReturn.list')  
               </div>
             </div>
         </div>

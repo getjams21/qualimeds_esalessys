@@ -111,6 +111,8 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/viewCR', 'CRController@viewCR');
  		Route::post('/viewCRDetails', 'CRController@viewCRDetails');
  		Route::post('/saveEditedCR', 'CRController@saveEditedCR');
+ 		Route::post('/fetchCustomerSI', 'CRController@fetchCustomerSI');
+ 		Route::post('/fetchSIItems', 'CRController@fetchSIItems');
 	});
 
 

@@ -1,104 +1,89 @@
+var reroute='/user/'+$('meta[name="_token"]').attr('content');
 var sample = 'sample';
 var itemno = 1;
 var counter = 1;
 function addCR(id){
-	var name= $('#name'+id).text();
-	var brand= $('#brand'+id).text();
-	var unit= $('#wholesale'+id).text();
 	var table = $('.product').DataTable();
-	var unitPrice = 0.00;
 	var index=table.row('#rowProd'+id).index();
-	var curDate = new Date();
-	$('.IAtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
-		<td id="prdoNo'+itemno+'">'+id+'</td>
-		<td>'+name+'</td>
-		<td>'+brand+'</td>
-		<td class="editable-default" id="lotNo'+id+'"><i></i></td>
-		<td class="dateEditable">'+curDate.getFullYear()+'-'+curDate.getMonth()+'-'+curDate.getDate()+'
-		</td>
-		<td><select class="form-control square" name="unit" id="unit'+itemno+'">
-                  <option value="'+unit+'">'+unit+'</option>
-                  <option value="pcs">pcs</option>
-                </select></td>
-		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
-		<td class="light-red ed" id="prodUntSO'+itemno+'">0.00</td>
-		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
-		<td><button class="btn btn-danger btn-xs square" id="removeIA'+itemno+'" onclick="removeIA('+itemno+','+id+','+index+')">
-		<i class="fa fa-times"></i> Remove</button></td></tr>');
-		
-		itemno +=1;
-		// table.cell( index, 5 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
-		// var unitAvailable = $('#unitAv'+id).val();
-		$('.editable-default').editable({
-				send: 'never', 
-			    type: 'text',
-			    value:1,
-			    validate: function(value) {
-			        if($.trim(value) == '') {
-			         return 'This field is required';
-			        }
-			    },
-			    emptytext:0,
-			   display: function(value) {
-			   	$(this).text(value);
-			  	}	
-			});
-		$('.dateEditable').editable({
-		type: 'combodate',
-	        format: 'YYYY-MM-DD',    
-	        viewformat: 'YYYY-MM-DD',    
-	        template: 'D / MMMM / YYYY',
-		    validate: function(value) {
-		        if($.trim(value) == '') {
-		         return 'This field is required';
-		        }
-		    },    
-	        combodate: {
-	                minYear: d.getFullYear(),
-	                maxYear: d.getFullYear()+10,
-	                minuteStep: 1
-	           }
-    	});
-		$('.editable').editable({
-				send: 'never', 
-			    type: 'text',
-			    value:1,
-			    validate: function(value) {
-			        if($.trim(value) == '') {
-			         return 'This field is required';
-			        }
-			        if ($.isNumeric(value) == '' || value==0) {
-			            return 'Please input a valid number greater than 0';
-			        }
-			    },
-			    emptytext:0,
-			   display: function(value) {
-			   	$(this).text(value);
-			   		var rowID = $(this).attr('id').substring(9);
-			        calcCostSO(rowID);
-			  	}	
-			});
-		$('.ed').editable({
-				send: 'never', 
-			    type: 'text',
-			    value:unitPrice,
-			    validate: function(value) {
-			        if($.trim(value) == '') {
-			         return 'This field is required';
-			        }
-			        if ($.isNumeric(value) == '' || value==0) {
-			            return 'Please input a valid number greater than 0';
-			        }
-			    },
-			    emptytext:0,
-			   display: function(value) {
-			   		$(this).text(value);
-			   		var rowID = $(this).attr('id').substring(9);
-			   		// alert(rowID);
-			         calcCostSO(rowID);
-					}
+	$.post(reroute+'/fetchSIItems',{id:id},function(data){
+		if(data){
+			$('.CRTable').find('tr').remove().end();
+			var Qty;
+			$.each(data, function(key, value) {
+				Qty = value.Qty;
+				$('.CRTable').append('
+					<tr id="SO'+value.id+'">
+						<td id="itemno'+itemno+'">'+itemno+'</td>
+						<td id="prdoNo'+value.id+'">'+id+'</td>
+						<td id="prodName'+value.id+'">'+value.ProductName+'</td>
+						<td id="brand'+value.id+'">'+value.ProductBrand+'</td>
+						<td id="lotNo'+id+'">'+value.LotNo+'</td>
+						<td id="expDate'+id+'">'+value.ExpiryDate+'</td>
+						<td id="unit'+id+'">'+value.Unit+'</td>
+						<td class="light-green editable" id="prodQtySO'+value.id+'" value="'+value.Qty+'">'+value.Qty+'</td>
+						<td id="prodUntSO'+value.id+'">'+value.UnitPrice+'</td>
+						<td class="cost" id="prodCostSO'+value.id+'">0.00</td>
+						<td id="freebiesQty'+value.id+'">'+value.FreebiesQty+'</td>
+						<td><button class="btn btn-danger btn-xs square" id="removeIA'+value.id+'" onclick="removeIA('+value.id+','+id+','+index+')">
+						<i class="fa fa-times"></i> Remove</button></td>
+					</tr>
+				');
+			itemno +=1;
+			table.cell( index, 7 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+			// var unitAvailable = $('#unitAv'+id).val();
+			$('.editable-default').editable({
+					send: 'never', 
+				    type: 'text',
+				    value:1,
+				    validate: function(value) {
+				        if($.trim(value) == '') {
+				         return 'This field is required';
+				        }
+				    },
+				    emptytext:0,
+				   display: function(value) {
+				   	$(this).text(value);
+				  	}	
 				});
-		$('#saveSO').removeClass('hidden');
+			$('.dateEditable').editable({
+			type: 'combodate',
+		        format: 'YYYY-MM-DD',    
+		        viewformat: 'YYYY-MM-DD',    
+		        template: 'D / MMMM / YYYY',
+			    validate: function(value) {
+			        if($.trim(value) == '') {
+			         return 'This field is required';
+			        }
+			    },    
+		        combodate: {
+		                minYear: d.getFullYear(),
+		                maxYear: d.getFullYear()+10,
+		                minuteStep: 1
+		           }
+	    	});
+			$('.editable').editable({
+					send: 'never', 
+				    type: 'text',
+				    value:Qty,
+				    validate: function(value) {
+				        if($.trim(value) == '') {
+				         return 'This field is required';
+				        }
+				        if ($.isNumeric(value) == '' || value==0) {
+				            return 'Please input a valid number greater than 0';
+				        }
+				    },
+				    emptytext:0,
+				   display: function(value) {
+				   	$(this).text(value);
+				   		var rowID = $(this).attr('id').substring(9);
+				        calcCostSO(rowID);
+				  	}	
+				});
+			$('#saveSO').removeClass('hidden');
+			});
+		}
+	});
 }
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
@@ -425,6 +410,35 @@ function vwRemovePO(id){
 // END OF PO FUNCTIONS
 
 $(document).ready(function() {
+	$('#customer').on('change', function() {
+		var id = $(this).val();
+		$.post(reroute+'/fetchCustomerSI',{id:id},function(data){
+			if(data){
+				$('#SITable').find('tr').remove().end();
+				var terms;
+				$.each(data, function(key,value) {
+					if (value.Terms == 0) {
+                      terms = "Cash";
+                    }else{
+                      terms = "Check";
+                    }
+					$('#SITable').append('
+						<tr id="rowProd'+value.id+'">
+	                      <td id="si'+value.id+'">'+value.id+'</td>
+	                      <td id="invoice'+value.id+'">'+value.SalesInvoiceRefDocNo+'</td>
+	                      <td id="SO'+value.id+'">'+value.SalesOrderNo+'</td>
+	                      <td id="invoiceDate'+value.id+'">'+value.InvoiceDate+'</td>
+	                      <td id="terms'+value.id+'">'+terms+'</td>
+	                      <td id="prepared'+value.id+'">'+value.PreparedBy+'</td>
+	                      <td id="approved'+value.id+'">'+value.ApprovedBy+'</td>
+	                      <td><button class="btn btn-success btn-xs square" onclick="addCR('+value.id+')" ><i class="fa fa-check-circle"></i> Add</button>
+	                      </td>
+	                    </tr>
+					');
+				});
+			}
+		});
+	});
 	// PO TERM 
 	//term check
 	$('#term2,#edTerm2').click(function() {
@@ -479,7 +493,7 @@ $(document).ready(function() {
 		{
 			var TableData = new Array();
 			var ctr = 1;
-			$('.IAtable tr').each(function(row, tr){
+			$('.CRTable tr').each(function(row, tr){
 			    TableData[row]={
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
 			        , "LotNo" : $(tr).find('td:eq(4)').text()

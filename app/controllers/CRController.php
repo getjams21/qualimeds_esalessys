@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Acme\Repos\CustomerReturnDetails\CRDRepository;
 use Acme\Repos\SalesInvoices\SIRepository;
 use Acme\Repos\SalesInvoiceDetails\SIDetailsRepository;
+use Acme\Repos\Customers\CustomerRepository;
 
 class CRController extends \BaseController {
 	private $customerReturnRepo;
@@ -28,9 +29,24 @@ class CRController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		$max = $this->customerReturnRepo->getMaxId();
+		$customers = Customer::lists('CustomerName','id');
+		$defaultCus = Customer::firstOrFail();
+		$customerSalesInvoices = $this->salesInvoiceRepo->getAllByCustomer($defaultCus->id);
+		return View::make('dashboard.CustomerReturns.list', compact('customers','max','customerSalesInvoices')); 
 	}
-
+	public function fetchCustomerSI(){
+		if(Request::ajax()){
+			$customerSI = $this->salesInvoiceRepo->getAllByCustomer(Input::get('id'));
+			return Response::json($customerSI);
+		}
+	}
+	public function fetchSIItems(){
+		if(Request::ajax()){
+			$SIdetails = $this->salesInvoiceDetailsRepo->getAllBySO(Input::get('id'));
+			return Response::json($SIdetails);
+		}
+	}
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /cr/create
@@ -52,7 +68,6 @@ class CRController extends \BaseController {
 	{
 		//
 	}
-
 	/**
 	 * Display the specified resource.
 	 * GET /cr/{id}
