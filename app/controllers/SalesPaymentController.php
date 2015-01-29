@@ -138,23 +138,6 @@ class SalesPaymentController extends \BaseController {
 	  			$SP->ApprovedBy=$approve;
 	  			$SP->save();
 	  		}
-	  				// if($input['cash']==1){
-	  				// 	$SPCash = new SalesPaymentDetail;
-	  				// 	$SPCash->PaymentNo = $SP->id;
-	  				// 	$SPCash->PaymentType = 0;
-	  				// 	$SPCash->amount = $input['cashAmount'];
-	  				// 	$SPCash->save();
-	  				// }
-	  				// if($input['check']==1){
-	  				// 	$SPCheck = new SalesPaymentDetail;
-	  				// 	$SPCheck->PaymentNo = $SP->id;
-	  				// 	$SPCheck->PaymentType = 1;
-	  				// 	$SPCheck->CheckNo = $input['checkNo'];
-	  				// 	$SPCheck->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
-	  				// 	$SPCheck->amount = $input['checkAmount'];
-	  				// 	$SPCheck->BankNo = $input['BankNo'];
-	  				// 	$SPCheck->save();
-	  				// }
 	  				foreach($PaymentType as $pt){
 	  					$SPInvoice= new SalesPaymentDetail;
 	  					$SPInvoice->paymentNo=$SP->id;
@@ -169,6 +152,12 @@ class SalesPaymentController extends \BaseController {
 		  					$SPInvoice->CheckDueDate=\Carbon\Carbon::createFromFormat('Y-m-d', $pt['CheckDueDate'])->toDateTimeString();
 		  					$SPInvoice->amount=$pt['amount'];
 		  					$SPInvoice->save();
+		  				}else if($pt['PaymentType'] == 'Advance'){
+		  					$usedAdvance = AdvancePayment::where('customerNo','=',$input['customer_id'])
+		  									->where('isCharged','=',0)->first();
+		  					$usedAdvance->isCharged = 1;
+		  					$usedAdvance->chargedPaymentNo = $SP->id;
+		  					$usedAdvance->save();
 		  				}
 	  				}
 	  				foreach($TableData as $td){
@@ -178,6 +167,13 @@ class SalesPaymentController extends \BaseController {
 	  					$SPInvoice->amount=$td['amount'];
 	  					$SPInvoice->save();
 	  				}
+	  				if($input['advance'] != 0){
+	  					$advance = new AdvancePayment;
+	  					$advance->paymentNo = $SP->id;
+	  					$advance->customerNo = $input['customer_id'];
+	  					$advance->amount =  $input['advance'];
+	  					$advance->save();
+	  				}
 	  			}
 		return Response::json($input);
 	}
@@ -186,6 +182,32 @@ class SalesPaymentController extends \BaseController {
 		if(Request::ajax()){
   			$banks= Bank::all();
 		return Response::json($banks);
+		}
+	}
+	public function checkPayments()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+  			$advance= AdvancePayment::where('customerNo','=',$input['customer_id'])
+  										->where('isCharged','=',0)->get();
+			return Response::json($advance);
+		}
+	}
+	public function getPaymentAdvance()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+  			$advance= AdvancePayment::where('chargedPaymentNo','=',$input['id'])
+  										->where('isCharged','=',1)->get();
+			return Response::json($advance);
+		}
+	}
+	public function getPaymentTypes()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+  			$payment= SalesPaymentDetail::where('PaymentNo','=',$input['id'])->get();
+			return Response::json($payment);
 		}
 	}
 	

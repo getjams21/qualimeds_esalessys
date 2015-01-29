@@ -11,7 +11,7 @@
         	<div class="col-md-12">
 			<div class="well customerForm">
 			<div>
-			{{ Form::open(['route'=>'Users.store', 'id'=>'userForm']) }}
+			{{ Form::open(['url' => '/user/'.Auth::user()->id.'/storeuser', 'id'=>'userForm']) }}
 			<div class="form-group">
 				<label>Username</label>
 				<input class="form-control username" type="text" name="username" id="username" placeholder="Username" required>

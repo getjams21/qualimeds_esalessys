@@ -21,6 +21,7 @@
 	              <center>You are currently Editing Existing Invoice Payment No. <i class="billPaymentEditId" ></i></center>
 	          </div>
 	          <input type="hidden"  id="SPediting">
+            <input type="hidden"  id="customer_id">
 	         <span class="pull-right"> <input type="button" class="btn btn-warning" id="cancelBPEditing" value="Cancel Editing"></span>
 	      </div>
         </div>
@@ -106,75 +107,10 @@
     </div>
     </div>
     <hr >
-    <!-- CASH and CHECK START -->
-    <!-- <div class="row" >
-      <div class="col-md-12">
-      	<div class="error" id="checkBoxError" hidden>Please Select Payment Type.</div>
-        <div class="well hidden cashChecque">
-          <div class="row">
-            <div class="col-md-2">
-             CASH&nbsp;&nbsp;<input type="checkbox" checked id="SPCash" name="paymentType" style="width:15px; height:15px;"/><br>
-             CHEQUE&nbsp;&nbsp;<input type="checkbox" id="SPCheck" name="paymentType" style="width:15px; height:15px;"/>
-            </div>
-            <div class="col-md-10">
-            	<div class="chequeDiv container-fluid col-md-12 hidden" >
-            		<div class="row " >
-            		<div class="cashDiv hidden">
-            			<div class="col-md-6">
-            				<h4>Cash Details: </h4>
-		                    <div class="input-group">
-		                      <span class="input-group-addon panel-head square">Amount: </span>
-		                      <input type="text" id="cashAmount" class="form-control clearEdit"  >
-		                    </div>
-	                	</div>
-		            </div>	
-		            </div>
-            	 <div class="row">
-             	 <div class="col-md-6">
-              		
-            		<h4>Cheque Details: </h4>
-
-                  <div class="input-group checkamount">
-                      <span class="input-group-addon panel-head square ">Amount: </span>
-                      <input type="text" id="checkAmount" class="form-control clearEdit"  >
-                  </div>
-            		<br>
-			          <div class="input-group">
-		                <span class="input-group-addon panel-head square">Cheque No: </span>
-		                <input type="text" id="chequeNo" class="form-control numberOnly clearEdit"  >
-	              	</div>
-              </div>
-              <div class="col-md-6">
-                <br><br>
-               	 <div class="input-group">
-	               <span class="input-group-addon panel-head square">
-	                Bank: 
-	               </span>
-	               {{Form::select('bankNo', $banks, 'key', array('class' => 'form-control square','id'=>'bankNo'));}}
-	          	</div>
-	                {{ Form::label('', 'Cheque Due Date: '); }}
-                    <div class="input-group date txtbox-m" id="grp-from" data-date="" data-date-format="mm-dd-yyyy">
-                      <input class="form-control" value="{{$now}}" type="text" id="chequeDueDate"  readonly required >
-                      <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div><br>
-		            <div class="error" id="chequeError" hidden>Please provide all necessary information.</div>
-		            <div class="error" id="amountError" hidden>Amount doesn't match.</div>
-                    
-            	</div>
-           	 </div>
-             </div>
-             </div>
-            <div class="col-md-1">
-             </div>
-           </div>
-        </div>
-      </div>
-    </div> -->
-     <!-- CASH and CHECK END -->
      <!-- CASH and CHECK table -->
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
-        <div class="error" id="checkBoxError" hidden>Payment is greater than the Total.</div>
+        <div class="error" id="checkBoxError" hidden>Payment must be greater or equal to the Total Bill.</div>
         <div class="well hidden cashChecque">
           <div class="table-responsive responsive" >
             <table class="table table-striped table-bordered table-hover"

@@ -11,7 +11,7 @@
         	<div class="col-md-12">
 			<div class="well customerForm">
 			<div>
-			{{ Form::open(['route'=>'banks.store']) }}
+			{{ Form::open(['url'=>'/user/'.Auth::user()->id.'/storebank']) }}
 			<div class="form-group">
 				<label>Bank Name</label>
 				<input class="form-control name" type="text" name="BankName" placeholder="Bank Name" required>

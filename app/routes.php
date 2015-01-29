@@ -93,6 +93,9 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/getSPDetails', 'SalesPaymentController@getSPDetails');
  		Route::post('/getSPInvoices', 'SalesPaymentController@getSPInvoices');
  		Route::post('/fetchBanks', 'SalesPaymentController@fetchBanks');
+ 		Route::post('/checkPayments', 'SalesPaymentController@checkPayments');
+ 		Route::post('/getPaymentAdvance', 'SalesPaymentController@getPaymentAdvance');
+ 		Route::post('/getPaymentTypes', 'SalesPaymentController@getPaymentTypes');
  	#STOCK TRANSFER ROUTES
  		Route::post('/saveST', 'STController@saveST');
  		Route::post('/viewST', 'STController@viewST');
@@ -118,26 +121,43 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 ##File Maintenance Filters
 Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	#Product Categories
-	Route::get('/ProductCategories', 'ProductCategoriesController@index');
+	// Route::get('/ProductCategories', 'ProductCategoriesController@index');
+	Route::post('/addCategory', 'ProductCategoriesController@addCategory');
+	Route::post('/storecategory', 'ProductCategoriesController@store');
+ 	Route::post('/editCategory', 'ProductCategoriesController@editCategory');
 	#Suppliers
-	Route::get('/Suppliers', 'SuppliersController@index');
+	// Route::get('/Suppliers', 'SuppliersController@index');
+	Route::resource('/Suppliers', 'SuppliersController');
+	Route::post('/storesupplier', 'SuppliersController@store');
+ 	Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
 	#Products
-	Route::get('/Products', 'ProductsController@index');
+	// Route::get('/Products', 'ProductsController@index');
+	Route::resource('/Products', 'ProductsController');
+	Route::post('/storeproduct', 'ProductsController@store');
+ 	Route::post('/fetchProduct', 'ProductsController@fetchProduct');
 	#Banks
-	Route::get('/banks', 'BanksController@index');
+	// Route::get('/banks', 'BanksController@index');
+	Route::resource('/banks', 'BanksController');
+	Route::post('/storebank', 'BanksController@store');
  	Route::get('/toEditBank','BanksController@toEditBank');
  	Route::get('delete-bank/{id}', 'BanksController@destroy');
-	#Brancher
-	Route::get('/branches', 'BranchesController@index');
+	#Branches
+	// Route::get('/branches', 'BranchesController@index');
+	Route::resource('/branches', 'BranchesController');
+	Route::post('/storebranch', 'BranchesController@store');
  	Route::get('/toEditBranch','BranchesController@toEditBranch');
  	Route::get('delete-branch/{id}', 'BranchesController@destroy');
 	#Customers
-	Route::get('/customers', 'CustomersController@index');
+	// Route::get('/customers', 'CustomersController@index');
+	Route::resource('/customers', 'CustomersController');
+	Route::post('/storecustomer', 'CustomersController@store');
  	Route::get('/toEditCustomer','CustomersController@toEditCustomer');
  	Route::get('delete-customer/{id}', 'CustomersController@destroy');
 
 	#Users
-	Route::get('/Users', 'UsersController@index');
+	// Route::get('/Users', 'UsersController@index');
+	Route::resource('/Users', 'UsersController');
+	Route::post('/storeuser', 'UsersController@store');
 	Route::get('/toEditUser','UsersController@toEditUser');
 	Route::get('delete-user/{id}', 'UsersController@destroy');
 	Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
@@ -148,24 +168,24 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 
 #ADMIN POST ROUTES
 #File Maintenance Filters
-Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function(){
- 	#Product Categories
- 		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
- 		Route::post('/editCategory', 'ProductCategoriesController@editCategory');
- 	#Suppliers
- 		Route::resource('/Suppliers', 'Suppliers');
- 		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
- 	#Products
- 		Route::resource('/Products', 'Products');
- 		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
- 	#Banks
- 		Route::resource('/banks', 'BanksController');
- 	#branch library
- 		Route::resource('/branches', 'BranchesController');
- 	#customer library
- 		Route::resource('/customers', 'CustomersController');
- 	#user library
- 		Route::resource('/Users', 'UsersController');
+// Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function(){
+//  	#Product Categories
+//  		Route::post('/addCategory', 'ProductCategoriesController@addCategory');
+//  		Route::post('/editCategory', 'ProductCategoriesController@editCategory');
+//  	#Suppliers
+//  		Route::resource('/Suppliers', 'Suppliers');
+//  		Route::post('/fetchSupplier', 'SuppliersController@fetchSupplier');
+//  	#Products
+//  		Route::resource('/Products', 'Products');
+//  		Route::post('/fetchProduct', 'ProductsController@fetchProduct');
+//  	#Banks
+//  		Route::resource('/banks', 'BanksController');
+//  	#branch library
+//  		Route::resource('/branches', 'BranchesController');
+//  	#customer library
+//  		Route::resource('/customers', 'CustomersController');
+//  	#user library
+//  		Route::resource('/Users', 'UsersController');
  	
-});
+// });
 

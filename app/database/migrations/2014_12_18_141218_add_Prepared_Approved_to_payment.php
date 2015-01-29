@@ -28,7 +28,7 @@ class AddPreparedApprovedToPayment extends Migration {
 	{
 		Schema::table('payments', function(Blueprint $table)
 		{
-			Schema::drop('payments');
+			
 		});
 	}
 

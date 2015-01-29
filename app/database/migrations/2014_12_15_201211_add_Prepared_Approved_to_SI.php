@@ -28,7 +28,7 @@ class AddPreparedApprovedToSI extends Migration {
 	{
 		Schema::table('SalesInvoices', function(Blueprint $table)
 		{
-			Schema::drop('SalesInvoices');
+			
 		});
 	}
 

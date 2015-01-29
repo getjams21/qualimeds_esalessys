@@ -68,6 +68,9 @@
 		            	@if($billpayment->check == 1)
 		            	Check
 		            	@endif
+		            	@if($billpayment->check == 0 && $billpayment->cash == 0)
+		            	Advanced Payment
+		            	@endif
 		           	</td>
 		            <td>{{money($billpayment->amount)}}</td>
 		             <td >{{$billpayment->PreparedBy}}</td>

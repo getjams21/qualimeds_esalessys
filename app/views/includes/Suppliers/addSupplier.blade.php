@@ -9,7 +9,7 @@
           <div class="row">
           <div class="col-md-6 col-md-offset-3">
           <div class="well">
-           {{ Form::open(array('route' => 'Suppliers.store', 'class'=>'form', 'id'=>'form'))}}
+           {{ Form::open(array('url' => '/user/'.Auth::user()->id.'/storesupplier', 'class'=>'form', 'id'=>'form'))}}
             <div class="form-group">
               {{Form::hidden('id',null,['class'=>'form-control square ','required'=>'required','id'=>'txtSupID'])}}
               {{Form::label('SupplierName', 'Supplier Name')}}
