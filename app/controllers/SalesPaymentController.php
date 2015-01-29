@@ -52,6 +52,7 @@ class SalesPaymentController extends \BaseController {
   			$check = SalesPaymentDetail::where('PaymentNo','=',$SP->id)->where('PaymentType','=',1)->get();
 			if(count($check) > 0){ $SP['check']=1; }else{$SP['check']=0;}
 		}
+		// return $salesPayments;
 		return View::make('dashboard.SalesPayments.list',compact('invoices','max','now','lastweek','customers','medReps','banks','salesPayments'));
 	}
 	public function addInvoiceToSalesPayment()
@@ -138,23 +139,6 @@ class SalesPaymentController extends \BaseController {
 	  			$SP->ApprovedBy=$approve;
 	  			$SP->save();
 	  		}
-	  				// if($input['cash']==1){
-	  				// 	$SPCash = new SalesPaymentDetail;
-	  				// 	$SPCash->PaymentNo = $SP->id;
-	  				// 	$SPCash->PaymentType = 0;
-	  				// 	$SPCash->amount = $input['cashAmount'];
-	  				// 	$SPCash->save();
-	  				// }
-	  				// if($input['check']==1){
-	  				// 	$SPCheck = new SalesPaymentDetail;
-	  				// 	$SPCheck->PaymentNo = $SP->id;
-	  				// 	$SPCheck->PaymentType = 1;
-	  				// 	$SPCheck->CheckNo = $input['checkNo'];
-	  				// 	$SPCheck->CheckDueDate = \Carbon\Carbon::createFromFormat('m/d/Y', $input['checkDueDate'])->toDateTimeString();
-	  				// 	$SPCheck->amount = $input['checkAmount'];
-	  				// 	$SPCheck->BankNo = $input['BankNo'];
-	  				// 	$SPCheck->save();
-	  				// }
 	  				foreach($PaymentType as $pt){
 	  					$SPInvoice= new SalesPaymentDetail;
 	  					$SPInvoice->paymentNo=$SP->id;
@@ -170,6 +154,13 @@ class SalesPaymentController extends \BaseController {
 		  					$SPInvoice->amount=$pt['amount'];
 		  					$SPInvoice->save();
 		  				}
+		  				// else if($pt['PaymentType'] == 'Advance'){
+		  				// 	$usedAdvance = AdvancePayment::where('customerNo','=',$input['customer_id'])
+		  				// 					->where('isCharged','=',0)->first();
+		  				// 	$usedAdvance->isCharged = 1;
+		  				// 	$usedAdvance->chargedPaymentNo = $SP->id;
+		  				// 	$usedAdvance->save();
+		  				// }
 	  				}
 	  				foreach($TableData as $td){
 	  					$SPInvoice= new SalesPaymentInvoice;
@@ -178,6 +169,13 @@ class SalesPaymentController extends \BaseController {
 	  					$SPInvoice->amount=$td['amount'];
 	  					$SPInvoice->save();
 	  				}
+	  				// if($input['advance'] != 0){
+	  				// 	$advance = new AdvancePayment;
+	  				// 	$advance->paymentNo = $SP->id;
+	  				// 	$advance->customerNo = $input['customer_id'];
+	  				// 	$advance->amount =  $input['advance'];
+	  				// 	$advance->save();
+	  				// }
 	  			}
 		return Response::json($input);
 	}
@@ -186,6 +184,53 @@ class SalesPaymentController extends \BaseController {
 		if(Request::ajax()){
   			$banks= Bank::all();
 		return Response::json($banks);
+		}
+	}
+	public function checkPayments()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+  			// $advance= AdvancePayment::where('customerNo','=',$input['customer_id'])
+  			// 							->where('isCharged','=',0)->get();
+  			$payments=DB::table('paymentdetails')
+  						->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
+  						->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  						->sum('paymentdetails.amount');
+  			$invoices = DB::table('paymentinvoices')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  						->sum('paymentinvoices.amount');
+			return Response::json($payments-$invoices);
+		}
+	}
+	public function getPaymentAdvance()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+  			// $advance= AdvancePayment::where('chargedPaymentNo','=',$input['id'])
+  			// 							->where('isCharged','=',1)->get();
+  			$payments=DB::table('paymentdetails')
+  						->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
+  						->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  						->sum('paymentdetails.amount');
+  			$invoices = DB::table('paymentinvoices')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  						->sum('paymentinvoices.amount');
+  			
+			return Response::json($advance);
+		}
+	}
+	public function getPaymentTypes()
+	{ 
+		if(Request::ajax()){
+			$input = Input::all();
+  			$payment= SalesPaymentDetail::where('PaymentNo','=',$input['id'])->get();
+			return Response::json($payment);
 		}
 	}
 	

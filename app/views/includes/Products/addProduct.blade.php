@@ -8,7 +8,7 @@
       <div class="modal-body">
           <div class="well">
           <div class="row">
-          {{ Form::open(array('route' => 'Products.store', 'class'=>'form', 'id'=>'Productform'))}}
+          {{ Form::open(array('url' => '/user/'.Auth::user()->id.'/storeproduct', 'class'=>'form', 'id'=>'Productform'))}}
           <div class="col-md-6">
             {{Form::hidden('id',null,['class'=>'form-control square','id'=>'txtProdID'])}}
             <p>{{ errors_for('id', $errors)}}</p>

@@ -276,6 +276,9 @@ function viewBill(id){
 	$('#viewBillModal').modal('show');
 	$('#vwbillNo').text(id);
 	$.post(reroute+'/viewBill',{id:id},function(data){
+
+
+		
 		$('#vwbillPOId').text(data[0]['PurchaseOrderNo']);
 	 	$('[name="vwBillSupplier"]').val(data[0]['SupplierNo']);
 	 	$('#vwBillBranchName').val(data[0]['BranchName']);
@@ -1451,14 +1454,16 @@ $('#SPCash').click(function(){
 });
 //SALES PAYMENTS SAVING FUNCTIONS
 $('#saveSP').click(function(){
-	if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
-		$('#checkBoxError').fadeIn("fast", function(){ 
-			        $("#checkBoxError").fadeOut(4000);
-		});
-		return;
-	}	
+	// if($('#BillPaymentTotalCost').text() > $('#paymentTypeTotal').text()){
+	// 	$('#checkBoxError').fadeIn("fast", function(){ 
+	// 		        $("#checkBoxError").fadeOut(4000);
+	// 	});
+	// 	return;
+	// }
 	var id = $('#SPediting').val();
+	var customer_id = $("#customer_id").val();
 	var TableData;
+	var advance=0;
 	TableData = storeSPValues();	 
 	TableData = $.toJSON(TableData);
 	PaymentTypes = storePTValues();	 
@@ -1469,7 +1474,10 @@ $('#saveSP').click(function(){
 	}else{
 		var approved =0;		
 	}
-	$.post(reroute+'/salesPay',{id:id,TD:TableData,PT:PaymentTypes,approved:approved},function(data){
+	// if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
+	// 	advance = $('#paymentTypeTotal').text() - $('#BillPaymentTotalCost').text();
+	// }	
+	$.post(reroute+'/salesPay',{id:id,TD:TableData,PT:PaymentTypes,advance:advance,customer_id:customer_id,approved:approved},function(data){
 		location.reload();
 			$(location).attr('href','/SalesPayment#SalesPaymentList');
 	});
@@ -1510,7 +1518,10 @@ $('#saveSP').click(function(){
 $('.editSP').click(function(){
 	var id= $(this).val();
 	var itemno=1;
+	var customer_id;
 	$('#SPediting').val(id);
+	$('#cashCheckTable > tbody > tr').remove();
+	PTcalcCost();
 	$('.BillPaymentTable >tbody > tr').remove();
 	$.post(reroute+'/getSP',{id:id},function(bills){
 		$('.billPaymentEditId').text(bills['id']);
@@ -1549,7 +1560,81 @@ $('.editSP').click(function(){
 				<i class="fa fa-times"></i> Remove</button></td></tr>');
 			itemno +=1;
 			calcBillPaymentTotal();		
+			customer_id = value.CustomerNo;
 		});
+	});
+	$.post(reroute+'/getPaymentAdvance',{id:id,customer_id:customer_id},function(advance){
+		if(advance.length){
+				$('#cashCheckTable').append('<tr id="PTadvance">
+				<td colspan="4">Advance</td>
+				<td class="PTcost">'+money(advance[0]['amount'])+'</td>
+				<td></td></tr>');
+				PTcalcCost();
+			}		
+	});
+	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
+		if(payment.length){
+			var paymentItem=1;
+			$.each(payment, function(key,value) {	
+				if(value.PaymentType == 0){
+					$('#cashCheckTable').append('<tr id="PT'+paymentItem+'">
+						<td colspan="4">Cash</td>
+						<td class="PTeditable danger PTcost">'+value.amount+'</td>
+						<td><button class="btn btn-danger btn-xs square" id="removePT'+paymentItem+'" onclick="removePT('+paymentItem+')">
+						<i class="fa fa-times"></i> Remove</button></td></tr>');
+				}
+				if(value.PaymentType == 1){
+					$('#cashCheckTable').append('<tr id="PT'+paymentItem+'">
+						<td>Check</td>
+						<td><select class="bankSelect form-control square" id="bankSelect'+paymentItem+'"></select></td><td class="numberEditable danger">'+value.CheckNo+'</td>
+						<td class="dateEditable danger">'+value.CheckDueDate+'</td>
+						<td class="PTeditable danger PTcost">'+value.amount+'</td>
+						<td><button class="btn btn-danger btn-xs square" id="removePT'+paymentItem+'" onclick="removePT('+paymentItem+')">
+						<i class="fa fa-times"></i> Remove</button></td></tr>');
+					var bank = value.BankNo;
+					// alert(bank +' '+paymentItem);
+					$('#bankSelect'+paymentItem).append( $('<option></option>').val(bank).html(bank).attr('selected',true) );
+					$.post(reroute+'/fetchBanks',function(data){
+						$('.bankSelect').each(function(){
+							$.each(data, function(key,value) {
+								if(!$('.bankSelect').find('option[value='+value.id +']').length){
+									$('.bankSelect').append( $('<option></option>').val(value.id).html(value.BankName) );
+									}else{
+									$('.bankSelect').find('option[value='+value.id +']').html(value.BankName);
+									$('.bankSelect').each(function(){
+										if(!$(this).find('option[value='+value.id +']').length){
+											$(this).append( $('<option></option>').val(value.id).html(value.BankName) );
+										}
+									});
+								}
+							});
+						});
+					});
+
+				}
+				editableNumber(paymentItem);
+					$('.PTeditable').editable({
+							send: 'never', 
+						    type: 'text',
+						    validate: function(value) {
+						        if($.trim(value) == '') {
+						         return 'This field is required';
+						        }
+						        else if($.isNumeric(value) == '' || value==0) {
+						            return 'Please input a valid number greater than 0';
+						        }
+						    },
+						    emptytext:0,
+						   display: function(value) {
+						   		$(this).text(Number(value).toFixed(2));
+						   		PTcalcCost();
+								}
+					});
+
+				dateEditable(paymentItem);
+				paymentItem++;
+			});	
+		}	
 	});
 	
 	
@@ -1575,6 +1660,26 @@ function addSItoSP(id){
 						    });
 						    return;
 						}
+					}else{
+						// if invoice list is empty
+						$('#cashCheckTable > tbody').remove();
+						PTcalcCost();
+						$("#customer_id").val(data['CustomerNo']);
+						var customer_id = $("#customer_id").val();
+						$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
+							if(data > 0){
+								$('#cashCheckTable').append('<tr id="PTadvance">
+								<td colspan="4">Advance</td>
+								<td class="PTcost">'+money(data)+'</td>
+								<td></td></tr>');
+							}else if(data < 0){
+								$('#cashCheckTable').append('<tr id="PTadvance">
+								<td colspan="4" >Balance</td>
+								<td class="PTcost class="error"">'+money(data)+'</td>
+								<td></td></tr>');
+							}
+							PTcalcCost();
+						});	
 					}
 						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
 							<td class="customer'+data['CustomerNo']+'">'+data['CustomerName']+'</td><td class="medrep'+data['UserNo']+'">'+data['Lastname']+', '+data['Firstname']+' '+data['MI']+'.<td class="dp">'+data['SalesInvoiceRefDocNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td>
@@ -1583,9 +1688,9 @@ function addSItoSP(id){
 						itemno +=1;
 							calcBillPaymentTotal();
 							$('#saveSP,.cashChecque').removeClass('hidden');
-						}
-					
-			});	
+						}	
+	});	
+	
 }
 // Adding Payment  Type to list
 
