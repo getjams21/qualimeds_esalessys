@@ -1454,12 +1454,12 @@ $('#SPCash').click(function(){
 });
 //SALES PAYMENTS SAVING FUNCTIONS
 $('#saveSP').click(function(){
-	if($('#BillPaymentTotalCost').text() > $('#paymentTypeTotal').text()){
-		$('#checkBoxError').fadeIn("fast", function(){ 
-			        $("#checkBoxError").fadeOut(4000);
-		});
-		return;
-	}
+	// if($('#BillPaymentTotalCost').text() > $('#paymentTypeTotal').text()){
+	// 	$('#checkBoxError').fadeIn("fast", function(){ 
+	// 		        $("#checkBoxError").fadeOut(4000);
+	// 	});
+	// 	return;
+	// }
 	var id = $('#SPediting').val();
 	var customer_id = $("#customer_id").val();
 	var TableData;
@@ -1474,9 +1474,9 @@ $('#saveSP').click(function(){
 	}else{
 		var approved =0;		
 	}
-	if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
-		advance = $('#paymentTypeTotal').text() - $('#BillPaymentTotalCost').text();
-	}	
+	// if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
+	// 	advance = $('#paymentTypeTotal').text() - $('#BillPaymentTotalCost').text();
+	// }	
 	$.post(reroute+'/salesPay',{id:id,TD:TableData,PT:PaymentTypes,advance:advance,customer_id:customer_id,approved:approved},function(data){
 		location.reload();
 			$(location).attr('href','/SalesPayment#SalesPaymentList');
@@ -1509,11 +1509,6 @@ $('#saveSP').click(function(){
 			    	 ,"amount" : $(tr).find('td:eq(4)').text()
 			    }
 		    }
-		    else if(($(tr).find('td:eq(0)').text() == 'Advance')){
-			    TableData[row]={
-			    	 "PaymentType" : "Advance"
-			    }
-		    }
 		});
 	    return TableData;
 	}
@@ -1523,6 +1518,7 @@ $('#saveSP').click(function(){
 $('.editSP').click(function(){
 	var id= $(this).val();
 	var itemno=1;
+	var customer_id;
 	$('#SPediting').val(id);
 	$('#cashCheckTable > tbody > tr').remove();
 	PTcalcCost();
@@ -1564,9 +1560,10 @@ $('.editSP').click(function(){
 				<i class="fa fa-times"></i> Remove</button></td></tr>');
 			itemno +=1;
 			calcBillPaymentTotal();		
+			customer_id = value.CustomerNo;
 		});
 	});
-	$.post(reroute+'/getPaymentAdvance',{id:id},function(advance){
+	$.post(reroute+'/getPaymentAdvance',{id:id,customer_id:customer_id},function(advance){
 		if(advance.length){
 				$('#cashCheckTable').append('<tr id="PTadvance">
 				<td colspan="4">Advance</td>
@@ -1670,13 +1667,18 @@ function addSItoSP(id){
 						$("#customer_id").val(data['CustomerNo']);
 						var customer_id = $("#customer_id").val();
 						$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
-							if(data.length){
+							if(data > 0){
 								$('#cashCheckTable').append('<tr id="PTadvance">
 								<td colspan="4">Advance</td>
-								<td class="PTcost">'+money(data[0]['amount'])+'</td>
+								<td class="PTcost">'+money(data)+'</td>
 								<td></td></tr>');
-								PTcalcCost();
+							}else if(data < 0){
+								$('#cashCheckTable').append('<tr id="PTadvance">
+								<td colspan="4" >Balance</td>
+								<td class="PTcost class="error"">'+money(data)+'</td>
+								<td></td></tr>');
 							}
+							PTcalcCost();
 						});	
 					}
 						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>

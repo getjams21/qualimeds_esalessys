@@ -19,8 +19,10 @@ class DbSIRepository extends DbRepository implements SIRepository{
 			->get();
 	}
 	public function getAllWithCusAndRep(){
-		return SalesInvoice::selectRaw('SalesInvoices.*,pc.CustomerName,u.Lastname,u.Firstname,u.MI')->join('Customers AS pc', 'pc.id', '=', 'SalesInvoices.CustomerNo')
-			->join('Users AS u', 'SalesInvoices.UserNo', '=', 'u.id')->get();
+		return SalesInvoice::selectRaw('SalesInvoices.*,pc.CustomerName,u.Lastname,u.Firstname,u.MI,s.invoiceNo as paid')->join('Customers AS pc', 'pc.id', '=', 'SalesInvoices.CustomerNo')
+			->join('Users AS u', 'SalesInvoices.UserNo', '=', 'u.id')
+			->leftJoin('PaymentInvoices AS s', 's.invoiceNo', '=', 'SalesInvoices.id')
+			->get();
 	}
 	public function getByidWithMedRep($id){
 		return SalesInvoice::selectRaw('SalesInvoices.*,u.Lastname,u.Firstname,u.MI,c.CustomerName')->join('Users AS u', 'u.id', '=', 'SalesInvoices.UserNo')

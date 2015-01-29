@@ -85,7 +85,7 @@
 		            	@endif
 		            </td>
 		            <td>
-		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == ''))
+		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == '') && !$bill->paid)
 		              <button class="btn btn-primary btn-xs "  onclick="editSI({{$bill->id}})"><i class="fa fa-gear"></i>Edit</button>
 		              @else
 		             <button class="btn btn-success btn-xs "  onclick="viewSI({{$bill->id}})"> View</button>
