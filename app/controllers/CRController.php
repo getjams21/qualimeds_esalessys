@@ -1,9 +1,9 @@
 <?php
-use Acme\Repos\CustomerReturns\CustomerReturnRepository;
+use Acme\Repos\CustomerReturns\CRRepository;
 use Carbon\Carbon;
-use Acme\Repos\CustomerReturnDetails\CustomerReturnDetailsRepository;
+use Acme\Repos\CustomerReturnDetails\CRDRepository;
 use Acme\Repos\SalesInvoices\SIRepository;
-use Acme\Repos\SalesInvoiceDetails\SIDRepository;
+use Acme\Repos\SalesInvoiceDetails\SIDetailsRepository;
 
 class CRController extends \BaseController {
 	private $customerReturnRepo;
@@ -11,8 +11,8 @@ class CRController extends \BaseController {
 	private $salesInvoiceRepo;
 	private $salesInvoiceDetailsRepo;
 
-	function __construct(CustomerReturnRepository $customerReturnRepo,CustomerReturnDetailsRepository $customerReturnDetailsRepo,
-		SIRepository $salesInvoiceRepo,SIDRepository $salesInvoiceDetailsRepo)
+	function __construct(CRRepository $customerReturnRepo,CRDRepository $customerReturnDetailsRepo,
+		SIRepository $salesInvoiceRepo,SIDetailsRepository $salesInvoiceDetailsRepo)
 	{
 		$this->customerReturnRepo = $customerReturnRepo;
 		$this->customerReturnDetailsRepo = $customerReturnDetailsRepo;
