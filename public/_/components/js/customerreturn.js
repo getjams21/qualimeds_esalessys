@@ -5,62 +5,35 @@ var counter = 1;
 function addCR(id){
 	var table = $('.product').DataTable();
 	var index=table.row('#rowProd'+id).index();
+	$('#SalesInvoiceNo').val(id);
 	$.post(reroute+'/fetchSIItems',{id:id},function(data){
 		if(data){
 			$('.CRTable').find('tr').remove().end();
 			var Qty;
 			$.each(data, function(key, value) {
-				Qty = value.Qty;
+				Qty = parseInt(value.Qty);
 				$('.CRTable').append('
-					<tr id="SO'+value.id+'">
+					<tr id="SO'+itemno+'">
 						<td id="itemno'+itemno+'">'+itemno+'</td>
-						<td id="prdoNo'+value.id+'">'+id+'</td>
+						<td id="prdoNo'+value.id+'">'+value.id+'</td>
 						<td id="prodName'+value.id+'">'+value.ProductName+'</td>
-						<td id="brand'+value.id+'">'+value.ProductBrand+'</td>
+						<td id="brand'+value.id+'">'+value.BrandName+'</td>
 						<td id="lotNo'+id+'">'+value.LotNo+'</td>
 						<td id="expDate'+id+'">'+value.ExpiryDate+'</td>
 						<td id="unit'+id+'">'+value.Unit+'</td>
 						<td class="light-green editable" id="prodQtySO'+value.id+'" value="'+value.Qty+'">'+value.Qty+'</td>
-						<td id="prodUntSO'+value.id+'">'+value.UnitPrice+'</td>
+						<td id="prodUntSO'+value.id+'">'+money(value.UnitPrice)+'</td>
 						<td class="cost" id="prodCostSO'+value.id+'">0.00</td>
-						<td id="freebiesQty'+value.id+'">'+value.FreebiesQty+'</td>
-						<td><button class="btn btn-danger btn-xs square" id="removeIA'+value.id+'" onclick="removeIA('+value.id+','+id+','+index+')">
+						<td id="freebiesQty'+value.id+'">'+parseInt(value.FreebiesQty)+'</td>
+						<td id="freebiesQty'+value.id+'">'+value.FreebiesUnit+'</td>
+						<td><button class="btn btn-danger btn-xs square" id="removeIA'+value.id+'" onclick="removeIA('+itemno+','+id+','+index+')">
 						<i class="fa fa-times"></i> Remove</button></td>
+						<input type="hidden" id="prevQty'+value.id+'" value="'+Qty+'">
 					</tr>
 				');
 			itemno +=1;
-			table.cell( index, 7 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+			// table.cell( index, 7 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
 			// var unitAvailable = $('#unitAv'+id).val();
-			$('.editable-default').editable({
-					send: 'never', 
-				    type: 'text',
-				    value:1,
-				    validate: function(value) {
-				        if($.trim(value) == '') {
-				         return 'This field is required';
-				        }
-				    },
-				    emptytext:0,
-				   display: function(value) {
-				   	$(this).text(value);
-				  	}	
-				});
-			$('.dateEditable').editable({
-			type: 'combodate',
-		        format: 'YYYY-MM-DD',    
-		        viewformat: 'YYYY-MM-DD',    
-		        template: 'D / MMMM / YYYY',
-			    validate: function(value) {
-			        if($.trim(value) == '') {
-			         return 'This field is required';
-			        }
-			    },    
-		        combodate: {
-		                minYear: d.getFullYear(),
-		                maxYear: d.getFullYear()+10,
-		                minuteStep: 1
-		           }
-	    	});
 			$('.editable').editable({
 					send: 'never', 
 				    type: 'text',
@@ -77,7 +50,7 @@ function addCR(id){
 				   display: function(value) {
 				   	$(this).text(value);
 				   		var rowID = $(this).attr('id').substring(9);
-				        calcCostSO(rowID);
+				        calcCostSO(rowID,Qty);
 				  	}	
 				});
 			$('#saveSO').removeClass('hidden');
@@ -87,6 +60,15 @@ function addCR(id){
 }
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
+	var prevQty = parseInt($('#prevQty'+id).val());
+	if(qty > prevQty){
+		$('#invalidQty').show();
+		$('#saveSO').attr('disabled', 'disabled');
+		return false;
+	}else{
+		$('#saveSO').removeAttr('disabled');
+		$('#invalidQty').hide();
+	}
 	var unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
 	$('#prodCostSO'+id).text(parseFloat(qty*unit).toFixed(2));
 	totalCostSO();
@@ -103,9 +85,6 @@ function totalCostSO(){
 }
 function removeIA(id,prodId,index){
 	var table = $('.product').DataTable();
-		// table.cell( index, 5 ).data('<button class="btn btn-success btn-xs square" 
-		// 	onclick="addIA('+prodId+')" >
-		// 	<i class="fa fa-check-circle"></i> Add</button>').draw();
 	$('#SO'+id).remove();
 	id +=1;
 	if( $('#SO'+id).length ) 
@@ -123,7 +102,7 @@ function removeIA(id,prodId,index){
 		}
 	}
 	itemno -=1;
-	totalCost();
+	totalCostSO();
 }
 function viewPO(id){
 	$('#viewPOModal').modal('show');
@@ -439,49 +418,30 @@ $(document).ready(function() {
 			}
 		});
 	});
-	// PO TERM 
-	//term check
-	$('#term2,#edTerm2').click(function() {
-		$('#termBox,#edTermBox').removeClass('hidden');
-		$('#term1,#edTerm1').removeClass('active');
-		$('#term,#edTerm').select();
-	});
-	$('#term1,#edTerm1').click(function() {
-		$('#termBox,#edTermBox').addClass('hidden');
-		$('#term2,#edTerm2').removeClass('active');
-		$('#term,#edTerm').val(0);
-	});
-	$('#term,#edTerm').blur(function() {
-		var value=jQuery.trim($(this).val());
-		if(value==''){
-			$(this).val(0);
-		}
-	});
-	$("#term,#edTerm").keydown(function(e){
-			numberOnlyInput(e);
-	});
-	//END OF PO TERM
 	$('#addProductPO').click(function(){
 		$('#addProductPOModal').modal('show');
 	});
 	//SAVE SO
 	$('#saveSO').click(function(){
 		var TableData;
-		var BranchNo = $('#branch').val();
+		var SalesinvoiceNo = $('#SalesInvoiceNo').val();
+		var CustomerNo = $('#customer').val();
 		var Remarks = $('#remarks').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
+		// alert(TableData);
+		// return false;
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
+		$.post(reroute+'/saveCR',{TD:TableData,CustomerNo:CustomerNo,SalesinvoiceNo:SalesinvoiceNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();
-					 $(location).attr('href','/inventory-adjustment#showIAList');
+					 $(location).attr('href','/customer-return#showCRList');
 					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -493,14 +453,16 @@ $(document).ready(function() {
 		{
 			var TableData = new Array();
 			var ctr = 1;
-			$('.CRTable tr').each(function(row, tr){
+			$('.IAtable tr').each(function(row, tr){
 			    TableData[row]={
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
 			        , "LotNo" : $(tr).find('td:eq(4)').text()
 			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
-			        , "Unit" : $(tr).find('td:eq(6) select option:selected').val()
+			        , "Unit" : $(tr).find('td:eq(6)').text()
 			        , "Qty" : $(tr).find('td:eq(7)').text()
-			        , "CostPerQty" : $(tr).find('td:eq(8)').text()
+			        , "UnitPrice" : $(tr).find('td:eq(8)').text()
+			        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
+			        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
 			    }
 			    ctr++;
 			});

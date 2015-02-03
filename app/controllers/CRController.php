@@ -32,8 +32,11 @@ class CRController extends \BaseController {
 		$max = $this->customerReturnRepo->getMaxId();
 		$customers = Customer::lists('CustomerName','id');
 		$defaultCus = Customer::firstOrFail();
+		$CRs= $this->customerReturnRepo->getAllWithBranch();
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		$customerSalesInvoices = $this->salesInvoiceRepo->getAllByCustomer($defaultCus->id);
-		return View::make('dashboard.CustomerReturns.list', compact('customers','max','customerSalesInvoices')); 
+		return View::make('dashboard.CustomerReturns.list', compact('customers','max','customerSalesInvoices','now','lastweek','CRs')); 
 	}
 	public function fetchCustomerSI(){
 		if(Request::ajax()){
@@ -46,6 +49,41 @@ class CRController extends \BaseController {
 			$SIdetails = $this->salesInvoiceDetailsRepo->getAllBySO(Input::get('id'));
 			return Response::json($SIdetails);
 		}
+	}
+	public function saveCR(){
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$TableData = stripcslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			if(!$TableData || !$input['CustomerNo']){
+  				$result = 0;
+  			}else{
+  				$CR= new CustomerReturn;
+  				$CR->SalesInvoiceNo=$input['SalesinvoiceNo'];
+  				$CR->BranchNo = Auth::user()->BranchNo;
+  				$CR->CustomerReturnDate= Carbon::now();
+  				$CR->Remarks=$input['Remarks'];
+  				$CR->PreparedBy= $input['PreparedBy'];
+  				$CR->ApprovedBy= $input['approvedBy'];
+  				$CR->save();
+  				$result =1;
+  				foreach($TableData as $td){
+  					// dd($td['Qty']);
+  					$CRdetail= new CustomerReturnDetail;
+  					$CRdetail->CustomerReturnNo=$CR->id;
+  					$CRdetail->ProductNo=$td['ProdNo'];
+  					$CRdetail->Unit=$td['Unit'];
+  					$CRdetail->LotNo=$td['LotNo'];
+  					$CRdetail->ExpiryDate=$td['ExpiryDate'];
+  					$CRdetail->Qty=$td['Qty'];
+  					$CRdetail->UnitPrice=$td['UnitPrice'];
+  					$CRdetail->FreebiesQty=$td['FreebiesQty'];
+  					$CRdetail->FreebiesUnit=$td['FreebiesUnit'];
+  					$CRdetail->save();
+  				}
+  			}
+		return Response::json($result);
+  		}
 	}
 	/**
 	 * Show the form for creating a new resource.

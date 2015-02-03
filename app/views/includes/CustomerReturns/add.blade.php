@@ -19,11 +19,10 @@
                </span>
                {{Form::select('customers', $customers, 'key', array('class' => 'form-control square','id'=>'customer'));}}
           </div><br>
-           <div class="form-group">
-            <div class="alert alert-warning">
-                <center>Type the desired product on the Search Bar and click Add button to add the product to SO List.</center>
-            </div>
-          </div>
+          <div class="input-group">
+                 <label>Remarks:</label>
+                 {{ Form::textarea('remarks', null, ['class'=>'form-control square','size' => '50x4','id'=>'remarks', 'required']) }}
+            </div><br>
         </div>
        <div class="col-md-8">
       <div class="form-group" style="width:80%;">
@@ -69,6 +68,7 @@
                   @endforeach
                  </tbody>
               </table>
+              <input type="hidden" name="SalesInvoiceNo" id="SalesInvoiceNo">
             </div>
       </div>
     </div>
@@ -97,6 +97,7 @@
             <th>Unit Price</th>
             <th>Item Cost</th>
             <th>Freebies Qty</th>
+            <th>Freebies Unit</th>
             <th>Remove</th>
           </tr>
          </thead> 
@@ -125,7 +126,7 @@
               @endif
              </div>
             <div class="col-md-2">
-             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b> Save SO</b></button>
+             <button type="button" class="btn btn-success square btn-sm hidden"  id="saveSO" style="margin-right:5%;"><i class="fa fa-plus-square" ></i> <b>Return Stocks</b></button>
              </div>
            </div>
         </div>

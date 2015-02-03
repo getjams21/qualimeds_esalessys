@@ -23,15 +23,16 @@ display: none;
        	<div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist">
-              <li class="active"><a href="#showCREntry" role="tab" data-toggle="tab"><h5><b><i>Adjust Inventories</i></b></h5></a></li>
-              <li ><a href="#showCRList" role="tab" data-toggle="tab"><h5><b><i>Adjusted Inventories</i></b></h5></a></li>
+              <li class="active"><a href="#showCREntry" role="tab" data-toggle="tab"><h5><b><i>Customer Return Entry</i></b></h5></a></li>
+              <li ><a href="#showCRList" role="tab" data-toggle="tab"><h5><b><i>Customer Return List</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane active" id="showIAEntry">
+              <div class="tab-pane active" id="showCREntry">
                  @include('includes.CustomerReturns.add')
               </div>
-              <div class="tab-pane " id="showIAList">
+              <div class="tab-pane " id="showCRList">
+                @include('includes.CustomerReturns.list')
               </div>
             </div>
         </div>

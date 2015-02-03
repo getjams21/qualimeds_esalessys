@@ -32,6 +32,12 @@ class DbSIRepository extends DbRepository implements SIRepository{
 		return SalesInvoice::selectRaw('SalesInvoices.*')
 			->join('customers as c', 'SalesInvoices.CustomerNo', '=', 'c.id')
 			->where('c.id','=',$id)
+			->whereNotExists(function($query)
+	            {
+	                $query->selectRaw('invoiceNo')
+	                      ->from('paymentinvoices')
+	                      ->whereRaw('SalesInvoices.id = paymentinvoices.invoiceNo');
+	            })
 			->get();
 	}
 }
