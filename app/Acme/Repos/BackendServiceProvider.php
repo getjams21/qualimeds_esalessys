@@ -28,6 +28,7 @@ class BackendServiceProvider extends ServiceProvider{
 		$this->app->bind('Acme\Repos\SalesInvoiceDetails\SIDetailsRepository','Acme\Repos\SalesInvoiceDetails\DBSIDetailsRepository');
 		#SalesPayment		
 		$this->app->bind('Acme\Repos\SalesPayment\SalesPaymentRepository','Acme\Repos\SalesPayment\DBSalesPaymentRepository');
+		$this->app->bind('Acme\Repos\VwCustomerBalances\CustomerBalancesRepository','Acme\Repos\VwCustomerBalances\DbCustomerBalancesRepository');
 
 		#Inventory Source
 		$this->app->bind(

@@ -1518,7 +1518,7 @@ $('#saveSP').click(function(){
 $('.editSP').click(function(){
 	var id= $(this).val();
 	var itemno=1;
-	var customer_id;
+	var customer_id ;
 	$('#SPediting').val(id);
 	$('#cashCheckTable > tbody > tr').remove();
 	PTcalcCost();
@@ -1561,13 +1561,16 @@ $('.editSP').click(function(){
 			itemno +=1;
 			calcBillPaymentTotal();		
 			customer_id = value.CustomerNo;
+			$('#customer_id').val(value.CustomerNo);
 		});
 	});
+	customer_id = $('#customer_id').val();
 	$.post(reroute+'/getPaymentAdvance',{id:id,customer_id:customer_id},function(advance){
+
 		if(advance.length){
 				$('#cashCheckTable').append('<tr id="PTadvance">
 				<td colspan="4">Advance</td>
-				<td class="PTcost">'+money(advance[0]['amount'])+'</td>
+				<td class="PTcost">'+money(advance)+'</td>
 				<td></td></tr>');
 				PTcalcCost();
 			}		

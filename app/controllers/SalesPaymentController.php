@@ -7,6 +7,7 @@ use Acme\Repos\SalesOrderDetails\SalesOrderDetailsRepository;
 use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
 use Acme\Repos\SalesInvoiceDetails\SIDetailsRepository;
 use Acme\Repos\SalesPayment\SalesPaymentRepository;
+use Acme\Repos\VwCustomerBalances\CustomerBalancesRepository;
 class SalesPaymentController extends \BaseController {
 	private $SIRepo;
 	private $salesOrderRepo;
@@ -14,7 +15,8 @@ class SalesPaymentController extends \BaseController {
 	private $salesPayment;
 	function __construct(SalesOrderRepository $salesOrderRepo,ProductRepository $productRepo,
 		SalesOrderDetailsRepository $salesOrderDetailsRepo,VwInventorySourceRepository $vwInventorySource,
-		SIRepository $SIRepo,SIDetailsRepository $SIDetailsRepo,SalesPaymentRepository $salesPayment)
+		SIRepository $SIRepo,SIDetailsRepository $SIDetailsRepo,SalesPaymentRepository $salesPayment,
+		CustomerBalancesRepository $cusbalRepo)
 		{
 			$this->salesOrderRepo = $salesOrderRepo;
 			$this->productRepo = $productRepo;
@@ -23,6 +25,7 @@ class SalesPaymentController extends \BaseController {
 			$this->SIRepo = $SIRepo;
 			$this->SIDetailsRepo = $SIDetailsRepo;
 			$this->salesPayment = $salesPayment;
+			$this->cusbalRepo = $cusbalRepo;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -192,17 +195,19 @@ class SalesPaymentController extends \BaseController {
 			$input = Input::all();
   			// $advance= AdvancePayment::where('customerNo','=',$input['customer_id'])
   			// 							->where('isCharged','=',0)->get();
-  			$payments=DB::table('paymentdetails')
-  						->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
-  						->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
-  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
-  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
-  						->sum('paymentdetails.amount');
-  			$invoices = DB::table('paymentinvoices')
-  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
-  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
-  						->sum('paymentinvoices.amount');
-			return Response::json($payments-$invoices);
+  			// $payments=DB::table('paymentdetails')
+  			// 			->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
+  			// 			->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
+  			// 			->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  			// 			->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  			// 			->sum('paymentdetails.amount');
+  			// $invoices = DB::table('paymentinvoices')
+  			// 			->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  			// 			->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  			// 			->sum('paymentinvoices.amount');
+
+  			$advance = $this->cusbalRepo->getSumByCustomerNo($input['customer_id']);
+			return Response::json($advance[0]['amount']);
 		}
 	}
 	public function getPaymentAdvance()
@@ -222,7 +227,7 @@ class SalesPaymentController extends \BaseController {
   						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
   						->sum('paymentinvoices.amount');
   			
-			return Response::json($advance);
+			return Response::json($payments-$invoices);
 		}
 	}
 	public function getPaymentTypes()
