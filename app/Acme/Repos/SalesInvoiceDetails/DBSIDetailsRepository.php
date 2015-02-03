@@ -13,4 +13,10 @@ class DBSIDetailsRepository extends DbRepository implements SIDetailsRepository{
 			->where('Salesinvoicedetails.SalesInvoiceNo', '=', $id)->get();
 
 	}
+	// public function getAllBySI($id){
+	// 	return SalesInvoiceDetail::selectRaw('Salesinvoicedetails.*,p.ProductName,pc.BrandName')
+	// 		->join('products as p','p.id','=','Salesinvoicedetails.ProductNo')
+	// 		->where('Salesinvoicedetails.SalesInvoiceNo', '=', $id)
+	// 		->get();
+	// }
 }

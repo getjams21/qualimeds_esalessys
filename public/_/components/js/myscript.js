@@ -567,7 +567,7 @@ function vwRemovePO(id){
 // END OF PO FUNCTIONS
 //edit-delte bank
 function triggerEdit(id){
-	$.get('toEditBank',{id:id},function(data){
+	$.get(reroute+'toEditBank',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
   			$.each(data, function(key,value) {
@@ -584,7 +584,7 @@ $('#bank-library').modal('show');
 }
 //edit-delete branch
 function triggerEditBranch(id){
-	$.get('toEditBranch',{id:id},function(data){
+	$.get(reroute+'toEditBranch',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
   			$.each(data, function(key,value) {
@@ -601,7 +601,7 @@ $('#branch-library').modal('show');
 }
 //edit-delete branch
 function triggerEditCustomer(id){
-	$.get('toEditCustomer',{id:id},function(data){
+	$.get(reroute+'toEditCustomer',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
   			$.each(data, function(key,value) {
@@ -620,7 +620,7 @@ function triggerEditCustomer(id){
  $('#customer-library').modal('show');
  }
 function triggerEditUser(id){
-	$.get('toEditUser',{id:id},function(data){
+	$.get(reroute+'toEditUser',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
   			var usertype;
@@ -824,7 +824,7 @@ $('#current-password').blur(function(event) {
 	/* Act on the event */
 	var val = $(this).val();
 	// alert (val);
-	$.get('verifyCurrentPassword',{val:val},function(data){
+	$.get(reroute+'verifyCurrentPassword',{val:val},function(data){
   		if(data == '0'){
   			$('#isCurrentPW').val('0');
   			$('.alert').show();

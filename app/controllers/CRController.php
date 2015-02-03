@@ -1,9 +1,10 @@
 <?php
-use Acme\Repos\CustomerReturns\CustomerReturnRepository;
+use Acme\Repos\CustomerReturns\CRRepository;
 use Carbon\Carbon;
-use Acme\Repos\CustomerReturnDetails\CustomerReturnDetailsRepository;
+use Acme\Repos\CustomerReturnDetails\CRDRepository;
 use Acme\Repos\SalesInvoices\SIRepository;
-use Acme\Repos\SalesInvoiceDetails\SIDRepository;
+use Acme\Repos\SalesInvoiceDetails\SIDetailsRepository;
+use Acme\Repos\Customers\CustomerRepository;
 
 class CRController extends \BaseController {
 	private $customerReturnRepo;
@@ -11,8 +12,8 @@ class CRController extends \BaseController {
 	private $salesInvoiceRepo;
 	private $salesInvoiceDetailsRepo;
 
-	function __construct(CustomerReturnRepository $customerReturnRepo,CustomerReturnDetailsRepository $customerReturnDetailsRepo,
-		SIRepository $salesInvoiceRepo,SIDRepository $salesInvoiceDetailsRepo)
+	function __construct(CRRepository $customerReturnRepo,CRDRepository $customerReturnDetailsRepo,
+		SIRepository $salesInvoiceRepo,SIDetailsRepository $salesInvoiceDetailsRepo)
 	{
 		$this->customerReturnRepo = $customerReturnRepo;
 		$this->customerReturnDetailsRepo = $customerReturnDetailsRepo;
@@ -28,9 +29,62 @@ class CRController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		$max = $this->customerReturnRepo->getMaxId();
+		$customers = Customer::lists('CustomerName','id');
+		$defaultCus = Customer::firstOrFail();
+		$CRs= $this->customerReturnRepo->getAllWithBranch();
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
+		$customerSalesInvoices = $this->salesInvoiceRepo->getAllByCustomer($defaultCus->id);
+		return View::make('dashboard.CustomerReturns.list', compact('customers','max','customerSalesInvoices','now','lastweek','CRs')); 
 	}
-
+	public function fetchCustomerSI(){
+		if(Request::ajax()){
+			$customerSI = $this->salesInvoiceRepo->getAllByCustomer(Input::get('id'));
+			return Response::json($customerSI);
+		}
+	}
+	public function fetchSIItems(){
+		if(Request::ajax()){
+			$SIdetails = $this->salesInvoiceDetailsRepo->getAllBySO(Input::get('id'));
+			return Response::json($SIdetails);
+		}
+	}
+	public function saveCR(){
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$TableData = stripcslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			if(!$TableData || !$input['CustomerNo']){
+  				$result = 0;
+  			}else{
+  				$CR= new CustomerReturn;
+  				$CR->SalesInvoiceNo=$input['SalesinvoiceNo'];
+  				$CR->BranchNo = Auth::user()->BranchNo;
+  				$CR->CustomerReturnDate= Carbon::now();
+  				$CR->Remarks=$input['Remarks'];
+  				$CR->PreparedBy= $input['PreparedBy'];
+  				$CR->ApprovedBy= $input['approvedBy'];
+  				$CR->save();
+  				$result =1;
+  				foreach($TableData as $td){
+  					// dd($td['Qty']);
+  					$CRdetail= new CustomerReturnDetail;
+  					$CRdetail->CustomerReturnNo=$CR->id;
+  					$CRdetail->ProductNo=$td['ProdNo'];
+  					$CRdetail->Unit=$td['Unit'];
+  					$CRdetail->LotNo=$td['LotNo'];
+  					$CRdetail->ExpiryDate=$td['ExpiryDate'];
+  					$CRdetail->Qty=$td['Qty'];
+  					$CRdetail->UnitPrice=$td['UnitPrice'];
+  					$CRdetail->FreebiesQty=$td['FreebiesQty'];
+  					$CRdetail->FreebiesUnit=$td['FreebiesUnit'];
+  					$CRdetail->save();
+  				}
+  			}
+		return Response::json($result);
+  		}
+	}
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /cr/create
@@ -52,7 +106,6 @@ class CRController extends \BaseController {
 	{
 		//
 	}
-
 	/**
 	 * Display the specified resource.
 	 * GET /cr/{id}
