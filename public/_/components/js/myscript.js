@@ -698,11 +698,17 @@ function removeBill(id){
 }
 function calcBillPaymentTotal(){
 	var total=0;
+	var bal=0;
+	if($('.Balcost').text()){
+		bal = parseFloat($('.Balcost').text());
+	}
 	$('.Billcost').each(function(){
 		total += parseFloat($(this).text()); 
 	});
-	$('#BillPaymentTotalCost').text(money(total));
+	$('#BillPaymentTotalCost').text(money(total+bal));
 	if(total ==0){
+		$('#BillPaymentTotalCost').text(money(total));
+		$('#invoicesTfoot').remove();
 		$('#saveBill,.cashChecque,#saveSP').addClass('hidden');
 	}
 }
@@ -1563,18 +1569,18 @@ $('.editSP').click(function(){
 			customer_id = value.CustomerNo;
 			$('#customer_id').val(value.CustomerNo);
 		});
+		customer_id = $('#customer_id').val();
+		$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
+		if(data > 0){
+			$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Balance</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+			calcBillPaymentTotal();
+		}else if(data < 0){
+			$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Advanced Payment</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+			calcBillPaymentTotal();
+		}
+	});	
 	});
-	customer_id = $('#customer_id').val();
-	$.post(reroute+'/getPaymentAdvance',{id:id,customer_id:customer_id},function(advance){
-
-		if(advance.length){
-				$('#cashCheckTable').append('<tr id="PTadvance">
-				<td colspan="4">Advance</td>
-				<td class="PTcost">'+money(advance)+'</td>
-				<td></td></tr>');
-				PTcalcCost();
-			}		
-	});
+	
 	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
 		if(payment.length){
 			var paymentItem=1;
@@ -1669,17 +1675,14 @@ function addSItoSP(id){
 						PTcalcCost();
 						$("#customer_id").val(data['CustomerNo']);
 						var customer_id = $("#customer_id").val();
-						$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
+						var branch = data['BranchNo'];
+						$.post(reroute+'/checkPayments',{customer_id:customer_id,branch:branch},function(data){
 							if(data > 0){
-								$('#cashCheckTable').append('<tr id="PTadvance">
-								<td colspan="4">Advance</td>
-								<td class="PTcost">'+money(data)+'</td>
-								<td></td></tr>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Balance</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+								calcBillPaymentTotal();
 							}else if(data < 0){
-								$('#cashCheckTable').append('<tr id="PTadvance">
-								<td colspan="4" >Balance</td>
-								<td class="PTcost class="error"">'+money(data)+'</td>
-								<td></td></tr>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Advanced Payment</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+								calcBillPaymentTotal();
 							}
 							PTcalcCost();
 						});	
@@ -1694,6 +1697,56 @@ function addSItoSP(id){
 						}	
 	});	
 	
+}
+function viewSP(id){
+	$('#viewSPModal').modal('show');
+	$('#vwbillNo').text(id);
+	$.post(reroute+'/viewSP',{id:id},function(data){
+		$('#vwbillNo').text(data['id']);
+	 	$('[name="vwbillSPBranch"]').val(data['BranchNo']);
+	 	$('#vwSPPreparedBy').val(data['PreparedBy']);
+	 	$('#vwSPApprovedBy').val(data['ApprovedBy']);
+		var PaymentDate = new Date(data['PaymentDate']);
+		$('#paymentDate').text((PaymentDate.getMonth() + 1) + '/' + PaymentDate.getDate() + '/' +  PaymentDate.getFullYear());
+	});
+	var itemno=1;
+	var total = 0;
+	$('.BillSPTable > tbody').remove();
+	$.post(reroute+'/getSPInvoices',{id:id},function(SPI){
+		$.each(SPI, function(key,value) {
+			$('.BillSPTable').append('<tr "><td>'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
+				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp ">'+money(value.amount)+'</td>
+				</tr>');
+			itemno += 1;	
+			total += value.amount;
+			$('#billSPCustomers').val( value.CustomerNo);
+			$('#vwBillSPTotalCost').text( money(total));
+		});
+	});
+	$('.BillSPPaymentType > tbody').remove();
+	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
+		if(payment.length){
+			var total=0;
+			$.each(payment, function(key,value) {	
+				if(value.PaymentType == 0){
+					$('.BillSPPaymentType').append('<tr ">
+						<td colspan="4">Cash</td>
+						<td >'+money(value.amount)+'</td></tr>');
+				}
+				if(value.PaymentType == 1){
+					$('.BillSPPaymentType').append('<tr >
+						<td>Check</td>
+						<td>'+value.BankName+'</td>
+						<td >'+value.CheckNo+'</td>
+						<td >'+value.CheckDueDate+'</td>
+						<td >'+money(value.amount)+'</td>
+						</tr>');
+				}
+				total +=  parseFloat(value.amount);
+				$('#pTTotal').text(money(total));
+			});	
+		}	
+	});
 }
 // Adding Payment  Type to list
 

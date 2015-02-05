@@ -39,6 +39,7 @@ class SalesPaymentController extends \BaseController {
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		$banks = Bank::lists('BankName','id');
+		$branches = Branch::lists('BranchName','id');
 		$customers = Customer::lists('CustomerName','id');
 		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$invoices =  $this->SIRepo->getAllWithUnpaid();
@@ -56,7 +57,7 @@ class SalesPaymentController extends \BaseController {
 			if(count($check) > 0){ $SP['check']=1; }else{$SP['check']=0;}
 		}
 		// return $salesPayments;
-		return View::make('dashboard.SalesPayments.list',compact('invoices','max','now','lastweek','customers','medReps','banks','salesPayments'));
+		return View::make('dashboard.SalesPayments.list',compact('invoices','max','now','lastweek','customers','medReps','banks','salesPayments','branches'));
 	}
 	public function addInvoiceToSalesPayment()
 	{
@@ -157,13 +158,6 @@ class SalesPaymentController extends \BaseController {
 		  					$SPInvoice->amount=$pt['amount'];
 		  					$SPInvoice->save();
 		  				}
-		  				// else if($pt['PaymentType'] == 'Advance'){
-		  				// 	$usedAdvance = AdvancePayment::where('customerNo','=',$input['customer_id'])
-		  				// 					->where('isCharged','=',0)->first();
-		  				// 	$usedAdvance->isCharged = 1;
-		  				// 	$usedAdvance->chargedPaymentNo = $SP->id;
-		  				// 	$usedAdvance->save();
-		  				// }
 	  				}
 	  				foreach($TableData as $td){
 	  					$SPInvoice= new SalesPaymentInvoice;
@@ -172,13 +166,6 @@ class SalesPaymentController extends \BaseController {
 	  					$SPInvoice->amount=$td['amount'];
 	  					$SPInvoice->save();
 	  				}
-	  				// if($input['advance'] != 0){
-	  				// 	$advance = new AdvancePayment;
-	  				// 	$advance->paymentNo = $SP->id;
-	  				// 	$advance->customerNo = $input['customer_id'];
-	  				// 	$advance->amount =  $input['advance'];
-	  				// 	$advance->save();
-	  				// }
 	  			}
 		return Response::json($input);
 	}
@@ -193,20 +180,7 @@ class SalesPaymentController extends \BaseController {
 	{
 		if(Request::ajax()){
 			$input = Input::all();
-  			// $advance= AdvancePayment::where('customerNo','=',$input['customer_id'])
-  			// 							->where('isCharged','=',0)->get();
-  			// $payments=DB::table('paymentdetails')
-  			// 			->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
-  			// 			->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
-  			// 			->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
-  			// 			->where('salesinvoices.CustomerNo','=',$input['customer_id'])
-  			// 			->sum('paymentdetails.amount');
-  			// $invoices = DB::table('paymentinvoices')
-  			// 			->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
-  			// 			->where('salesinvoices.CustomerNo','=',$input['customer_id'])
-  			// 			->sum('paymentinvoices.amount');
-
-  			$advance = $this->cusbalRepo->getSumByCustomerNo($input['customer_id']);
+  			$advance = $this->cusbalRepo->getSumByCustomerNo($input['customer_id'], $input['branch']);
 			return Response::json($advance[0]['amount']);
 		}
 	}
@@ -234,7 +208,18 @@ class SalesPaymentController extends \BaseController {
 	{ 
 		if(Request::ajax()){
 			$input = Input::all();
-  			$payment= SalesPaymentDetail::where('PaymentNo','=',$input['id'])->get();
+  			$payment = DB::table('paymentdetails')
+  						->leftJoin('banks', 'banks.id', '=', 'paymentdetails.BankNo')
+  						->where('paymentdetails.PaymentNo','=',$input['id'])->get();
+  			
+			return Response::json($payment);
+		}
+	}
+	public function viewSP()
+	{ 
+		if(Request::ajax()){
+			$input = Input::all();
+  			$payment= $this->salesPayment->getByid($input['id']);
 			return Response::json($payment);
 		}
 	}

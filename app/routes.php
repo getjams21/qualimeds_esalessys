@@ -96,6 +96,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/checkPayments', 'SalesPaymentController@checkPayments');
  		Route::post('/getPaymentAdvance', 'SalesPaymentController@getPaymentAdvance');
  		Route::post('/getPaymentTypes', 'SalesPaymentController@getPaymentTypes');
+ 		Route::post('/viewSP', 'SalesPaymentController@viewSP');
  	#STOCK TRANSFER ROUTES
  		Route::post('/saveST', 'STController@saveST');
  		Route::post('/viewST', 'STController@viewST');

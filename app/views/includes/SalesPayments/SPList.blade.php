@@ -87,11 +87,8 @@
 		            	@endif
 		            </td>
 		            <td>
-		             @if(($billpayment->ApprovedBy == '' || isAdmin()) && ($billpayment->CancelledBy == ''))
-		              <button class="btn btn-primary btn-xs editSP" value="{{$billpayment->id}}"><i class="fa fa-gear"></i>Edit</button>
-		              @else
-		             <button class="btn btn-success btn-xs viewSP" value="{{$billpayment->id}}" > View</button>
-		              @endif
+		          
+		             <button class="btn btn-success btn-xs viewSP" onclick="viewSP({{$billpayment->id}})" value="{{$billpayment->id}}" > View</button>
 		            </td>
 		         </tr> 
 		        @endforeach
