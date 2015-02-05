@@ -58,6 +58,62 @@ function addCR(id){
 		}
 	});
 }
+function addVwCR(id){
+	var table = $('.vwproduct').DataTable();
+	var index=table.row('#rowProd'+id).index();
+	$('#SalesInvoiceNo').val(id);
+	$.post(reroute+'/fetchSIItems',{id:id},function(data){
+		if(data){
+			$('.vwCRTable').find('tr').remove().end();
+			var Qty;
+			$.each(data, function(key, value) {
+				Qty = parseInt(value.Qty);
+				$('.vwCRTable').append('
+					<tr id="SO'+itemno+'">
+						<td id="itemno'+itemno+'">'+itemno+'</td>
+						<td id="prdoNo'+value.ProductNo+'">'+value.ProductNo+'</td>
+						<td id="prodName'+value.id+'">'+value.ProductName+'</td>
+						<td id="brand'+value.id+'">'+value.BrandName+'</td>
+						<td id="lotNo'+id+'">'+value.LotNo+'</td>
+						<td id="expDate'+id+'">'+value.ExpiryDate+'</td>
+						<td id="unit'+id+'">'+value.Unit+'</td>
+						<td class="light-green editable" id="prodQtySO'+value.id+'" value="'+value.Qty+'">'+value.Qty+'</td>
+						<td id="prodUntSO'+value.id+'">'+money(value.UnitPrice)+'</td>
+						<td class="cost" id="prodCostSO'+value.id+'">0.00</td>
+						<td id="freebiesQty'+value.id+'">'+parseInt(value.FreebiesQty)+'</td>
+						<td id="freebiesQty'+value.id+'">'+value.FreebiesUnit+'</td>
+						<td><button class="btn btn-danger btn-xs square" id="removeIA'+value.id+'" onclick="removeIA('+itemno+','+id+','+index+')">
+						<i class="fa fa-times"></i> Remove</button></td>
+						<input type="hidden" id="prevQty'+value.id+'" value="'+Qty+'">
+					</tr>
+				');
+			itemno +=1;
+			// table.cell( index, 7 ).data('<b class="success"> <i class="fa fa-check-circle"> Added</b>').draw();
+			// var unitAvailable = $('#unitAv'+id).val();
+			$('.editable').editable({
+					send: 'never', 
+				    type: 'text',
+				    value:Qty,
+				    validate: function(value) {
+				        if($.trim(value) == '') {
+				         return 'This field is required';
+				        }
+				        if ($.isNumeric(value) == '' || value==0) {
+				            return 'Please input a valid number greater than 0';
+				        }
+				    },
+				    emptytext:0,
+				   display: function(value) {
+				   	$(this).text(value);
+				   		var rowID = $(this).attr('id').substring(9);
+				        calcCostSO(rowID,Qty);
+				  	}	
+				});
+			$('#vwSaveSOBtn').removeClass('hidden');
+			});
+		}
+	});
+}
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
 	var prevQty = parseInt($('#prevQty'+id).val());
@@ -121,7 +177,7 @@ function viewPO(id){
 	 	}else{
 	 		$('#vwApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
-	      });
+	});
 	$.post('/viewPODetails',{id:id},function(data){
 	  			$(".vwPOTable > tbody").html("");
 	  			    counter=1;
@@ -129,56 +185,78 @@ function viewPO(id){
 			  		$.each(data, function(key,value) {
 	  				$('.vwPOTable >tbody').append('<tr ><td>'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
-	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td>'+value.Qty+'</td><td>'+value.CostPerQty+'</td>
-	  					<td>'+(value.CostPerQty*value.Qty)+'</td></tr>');
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td>'+value.Qty+'</td><td>'+value.UnitPrice+'</td>
+	  					<td>'+(value.UnitPrice*value.Qty)+'</td></tr>');
 		  			counter+=1;
-		  			total+=value.CostPerQty*value.Qty;
+		  			total+=value.UnitPrice*value.Qty;
 	  				});
 	  				$('#vwTotalCost').text(total);
 	      });
 }
-function editIA(id){
+function editCR(id){
 	$('#vwSaveBtn').addClass('hidden');
-	$('#editIAModal').modal('show');
-	 $.post('/viewIA',{id:id},function(data){
-	 	$('#edIAId').text(data[0]['id']);
-	 	$('#edIADate').text(data[0]['AdjustmentDate']);
-	 	$('select#branch option[value="'+data[0]['BranchNo']+'"]').attr('selected',true);
-	 	$('#remarks').text(data[0]['Remarks']);
-	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
-	 	if(data[0]['ApprovedBy'] == ''){
+	$('#editCRModal').modal('show');
+	var SIno;
+	 $.post(reroute+'/viewCR',{id:id},function(data){
+	 	SIno = data['SalesinvoiceNo'];
+	 	$('#edCRId').text(data['id']);
+	 	$('#edCRDate').text(data['CustomerReturnDate']);
+	 	$('#remarks').text(data['Remarks']);
+	 	$('#edPreparedBy').val(data['PreparedBy']);
+	 	if(data['ApprovedBy'] == ''){
 	 		$('#edApprovedBy').val('N/A');
 	 	}else{
-	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
+	 		$('#edApprovedBy').val(data['ApprovedBy']);
 	 	}
-	      });
-	 $.post('/viewIADetails',{id:id},function(data){
+	 	$.post(reroute+'/fetchSI',{SIno:SIno},function(info){
+			if(info){
+				$('#vwSItable').find('tr').remove().end();
+				$('#vwSalesInvoiceNo').val(info['id']);
+				$('#vwCustomer').val(info['CustomerNo']);
+				var terms;
+				if (info['Terms'] == 0) {
+                  terms = "Cash";
+                }else{
+                  terms = "Check";
+                }
+				$('#vwSItable').append('
+					<tr id="rowProd'+info['id']+'">
+                      <td id="si'+info['id']+'">'+info['id']+'</td>
+                      <td id="invoice'+info['id']+'">'+info['SalesInvoiceRefDocNo']+'</td>
+                      <td id="SO'+info['id']+'">'+info['SalesOrderNo']+'</td>
+                      <td id="invoiceDate'+info['id']+'">'+info['InvoiceDate']+'</td>
+                      <td id="terms'+info['id']+'">'+terms+'</td>
+                      <td id="prepared'+info['id']+'">'+info['PreparedBy']+'</td>
+                      <td id="approved'+info['id']+'">'+info['ApprovedBy']+'</td>
+                      <td><button class="btn btn-success btn-xs square" onclick="addVwCR('+info['id']+')" ><i class="fa fa-check-circle"></i> Add</button>
+                      </td>
+                    </tr>
+				');
+			}
+		});
+	 });
+	 $.post(reroute+'/viewCRDetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
 	  			// var ExpiryDate = substring(value.)
 			  		$.each(data, function(key,value) {
-			  		if (value.Unit == 'box' || value.Unit == 'Box'){
-			  			var nxtUnit = 'Pcs';
-			  		}else if (value.Unit == 'pcs' || value.Unit == 'Pcs'){
-			  			var nxtUnit = 'Box';
-			  		}
-			  		var itemCost = parseFloat(value.CostPerQty)*parseFloat(value.Qty);
+			  		var itemCost = parseFloat(value.UnitPrice)*parseFloat(value.Qty);
 	  				$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td>
-	  					<td class="editable-default" id="lotNo'+id+'"><i>'+value.LotNo+'</i></td>
-						<td class="dateEditable">'+value.ExpiryDate+'</td>
-	  					<td><select class="form-control square" name="unit" id="unit">
-		                  <option value="'+value.Unit+'">'+value.Unit+'</option>
-		                  <option value="'+nxtUnit+'">'+nxtUnit+'</option>
-		                </select></td>
-	  					<td class="vweditable" id="edQty'+counter+'">'+parseInt(value.Qty)+'</td>
-	  					<td class="vweditable" id="edUnt'+counter+'">'+money(value.CostPerQty)+'</td>
-	  					<td class="cost"id="edCost'+counter+'">'+itemCost.toFixed(2)+'</td><td><button class="btn btn-danger 
+	  					<td  id="lotNo'+id+'"><i>'+value.LotNo+'</i></td>
+						<td>'+value.ExpiryDate+'</td>
+	  					<td>'+value.Unit+'</td>
+	  					<td class="light-green vweditable" id="edQty'+counter+'">'+parseInt(value.Qty)+'</td>
+	  					<td id="edUnt'+counter+'">'+money(value.UnitPrice)+'</td>
+	  					<td class="cost"id="edCost'+counter+'">'+itemCost.toFixed(2)+'</td>
+	  					<td id="edUnt'+counter+'">'+parseInt(value.FreebiesQty)+'</td>
+	  					<td id="edUnt'+counter+'">'+value.FreebiesUnit+'</td>
+	  					<td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
 						<i class="fa fa-times" ></i> Remove</button></td></tr>');
-		  			total+=value.CostPerQty*value.Qty;
+		  			total+=value.UnitPrice*value.Qty;
 	  				// editable(value.ProductNo);
 		  			counter+=1;
 		  			$('.editable-default').editable({
@@ -472,22 +550,25 @@ $(document).ready(function() {
 	});
 	$('#vwSaveSOBtn').click(function(){
 		var TableData;
-		var id = $('#edIAId').text();
-		var BranchNo = $('#branch').val();
+		var SalesinvoiceNo = $('#vwSalesInvoiceNo').val();
+		var CustomerNo = $('#vwCustomer').val();
+		var id = $('#edCRId').text();
 		var Remarks = $('#remarks').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
+		// alert(TableData);
+		// return false;
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
 		} else{
 			var approvedBy='';
 		}
-		$.post('/saveEditedIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
+		$.post(reroute+'/saveEditedCR',{TD:TableData,CustomerNo:CustomerNo,SalesinvoiceNo:SalesinvoiceNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();
-					 $(location).attr('href','/inventory-adjustment#showIAList');
+					 $(location).attr('href','/customer-return#showCRList');
 					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -504,9 +585,11 @@ $(document).ready(function() {
 			        "ProdNo" : $(tr).find('td:eq(1)').text()
 			        , "LotNo" : $(tr).find('td:eq(4)').text()
 			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
-			        , "Unit" : $(tr).find('td:eq(6) select option:selected').val()
+			        , "Unit" : $(tr).find('td:eq(6)').text()
 			        , "Qty" : $(tr).find('td:eq(7)').text()
-			        , "CostPerQty" : $(tr).find('td:eq(8)').text()
+			        , "UnitPrice" : $(tr).find('td:eq(8)').text()
+			        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
+			        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
 			    }
 			    ctr++;
 			});

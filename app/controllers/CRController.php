@@ -38,18 +38,28 @@ class CRController extends \BaseController {
 		$customerSalesInvoices = $this->salesInvoiceRepo->getAllByCustomer($defaultCus->id);
 		return View::make('dashboard.CustomerReturns.list', compact('customers','max','customerSalesInvoices','now','lastweek','CRs')); 
 	}
+
 	public function fetchCustomerSI(){
 		if(Request::ajax()){
 			$customerSI = $this->salesInvoiceRepo->getAllByCustomer(Input::get('id'));
 			return Response::json($customerSI);
 		}
 	}
+
 	public function fetchSIItems(){
 		if(Request::ajax()){
 			$SIdetails = $this->salesInvoiceDetailsRepo->getAllBySO(Input::get('id'));
 			return Response::json($SIdetails);
 		}
 	}
+
+	public function fetchSI(){
+		if(Request::ajax()){
+			$SI = $this->salesInvoiceRepo->getByid(Input::get('SIno'));
+			return Response::json($SI);
+		}
+	}
+
 	public function saveCR(){
 		if(Request::ajax()){
   			$input = Input::all();
@@ -85,6 +95,68 @@ class CRController extends \BaseController {
 		return Response::json($result);
   		}
 	}
+
+	public function viewCR(){
+		if(Request::ajax()){
+			// dd(Input::get('id'));
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$CR= $this->customerReturnRepo->getByid($id);
+		return Response::json($CR);
+  		}
+	}
+
+	public function viewCRDetails()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$CRdetails = $this->customerReturnDetailsRepo->getAllByCR($id);
+		return Response::json($CRdetails);
+  		}
+	}
+
+	public function saveEditedCR()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$TableData = stripslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			$CR=$this->customerReturnRepo->getByIdWithBranch($id);
+  			$CRdetails = $this->customerReturnDetailsRepo->getAllByCR($id);
+  			foreach($CRdetails as $d){
+  					$d->delete();
+  				}
+  			if(!$TableData || (!isAdmin() && ($CR[0]->ApprovedBy!=''))){
+  				$result = 0;
+  			}else{
+  				$CR[0]->SalesInvoiceNo=$input['SalesinvoiceNo'];
+  				$CR[0]->BranchNo = Auth::user()->BranchNo;
+  				$CR[0]->Remarks=$input['Remarks'];
+  				$CR[0]->CustomerReturnDate= Carbon::now();
+  				$CR[0]->PreparedBy= fullname(Auth::user());
+  				$CR[0]->save();
+  				foreach($TableData as $td){
+  					// dd($td['Unit']);
+  					$CRdetail= new CustomerReturnDetail;
+  					$CRdetail->CustomerReturnNo=$CR[0]->id;
+  					$CRdetail->ProductNo=$td['ProdNo'];
+  					$CRdetail->Unit=$td['Unit'];
+  					$CRdetail->LotNo=$td['LotNo'];
+  					$CRdetail->ExpiryDate=$td['ExpiryDate'];
+  					$CRdetail->Qty=$td['Qty'];
+  					$CRdetail->UnitPrice=$td['UnitPrice'];
+  					$CRdetail->FreebiesQty=$td['FreebiesQty'];
+  					$CRdetail->FreebiesUnit=$td['FreebiesUnit'];
+  					$CRdetail->save();
+  				}
+  				$result =1;
+  			}
+  			return Response::json($result);
+  		}
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /cr/create

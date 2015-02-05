@@ -66,9 +66,9 @@
 		         <?php if($CR->IsCancelled == 1){ echo "danger";}elseif($CR->ApprovedBy != '' ){echo "success";}elseif($CR->IsCancelled == 0 && $CR->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$CR->id}}</td>
-		            <td>{{$CR->SalesinvoiceNo}}</td>
+		            <td id="SIno">{{$CR->SalesinvoiceNo}}</td>
 		            <td>{{$CR->BranchNo}}</td>
-		            <td>{{dateformat($CR->AdjustmentDate)}}</td>
+		            <td>{{dateformat($CR->CustomerReturnDate)}}</td>
 		            <td id="td-remarks" data-container="body" data-toggle="popover" data-placement="right" data-content="{{$CR->Remarks}}">
 		            	<?php 
 			            	// strip tags to avoid breaking any html

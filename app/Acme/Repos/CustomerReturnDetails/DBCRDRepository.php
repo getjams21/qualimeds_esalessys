@@ -7,8 +7,8 @@ class DBCRDRepository extends DbRepository implements CRDRepository{
 	public function __construct(CustomerReturnDetail $model){
 		$this->model = $model;
 	}
-	public function getAllByIA($id){
-		return CustomerReturnDetail::selectRaw('Inventoryadjustmentdetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'Inventoryadjustmentdetails.ProductNo')
-		->where('Inventoryadjustmentdetails.InvAdjustmentNo', '=', $id)->get();
+	public function getAllByCR($id){
+		return CustomerReturnDetail::selectRaw('Customerreturndetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'Customerreturndetails.ProductNo')
+		->where('Customerreturndetails.CustomerReturnNo', '=', $id)->get();
 	}
 }
