@@ -3,5 +3,5 @@
 interface CRDRepository{
 	public function getAll();
 	public function getByid($id);
-	public function getAllByIA($id);
+	public function getAllByCR($id);
 }
