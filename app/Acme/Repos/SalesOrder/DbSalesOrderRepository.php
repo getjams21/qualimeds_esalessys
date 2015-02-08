@@ -23,7 +23,7 @@ class DbSalesOrderRepository extends DbRepository implements SalesOrderRepositor
 		return SalesOrder::selectRaw('SalesOrders.*,pc.CustomerName,u.Lastname,u.Firstname,u.MI')->join('Customers AS pc', 'pc.id', '=', 'SalesOrders.CustomerNo')
 		->join('Users AS u', 'u.id', '=', 'SalesOrders.UserNo')
 		->leftJoin('SalesInvoices AS b', 'b.SalesOrderNo', '=', 'SalesOrders.id')
-		->whereNotIn('SalesOrders.ApprovedBy', array(''))->where('SalesOrders.IsCancelled', '=', 0)
+		->whereNotIn('SalesOrders.ApprovedBy', array(''))->where('SalesOrders.IsCancelled', '=', 'N')
 		->whereNull('b.SalesOrderNo')
 		->get();
 	}

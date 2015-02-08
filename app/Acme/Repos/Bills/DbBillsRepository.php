@@ -21,7 +21,7 @@ class DbBillsRepository extends DbRepository implements BillsRepository{
 	public function getAllWithSupUnpaid(){
 		return Bill::selectRaw('Bills.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Bills.SupplierNo')
 			->leftJoin('BillPaymentDetails AS b', 'b.BillNo', '=', 'Bills.id')
-			->whereNotIn('Bills.ApprovedBy', array(''))->where('Bills.IsCancelled', '=', 0)
+			->whereNotIn('Bills.ApprovedBy', array(''))->where('Bills.IsCancelled', '=', 'N')
 			->whereNull('b.BillNo')
 			->get();
 	}
