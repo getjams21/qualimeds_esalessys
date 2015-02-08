@@ -126,7 +126,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 ##File Maintenance Filters
 Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	#Product Categories
-	// Route::get('/ProductCategories', 'ProductCategoriesController@index');
+	Route::resource('/ProductCategories', 'ProductCategoriesController');
 	Route::post('/addCategory', 'ProductCategoriesController@addCategory');
 	Route::post('/storecategory', 'ProductCategoriesController@store');
  	Route::post('/editCategory', 'ProductCategoriesController@editCategory');

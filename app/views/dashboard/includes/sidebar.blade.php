@@ -14,22 +14,22 @@
                         </a>
                         <ul class="sidecontent collapse" >
                             <li>
-                                <a href="/ProductCategories">Product Categories</a>
+                                <a href="/ProductCategories" id="SBProductCategories">Product Categories</a>
                             </li>
                             <li>
-                                <a href="/Products">Products</a>
+                                <a href="/Products" id="SBProducts">Products</a>
                             </li>
                             <li>
-                                <a href="/Suppliers">Suppliers</a>
+                                <a href="/Suppliers" id="SBSuppliers">Suppliers</a>
                             </li>
                             <li>
-                                <a href="/customers">Customers</a>
+                                <a href="/customers" id="SBCustomers">Customers</a>
                             </li>
                             <li>
-                                <a href="/branches">Branches</a>
+                                <a href="/branches" id="SBBranches">Branches</a>
                             </li>
                             <li>
-                                <a href="/banks">Banks</a>
+                                <a href="/banks" id="SBBanks">Banks</a>
                             </li>
                         </ul>
                     </li>
@@ -40,22 +40,22 @@
                     </a>
                     <ul class="sidecontent collapse" >
                         <li>
-                            <a href="/PurchaseOrders">Purchase_Orders</a>
+                            <a href="/PurchaseOrders" id="SBPurchaseOrders">Purchase_Orders</a>
                         </li>
                         <li>
-                            <a href="/Bills">Bills</a>
+                            <a href="/Bills" id="SBBills">Bills</a>
                         </li>
                         <li>
-                            <a href="/BillPayments">Bill_Payments</a>
+                            <a href="/BillPayments" id="SBBillPayments">Bill_Payments</a>
                         </li>
                         <li>
-                            <a href="/SalesOrders">Sales_Orders</a>
+                            <a href="/SalesOrders" id="SBSalesOrders">Sales_Orders</a>
                         </li>
                         <li>
-                            <a href="/SalesInvoice">Sales Invoice</a>
+                            <a href="/SalesInvoice" id="SBSalesInvoice">Sales Invoice</a>
                         </li>
                         <li>
-                            <a href="/SalesPayment">Sales_Payments</a>
+                            <a href="/SalesPayment" id="SBSalesPayment">Sales_Payments</a>
                         </li>
                        
                     </ul>
@@ -66,19 +66,19 @@
                     </a>
                     <ul class="sidecontent collapse" >
                         <li>
-                            <a href="/stocks-transfer">Stock Transfers</a>
+                            <a href="/stocks-transfer" id="SBStockTransfer">Stock Transfers</a>
                         </li>
                         <li>
-                            <a href="/inventory-adjustment">Inventory Adjustments</a>
+                            <a href="/inventory-adjustment" id="SBInventoryAdjustment">Inventory Adjustments</a>
                         </li>
                         <li>
-                            <a href="/customer-return">Return Good Stocks</a>
+                            <a href="/customer-return" id="SBCustomerReturn">Return Good Stocks</a>
                         </li>
                     </ul>
                 </li>
                  @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
                 <li>
-                    <a href="/reports">Reports</a>
+                    <a href="/reports" id="SBReports">Reports</a>
                 </li>
                 @endif
                 <li class="sidehead">
@@ -88,11 +88,11 @@
                     <ul class="sidecontent collapse" >
                         @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
                             <li>
-                                <a href="/Users">Users</a>
+                                <a href="/Users" id="SBUsers">Users</a>
                             </li>
                         @endif
                         <li>
-                            <a href="update-account" >Update Account</a>
+                            <a href="update-account"  id="SBUpdateAccount">Update Account</a>
                         </li>   
                     </ul>
                 </li>

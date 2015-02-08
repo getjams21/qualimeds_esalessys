@@ -10,14 +10,13 @@
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.Products.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
     <div class="row">
        	<div class="col-md-12 shadowed"><br>
        		<div class="col-md-12 ">
-                @include('includes.Reports.reportlist')
+               Under Construction...!
             </div>  
 
         </div>
