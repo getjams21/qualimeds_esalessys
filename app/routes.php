@@ -119,6 +119,9 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/fetchCustomerSI', 'CRController@fetchCustomerSI');
  		Route::post('/fetchSIItems', 'CRController@fetchSIItems');
  		Route::post('/fetchSI', 'CRController@fetchSI');
+
+
+		Route::post('/updateuser', 'UsersController@updateuser');
 	});
 
 

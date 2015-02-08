@@ -9,13 +9,13 @@ $(function() {
 });
 
 // to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
-window.oncontextmenu = function () {
-   return false;
-}
-document.onkeydown = function (e) { 
-    if (window.event.keyCode == 123 ||  e.button==2)    
-    return false;
-}
+// window.oncontextmenu = function () {
+//    return false;
+// }
+// document.onkeydown = function (e) { 
+//     if (window.event.keyCode == 123 ||  e.button==2)    
+//     return false;
+// }
 
 var reroute='/user/'+$('meta[name="_token"]').attr('content');
 //PO FUNCTIONS

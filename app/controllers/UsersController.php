@@ -180,4 +180,20 @@ class UsersController extends \BaseController {
 			}
 		}
 	}
+	public function updateuser(){
+		$user = User::find(Auth::user()->id);
+		$user->username=Input::get('username');
+		$user->Lastname=Input::get('Lastname');
+		$user->Firstname=Input::get('Firstname');
+		$user->password=Input::get('password');
+		$user->MI=Input::get('MI');
+		$user->save();
+		// return dd($user);
+		return Redirect::back()
+			->withFlashMessage('
+					<div class="alert alert-success" role="alert">
+						User is Successfully updated.
+					</div>
+				');
+	}
 }
