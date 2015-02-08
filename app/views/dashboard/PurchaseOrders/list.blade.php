@@ -77,8 +77,8 @@ display: none;
        var p= $('.product').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "/productDtAjax",
-           "iDisplayLength": 1,
+        "sAjaxSource": reroute+"/productDtAjax",
+           "iDisplayLength": 3,
            "aLengthMenu": 1,
           "bLengthChange": false,
            "pagingType": "simple"

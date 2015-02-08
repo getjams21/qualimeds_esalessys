@@ -2,7 +2,7 @@
   <div class="panel-heading head">
     <div class="row">
       <div class="col-md-9" style="padding-top:6px;">
-          <b>Purchase Order Entry No. {{$max+1}}</b>
+          <b>Reports</b>
       </div> 
       <div class="col-md-3" style="padding-top:6px;">
           <b >Date:&nbsp;&nbsp;{{date('F d, Y')}} </b>
@@ -11,12 +11,15 @@
     <hr class="style-fade">
     <div class="row">
         <div class="col-md-4">
-     {{ Form::open() }}
           <div class="input-group">
                <span class="input-group-addon panel-head square">
-                Supplier: 
+                Report Type: 
                </span>
-               {{Form::select('supplier', $supplier, 'key', array('class' => 'form-control square','id'=>'supplier'));}}
+               <select id="report_type" class="form-control square">
+               		<option value="1">Product Inventory Summary</option>
+               		<option value="2">Product Inventory By Lot Number</option>
+               		<option value="3">Inventory Movement By Product / Stock Card</option>
+               </select>
           </div><br>
            <div class="form-group">
             <div class="input-group">
@@ -64,20 +67,9 @@
                   </tr>
                  </thead> 
                  <tbody>
-                  @foreach($products as $product)
-                    <tr id="rowProd{{$product->id}}">
-                      <td id="prodId{{$product->id}}">{{$product->id}}</td>
-                      <td id="name{{$product->id}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
-                      <td id="unit{{$product->id}}">{{$product->WholeSaleUnit}}</td>
-                      <!-- <td><button class="btn btn-success btn-xs square" onclick="addPO({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
-                      </td> -->
-                    </tr>
-                  @endforeach
                  </tbody>
               </table>
             </div>
-            <div class="error" id="prodError1" hidden> Product already exists</div>
       </div>
     </div>
     <div class="row">
@@ -135,5 +127,4 @@
     </div>
     </div>
 
-  {{ Form::close() }}
 </div>

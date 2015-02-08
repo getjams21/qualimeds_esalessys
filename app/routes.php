@@ -62,6 +62,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/approvePO', 'POController@approvePO');
  		Route::post('/cancelPO', 'POController@cancelPO');
  		Route::post('/addProductToPO', 'POController@addProductToPO');
+ 		Route::post('/productDtAjax', 'POController@productDtAjax');
 	 #BILLS ROUTES
 	 	Route::post('/savePOBill', 'BillsController@savePOBill');
 	 	Route::post('/viewBill', 'BillsController@viewBill');
@@ -165,6 +166,9 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::get('/toEditUser','UsersController@toEditUser');
 	Route::get('delete-user/{id}', 'UsersController@destroy');
 	Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
+
+	#Reports
+	Route::resource('/reports', 'ReportsController');
 });
 
 

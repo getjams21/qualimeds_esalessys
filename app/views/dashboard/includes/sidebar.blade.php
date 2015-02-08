@@ -76,6 +76,11 @@
                         </li>
                     </ul>
                 </li>
+                 @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
+                <li>
+                    <a href="/reports">Reports</a>
+                </li>
+                @endif
                 <li class="sidehead">
                     <a href="#">
                         <b>Security</b>
