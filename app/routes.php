@@ -144,26 +144,26 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	// Route::get('/banks', 'BanksController@index');
 	Route::resource('/banks', 'BanksController');
 	Route::post('/storebank', 'BanksController@store');
- 	Route::get('/toEditBank','BanksController@toEditBank');
+ 	Route::post('/toEditBank','BanksController@toEditBank');
  	Route::get('delete-bank/{id}', 'BanksController@destroy');
 	#Branches
 	// Route::get('/branches', 'BranchesController@index');
 	Route::resource('/branches', 'BranchesController');
 	Route::post('/storebranch', 'BranchesController@store');
- 	Route::get('/toEditBranch','BranchesController@toEditBranch');
+ 	Route::post('/toEditBranch','BranchesController@toEditBranch');
  	Route::get('delete-branch/{id}', 'BranchesController@destroy');
 	#Customers
 	// Route::get('/customers', 'CustomersController@index');
 	Route::resource('/customers', 'CustomersController');
 	Route::post('/storecustomer', 'CustomersController@store');
- 	Route::get('/toEditCustomer','CustomersController@toEditCustomer');
+ 	Route::post('/toEditCustomer','CustomersController@toEditCustomer');
  	Route::get('delete-customer/{id}', 'CustomersController@destroy');
 
 	#Users
 	// Route::get('/Users', 'UsersController@index');
 	Route::resource('/Users', 'UsersController');
 	Route::post('/storeuser', 'UsersController@store');
-	Route::get('/toEditUser','UsersController@toEditUser');
+	Route::post('/toEditUser','UsersController@toEditUser');
 	Route::get('delete-user/{id}', 'UsersController@destroy');
 	Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
 

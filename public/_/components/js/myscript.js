@@ -567,77 +567,68 @@ function vwRemovePO(id){
 // END OF PO FUNCTIONS
 //edit-delte bank
 function triggerEdit(id){
-	$.get(reroute+'toEditBank',{id:id},function(data){
+	$.post(reroute+'/toEditBank',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.BankName);
-	  			$('.address').val(value.BAddress);
-	  			$('.telephone').val(value.Telephone);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['BankName']);
+	  			$('.address').val(data['BAddress']);
+	  			$('.telephone').val(data['Telephone']);
 	  			$('.deactivate').attr('href', '/delete-bank/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('#bank-library').modal('show');
 }
 //edit-delete branch
 function triggerEditBranch(id){
-	$.get(reroute+'toEditBranch',{id:id},function(data){
+	$.post(reroute+'/toEditBranch',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.BranchName);
-	  			$('.address').val(value.BAddress);
-	  			$('.telephone').val(value.Telephone);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['BranchName']);
+	  			$('.address').val(data['BAddress']);
+	  			$('.telephone').val(data['Telephone']);
 	  			$('.deactivate').attr('href', '/delete-branch/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('#branch-library').modal('show');
 }
 //edit-delete branch
 function triggerEditCustomer(id){
-	$.get(reroute+'toEditCustomer',{id:id},function(data){
+	$.post(reroute+'/toEditCustomer',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.CustomerName);
-	  			$('.address').val(value.Address);
-	  			$('.telephone1').val(value.Telephone1);
-	  			$('.telephone2').val(value.Telephone2);
-	  			$('.contact-person').val(value.ContactPerson);
-	  			$('.credit-limit').val(value.CreditLimit);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['CustomerName']);
+	  			$('.address').val(data['Address']);
+	  			$('.telephone1').val(data['Telephone1']);
+	  			$('.telephone2').val(data['Telephone2']);
+	  			$('.contact-person').val(data['ContactPerson']);
+	  			$('.credit-limit').val(data['CreditLimit']);
 	  			$('.deactivate').attr('href', '/delete-customer/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
  $('#customer-library').modal('show');
  }
 function triggerEditUser(id){
-	$.get(reroute+'toEditUser',{id:id},function(data){
+	$.post(reroute+'/toEditUser',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			var usertype;
-  			$.each(data, function(key,value) {
   				//user type select
-  				$('select#usertype option[value="'+value.UserType+'"]').attr('selected',true);
+  				$('select#usertype option[value="'+data['UserType']+'"]').attr('selected',true);
   				//branch select
-  				$('select#branches option[value="'+value.BranchNo+'"]').attr('selected',true);
-	  			$('#library-action').val(value.id);
-	  			$('.username').val(value.username);
-	  			$('.lastname').val(value.Lastname);
-	  			$('.firstname').val(value.Firstname);
-	  			$('.mi').val(value.MI);
-	  			$('.usertype').val(usertype);
+  				$('select#branches option[value="'+data['BranchNo']+'"]').attr('selected',true);
+	  			$('#library-action').val(data['id']);
+	  			$('.username').val(data['username']);
+	  			$('.lastname').val(data['Lastname']);
+	  			$('.firstname').val(data['Firstname']);
+	  			$('.mi').val(data['MI']);
+	  			$('.usertype').val(data['UserType']);
 	  			$('.deactivate').attr('href', '/delete-user/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('.user-pwd').hide();
@@ -886,7 +877,7 @@ $.fn.editable.defaults.mode = 'inline';
 		$("#SB"+a+" a:contains("+a+")").parent().addClass('active');
 		$("#SB"+a).parent().parent().removeClass('collapse');
 		// $(".sidehead ul:contains #SB"+a).removeClass('collapse');
-		
+
 	$("#sidebar-wrapper").hover(function(e) {
 	        e.preventDefault();
 	        $("#wrapper").addClass("toggled");

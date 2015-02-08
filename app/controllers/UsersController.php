@@ -157,7 +157,7 @@ class UsersController extends \BaseController {
 
 	public function toEditUser(){
 		if(Request::ajax()){
-  			$user = DB::select('select * from users where id = '.Input::get('id').'');
+  			$user = User::find(Input::get('id'));
 			return Response::json($user);
   		}
 	}

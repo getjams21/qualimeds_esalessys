@@ -123,7 +123,7 @@ class BanksController extends \BaseController {
 
 	public function toEditBank(){
 		if(Request::ajax()){
-  			$bank = DB::select('select * from banks where id = '.Input::get('id').'');
+  			$bank = Bank::find(Input::get('id'));
 			return Response::json($bank);
   		}
 	}
