@@ -85,9 +85,9 @@ class UsersController extends \BaseController {
 			$user->username=Input::get('username');
 			$user->Lastname=Input::get('Lastname');
 			$user->Firstname=Input::get('Firstname');
+			$user->password=Input::get('password');
 			$user->UserType=Input::get('UserType');
 			$user->MI=Input::get('MI');
-			$user->BranchNo=Input::get('BranchNo');
 			$user->save();
 			return Redirect::back()
 				->withFlashMessage('
