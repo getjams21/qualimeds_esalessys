@@ -40,22 +40,22 @@
                     </a>
                     <ul class="sidecontent collapse" >
                         <li>
-                            <a href="/PurchaseOrders" id="SBPurchaseOrders">Purchase_Orders</a>
+                            <a href="/PurchaseOrders" id="SBPurchaseOrders">Purchase Orders</a>
                         </li>
                         <li>
                             <a href="/Bills" id="SBBills">Bills</a>
                         </li>
                         <li>
-                            <a href="/BillPayments" id="SBBillPayments">Bill_Payments</a>
+                            <a href="/BillPayments" id="SBBillPayments">Bill Payments</a>
                         </li>
                         <li>
-                            <a href="/SalesOrders" id="SBSalesOrders">Sales_Orders</a>
+                            <a href="/SalesOrders" id="SBSalesOrders">Sales Orders</a>
                         </li>
                         <li>
                             <a href="/SalesInvoice" id="SBSalesInvoice">Sales Invoice</a>
                         </li>
                         <li>
-                            <a href="/SalesPayment" id="SBSalesPayment">Sales_Payments</a>
+                            <a href="/SalesPayment" id="SBSalesPayment">Sales Payments</a>
                         </li>
                        
                     </ul>

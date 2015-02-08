@@ -881,11 +881,12 @@ $.fn.editable.defaults.mode = 'inline';
 			$('.dropdown-menu', this).fadeOut('fast');
 		});
 //set active navbar
-		$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
+		$("#SB"+a).addClass('active');
 //set active sidebar
-		$("#"+a+" a:contains("+a+")").parent().addClass('active');
-		$(".sidehead ul:contains("+a+")").removeClass('collapse');
-
+		$("#SB"+a+" a:contains("+a+")").parent().addClass('active');
+		$("#SB"+a).parent().parent().removeClass('collapse');
+		// $(".sidehead ul:contains #SB"+a).removeClass('collapse');
+		
 	$("#sidebar-wrapper").hover(function(e) {
 	        e.preventDefault();
 	        $("#wrapper").addClass("toggled");

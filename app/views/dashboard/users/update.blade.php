@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Update-Account')
+@section('meta-title','UpdateAccount')
 @section('metatags')
 @stop
 <!-- navbar -->
