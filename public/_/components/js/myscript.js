@@ -1678,10 +1678,10 @@ function addSItoSP(id){
 						var branch = data['BranchNo'];
 						$.post(reroute+'/checkPayments',{customer_id:customer_id,branch:branch},function(data){
 							if(data > 0){
-								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Balance</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Balance</td></tr></tfoot>');
 								calcBillPaymentTotal();
 							}else if(data < 0){
-								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Advanced Payment</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Advanced Payment</td></tr></tfoot>');
 								calcBillPaymentTotal();
 							}
 							PTcalcCost();
