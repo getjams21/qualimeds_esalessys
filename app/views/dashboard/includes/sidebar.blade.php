@@ -74,6 +74,9 @@
                         <li>
                             <a href="/customer-return" id="SBCustomerReturn">Return Good Stocks</a>
                         </li>
+                        <li>
+                            <a href="/supplier-return" id="SBSupplierReturn">Return Good Stocks</a>
+                        </li>
                     </ul>
                 </li>
                  @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)
