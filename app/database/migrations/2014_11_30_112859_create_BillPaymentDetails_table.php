@@ -31,7 +31,7 @@ class CreateBillPaymentDetailsTable extends Migration {
 	{
 		Schema::table('billpaymentdetails', function(Blueprint $table)
 		{
-			Schema::drop('SupplierReturnDetails');
+			Schema::drop('billpaymentdetails');
 		});
 	}
 

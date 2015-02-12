@@ -155,7 +155,7 @@ class POController extends \BaseController {
   			$id = $input['id'];
   			$PO = PurchaseOrder::find($id);
   			$PO->CancelledBy=fullname(Auth::user());
-  			$PO->IsCancelled=1;
+  			$PO->IsCancelled='Y';
   			$PO->save();
   			return Response::json(fullname(Auth::user()));
   		}

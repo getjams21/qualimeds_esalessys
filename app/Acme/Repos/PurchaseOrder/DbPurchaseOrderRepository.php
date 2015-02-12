@@ -22,7 +22,7 @@ class DbPurchaseOrderRepository extends DbRepository implements PurchaseOrderRep
 	public function getAllApprovedPO(){
 		return PurchaseOrder::selectRaw('Purchaseorders.*,pc.SupplierName')->join('Suppliers AS pc', 'pc.id', '=', 'Purchaseorders.SupplierNo')
 		->leftJoin('Bills AS b', 'b.PurchaseOrderNo', '=', 'Purchaseorders.id')
-		->whereNotIn('Purchaseorders.ApprovedBy', array(''))->where('Purchaseorders.IsCancelled', '=', 0)
+		->whereNotIn('Purchaseorders.ApprovedBy', array(''))->where('Purchaseorders.IsCancelled', '=', 'N')
 		->whereNull('b.PurchaseOrderNo')
 		->get();
 	}

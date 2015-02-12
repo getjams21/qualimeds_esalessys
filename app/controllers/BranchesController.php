@@ -113,9 +113,8 @@ class BranchesController extends \BaseController {
 	}
 
 	public function toEditBranch(){
-		// dd(Input::get('id'));
 		if(Request::ajax()){
-  			$branch = DB::select('select * from branches where id = '.Input::get('id').'');
+  			$branch = Branch::find(Input::get('id'));
 			return Response::json($branch);
   		}
 	}

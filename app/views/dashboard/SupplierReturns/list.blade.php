@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','CustomerReturn')
+@section('meta-title','SupplierReturn')
 @section('metatags')
 
 <style type="text/css">
@@ -16,7 +16,6 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
-@include('includes.CustomerReturns.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">
@@ -24,16 +23,16 @@ display: none;
        	<div class="col-md-12 shadowed"><br>
           <!-- Nav tabs -->
             <ul class="nav nav-pills " role="tablist">
-              <li class="active"><a href="#showCREntry" role="tab" data-toggle="tab"><h5><b><i>Customer Return Entry</i></b></h5></a></li>
-              <li ><a href="#showCRList" role="tab" data-toggle="tab"><h5><b><i>Customer Return List</i></b></h5></a></li>
+              <li class="active"><a href="#showSREntry" role="tab" data-toggle="tab"><h5><b><i>Supplier Return Entry</i></b></h5></a></li>
+              <li ><a href="#showSRList" role="tab" data-toggle="tab"><h5><b><i>Supplier Return List</i></b></h5></a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane active" id="showCREntry">
-                 @include('includes.CustomerReturns.add')
+              <div class="tab-pane active" id="showSREntry">
+                 @include('includes.SupplierReturns.add')
               </div>
-              <div class="tab-pane " id="showCRList">
-                @include('includes.CustomerReturns.list')
+              <div class="tab-pane " id="showSRList">
+                @include('includes.SupplierReturns.list')
               </div>
             </div>
         </div>
@@ -154,5 +153,5 @@ $.fn.dataTable.ext.search.push(
 );
     });
 </script>
-{{ HTML::script('_/js/customerreturn.js')}}
+{{ HTML::script('_/js/supplierreturn.min.js')}}
 @stop 

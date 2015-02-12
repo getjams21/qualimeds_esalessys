@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Purchase_Orders')
+@section('meta-title','PurchaseOrders')
 @section('metatags')
 
 <style type="text/css">
@@ -77,8 +77,8 @@ display: none;
        var p= $('.product').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "/productDtAjax",
-           "iDisplayLength": 1,
+        "sAjaxSource": reroute+"/productDtAjax",
+           "iDisplayLength": 3,
            "aLengthMenu": 1,
           "bLengthChange": false,
            "pagingType": "simple"

@@ -85,9 +85,9 @@ class UsersController extends \BaseController {
 			$user->username=Input::get('username');
 			$user->Lastname=Input::get('Lastname');
 			$user->Firstname=Input::get('Firstname');
+			$user->password=Input::get('password');
 			$user->UserType=Input::get('UserType');
 			$user->MI=Input::get('MI');
-			$user->BranchNo=Input::get('BranchNo');
 			$user->save();
 			return Redirect::back()
 				->withFlashMessage('
@@ -157,7 +157,7 @@ class UsersController extends \BaseController {
 
 	public function toEditUser(){
 		if(Request::ajax()){
-  			$user = DB::select('select * from users where id = '.Input::get('id').'');
+  			$user = User::find(Input::get('id'));
 			return Response::json($user);
   		}
 	}
@@ -179,5 +179,21 @@ class UsersController extends \BaseController {
 				return Response::json([0]);
 			}
 		}
+	}
+	public function updateuser(){
+		$user = User::find(Auth::user()->id);
+		$user->username=Input::get('username');
+		$user->Lastname=Input::get('Lastname');
+		$user->Firstname=Input::get('Firstname');
+		$user->password=Input::get('password');
+		$user->MI=Input::get('MI');
+		$user->save();
+		// return dd($user);
+		return Redirect::back()
+			->withFlashMessage('
+					<div class="alert alert-success" role="alert">
+						User is Successfully updated.
+					</div>
+				');
 	}
 }

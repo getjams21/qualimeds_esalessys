@@ -144,7 +144,7 @@ private $billDetailsRepo;
   			$id = $input['id'];
   			$bill = Bill::find($id);
   			$bill->CancelledBy=fullname(Auth::user());
-  			$bill->IsCancelled=1;
+  			$bill->IsCancelled='Y';
   			$bill->save();
   			return Response::json(fullname(Auth::user()));
   		}

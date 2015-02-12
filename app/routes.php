@@ -62,6 +62,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/approvePO', 'POController@approvePO');
  		Route::post('/cancelPO', 'POController@cancelPO');
  		Route::post('/addProductToPO', 'POController@addProductToPO');
+ 		Route::post('/productDtAjax', 'POController@productDtAjax');
 	 #BILLS ROUTES
 	 	Route::post('/savePOBill', 'BillsController@savePOBill');
 	 	Route::post('/viewBill', 'BillsController@viewBill');
@@ -96,6 +97,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/checkPayments', 'SalesPaymentController@checkPayments');
  		Route::post('/getPaymentAdvance', 'SalesPaymentController@getPaymentAdvance');
  		Route::post('/getPaymentTypes', 'SalesPaymentController@getPaymentTypes');
+ 		Route::post('/viewSP', 'SalesPaymentController@viewSP');
  	#STOCK TRANSFER ROUTES
  		Route::post('/saveST', 'STController@saveST');
  		Route::post('/viewST', 'STController@viewST');
@@ -119,14 +121,17 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/fetchSI', 'CRController@fetchSI');
 
  	#Return to Supplier (Supplier Returns)
- 		Route::resource('/suplier-return', 'SRController');
+ 		Route::resource('/supplier-return', 'SRController');
  		Route::post('/saveSR', 'SRController@saveSR');
  		Route::post('/viewSR', 'SRController@viewSR');
  		Route::post('/viewSRDetails', 'SRController@viewSRDetails');
  		Route::post('/saveEditedSR', 'SRController@saveEditedSR');
- 		Route::post('/fetchCustomerSI', 'SRController@fetchCustomerSI');
- 		Route::post('/fetchSIItems', 'SRController@fetchSIItems');
+ 		Route::post('/fetchSupplierBills', 'SRController@fetchSupplierBills');
+ 		Route::post('/fetchBillItems', 'SRController@fetchBillItems');
  		Route::post('/fetchSI', 'SRController@fetchSI');
+
+
+		Route::post('/updateuser', 'UsersController@updateuser');
 	});
 
 
@@ -134,7 +139,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 ##File Maintenance Filters
 Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	#Product Categories
-	// Route::get('/ProductCategories', 'ProductCategoriesController@index');
+	Route::resource('/ProductCategories', 'ProductCategoriesController');
 	Route::post('/addCategory', 'ProductCategoriesController@addCategory');
 	Route::post('/storecategory', 'ProductCategoriesController@store');
  	Route::post('/editCategory', 'ProductCategoriesController@editCategory');
@@ -152,28 +157,31 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	// Route::get('/banks', 'BanksController@index');
 	Route::resource('/banks', 'BanksController');
 	Route::post('/storebank', 'BanksController@store');
- 	Route::get('/toEditBank','BanksController@toEditBank');
+ 	Route::post('/toEditBank','BanksController@toEditBank');
  	Route::get('delete-bank/{id}', 'BanksController@destroy');
 	#Branches
 	// Route::get('/branches', 'BranchesController@index');
 	Route::resource('/branches', 'BranchesController');
 	Route::post('/storebranch', 'BranchesController@store');
- 	Route::get('/toEditBranch','BranchesController@toEditBranch');
+ 	Route::post('/toEditBranch','BranchesController@toEditBranch');
  	Route::get('delete-branch/{id}', 'BranchesController@destroy');
 	#Customers
 	// Route::get('/customers', 'CustomersController@index');
 	Route::resource('/customers', 'CustomersController');
 	Route::post('/storecustomer', 'CustomersController@store');
- 	Route::get('/toEditCustomer','CustomersController@toEditCustomer');
+ 	Route::post('/toEditCustomer','CustomersController@toEditCustomer');
  	Route::get('delete-customer/{id}', 'CustomersController@destroy');
 
 	#Users
 	// Route::get('/Users', 'UsersController@index');
 	Route::resource('/Users', 'UsersController');
 	Route::post('/storeuser', 'UsersController@store');
-	Route::get('/toEditUser','UsersController@toEditUser');
+	Route::post('/toEditUser','UsersController@toEditUser');
 	Route::get('delete-user/{id}', 'UsersController@destroy');
 	Route::get('/verifyCurrentPassword', 'UsersController@validateCurrentPassword');
+
+	#Reports
+	Route::resource('/reports', 'ReportsController');
 });
 
 

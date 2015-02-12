@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('meta-title','Bill_Payments')
+@section('meta-title','BillPayments')
 @section('metatags')
 
 <style type="text/css">

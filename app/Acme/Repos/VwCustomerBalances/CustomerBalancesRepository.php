@@ -3,5 +3,5 @@
 interface CustomerBalancesRepository{
 	public function getAll();
 	public function getByid($id);
-	public function getSumByCustomerNo($id);
+	public function getSumByCustomerNo($id,$branch);
 }

@@ -178,7 +178,7 @@ class SalesInvoiceController extends \BaseController {
   			$id = $input['id'];
   			$bill = SalesInvoice::find($id);
   			$bill->CancelledBy=fullname(Auth::user());
-  			$bill->IsCancelled=1;
+  			$bill->IsCancelled='Y';
   			$bill->save();
   			return Response::json(fullname(Auth::user()));
   		}

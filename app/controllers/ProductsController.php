@@ -3,7 +3,7 @@ use Acme\Forms\ProductForm;
 use Acme\Repos\Product\ProductRepository;
 class ProductsController extends \BaseController {
 	protected $productForm;
-	private $productRepo;
+	private $productRepo; 
 	function __construct(ProductForm $productForm, ProductRepository $productRepo)
 		{
 			$this->productForm = $productForm;

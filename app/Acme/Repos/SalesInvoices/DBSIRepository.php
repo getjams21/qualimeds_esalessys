@@ -14,7 +14,7 @@ class DbSIRepository extends DbRepository implements SIRepository{
 		return SalesInvoice::selectRaw('SalesInvoices.*,u.id as medrep,u.Lastname,u.Firstname,u.MI,c.CustomerName')->join('Users AS u', 'u.id', '=', 'SalesInvoices.UserNo')
 			->join('Customers AS c', 'c.id', '=', 'SalesInvoices.CustomerNo')
 			->leftJoin('PaymentInvoices AS b', 'b.invoiceNo', '=', 'SalesInvoices.id')
-			->whereNotIn('SalesInvoices.ApprovedBy', array(''))->where('SalesInvoices.IsCancelled', '=', 0)
+			->whereNotIn('SalesInvoices.ApprovedBy', array(''))->where('SalesInvoices.IsCancelled', '=', 'N')
 			->whereNull('b.invoiceNo')
 			->get();
 	}

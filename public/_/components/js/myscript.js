@@ -567,77 +567,68 @@ function vwRemovePO(id){
 // END OF PO FUNCTIONS
 //edit-delte bank
 function triggerEdit(id){
-	$.get(reroute+'toEditBank',{id:id},function(data){
+	$.post(reroute+'/toEditBank',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.BankName);
-	  			$('.address').val(value.BAddress);
-	  			$('.telephone').val(value.Telephone);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['BankName']);
+	  			$('.address').val(data['BAddress']);
+	  			$('.telephone').val(data['Telephone']);
 	  			$('.deactivate').attr('href', '/delete-bank/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('#bank-library').modal('show');
 }
 //edit-delete branch
 function triggerEditBranch(id){
-	$.get(reroute+'toEditBranch',{id:id},function(data){
+	$.post(reroute+'/toEditBranch',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.BranchName);
-	  			$('.address').val(value.BAddress);
-	  			$('.telephone').val(value.Telephone);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['BranchName']);
+	  			$('.address').val(data['BAddress']);
+	  			$('.telephone').val(data['Telephone']);
 	  			$('.deactivate').attr('href', '/delete-branch/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('#branch-library').modal('show');
 }
 //edit-delete branch
 function triggerEditCustomer(id){
-	$.get(reroute+'toEditCustomer',{id:id},function(data){
+	$.post(reroute+'/toEditCustomer',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			$.each(data, function(key,value) {
-	  			$('#library-action').val(value.id);
-	  			$('.name').val(value.CustomerName);
-	  			$('.address').val(value.Address);
-	  			$('.telephone1').val(value.Telephone1);
-	  			$('.telephone2').val(value.Telephone2);
-	  			$('.contact-person').val(value.ContactPerson);
-	  			$('.credit-limit').val(value.CreditLimit);
+	  			$('#library-action').val(data['id']);
+	  			$('.name').val(data['CustomerName']);
+	  			$('.address').val(data['Address']);
+	  			$('.telephone1').val(data['Telephone1']);
+	  			$('.telephone2').val(data['Telephone2']);
+	  			$('.contact-person').val(data['ContactPerson']);
+	  			$('.credit-limit').val(data['CreditLimit']);
 	  			$('.deactivate').attr('href', '/delete-customer/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
  $('#customer-library').modal('show');
  }
 function triggerEditUser(id){
-	$.get(reroute+'toEditUser',{id:id},function(data){
+	$.post(reroute+'/toEditUser',{id:id},function(data){
   		if(data){
   			$('.alert').remove();
-  			var usertype;
-  			$.each(data, function(key,value) {
   				//user type select
-  				$('select#usertype option[value="'+value.UserType+'"]').attr('selected',true);
+  				$('select#usertype option[value="'+data['UserType']+'"]').attr('selected',true);
   				//branch select
-  				$('select#branches option[value="'+value.BranchNo+'"]').attr('selected',true);
-	  			$('#library-action').val(value.id);
-	  			$('.username').val(value.username);
-	  			$('.lastname').val(value.Lastname);
-	  			$('.firstname').val(value.Firstname);
-	  			$('.mi').val(value.MI);
-	  			$('.usertype').val(usertype);
+  				$('select#branches option[value="'+data['BranchNo']+'"]').attr('selected',true);
+	  			$('#library-action').val(data['id']);
+	  			$('.username').val(data['username']);
+	  			$('.lastname').val(data['Lastname']);
+	  			$('.firstname').val(data['Firstname']);
+	  			$('.mi').val(data['MI']);
+	  			$('.usertype').val(data['UserType']);
 	  			$('.deactivate').attr('href', '/delete-user/'+id+'');
 	  			$('.delete').show();
-  			});
   		}
   	});
 $('.user-pwd').hide();
@@ -698,11 +689,17 @@ function removeBill(id){
 }
 function calcBillPaymentTotal(){
 	var total=0;
+	var bal=0;
+	if($('.Balcost').text()){
+		bal = parseFloat($('.Balcost').text());
+	}
 	$('.Billcost').each(function(){
 		total += parseFloat($(this).text()); 
 	});
-	$('#BillPaymentTotalCost').text(money(total));
+	$('#BillPaymentTotalCost').text(money(total+bal));
 	if(total ==0){
+		$('#BillPaymentTotalCost').text(money(total));
+		$('#invoicesTfoot').remove();
 		$('#saveBill,.cashChecque,#saveSP').addClass('hidden');
 	}
 }
@@ -875,10 +872,11 @@ $.fn.editable.defaults.mode = 'inline';
 			$('.dropdown-menu', this).fadeOut('fast');
 		});
 //set active navbar
-		$("#"+a+" a:contains('"+a+"')").parent().addClass('active');
+		$("#SB"+a).addClass('active');
 //set active sidebar
-		$("#"+a+" a:contains("+a+")").parent().addClass('active');
-		$(".sidehead ul:contains("+a+")").removeClass('collapse');
+		$("#SB"+a+" a:contains("+a+")").parent().addClass('active');
+		$("#SB"+a).parent().parent().removeClass('collapse');
+		// $(".sidehead ul:contains #SB"+a).removeClass('collapse');
 
 	$("#sidebar-wrapper").hover(function(e) {
 	        e.preventDefault();
@@ -1563,18 +1561,18 @@ $('.editSP').click(function(){
 			customer_id = value.CustomerNo;
 			$('#customer_id').val(value.CustomerNo);
 		});
+		customer_id = $('#customer_id').val();
+		$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
+		if(data > 0){
+			$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Balance</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+			calcBillPaymentTotal();
+		}else if(data < 0){
+			$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Advanced Payment</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
+			calcBillPaymentTotal();
+		}
+	});	
 	});
-	customer_id = $('#customer_id').val();
-	$.post(reroute+'/getPaymentAdvance',{id:id,customer_id:customer_id},function(advance){
-
-		if(advance.length){
-				$('#cashCheckTable').append('<tr id="PTadvance">
-				<td colspan="4">Advance</td>
-				<td class="PTcost">'+money(advance)+'</td>
-				<td></td></tr>');
-				PTcalcCost();
-			}		
-	});
+	
 	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
 		if(payment.length){
 			var paymentItem=1;
@@ -1669,17 +1667,14 @@ function addSItoSP(id){
 						PTcalcCost();
 						$("#customer_id").val(data['CustomerNo']);
 						var customer_id = $("#customer_id").val();
-						$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
+						var branch = data['BranchNo'];
+						$.post(reroute+'/checkPayments',{customer_id:customer_id,branch:branch},function(data){
 							if(data > 0){
-								$('#cashCheckTable').append('<tr id="PTadvance">
-								<td colspan="4">Advance</td>
-								<td class="PTcost">'+money(data)+'</td>
-								<td></td></tr>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Balance</td></tr></tfoot>');
+								calcBillPaymentTotal();
 							}else if(data < 0){
-								$('#cashCheckTable').append('<tr id="PTadvance">
-								<td colspan="4" >Balance</td>
-								<td class="PTcost class="error"">'+money(data)+'</td>
-								<td></td></tr>');
+								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Advanced Payment</td></tr></tfoot>');
+								calcBillPaymentTotal();
 							}
 							PTcalcCost();
 						});	
@@ -1694,6 +1689,56 @@ function addSItoSP(id){
 						}	
 	});	
 	
+}
+function viewSP(id){
+	$('#viewSPModal').modal('show');
+	$('#vwbillNo').text(id);
+	$.post(reroute+'/viewSP',{id:id},function(data){
+		$('#vwbillNo').text(data['id']);
+	 	$('[name="vwbillSPBranch"]').val(data['BranchNo']);
+	 	$('#vwSPPreparedBy').val(data['PreparedBy']);
+	 	$('#vwSPApprovedBy').val(data['ApprovedBy']);
+		var PaymentDate = new Date(data['PaymentDate']);
+		$('#paymentDate').text((PaymentDate.getMonth() + 1) + '/' + PaymentDate.getDate() + '/' +  PaymentDate.getFullYear());
+	});
+	var itemno=1;
+	var total = 0;
+	$('.BillSPTable > tbody').remove();
+	$.post(reroute+'/getSPInvoices',{id:id},function(SPI){
+		$.each(SPI, function(key,value) {
+			$('.BillSPTable').append('<tr "><td>'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
+				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp ">'+money(value.amount)+'</td>
+				</tr>');
+			itemno += 1;	
+			total += value.amount;
+			$('#billSPCustomers').val( value.CustomerNo);
+			$('#vwBillSPTotalCost').text( money(total));
+		});
+	});
+	$('.BillSPPaymentType > tbody').remove();
+	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
+		if(payment.length){
+			var total=0;
+			$.each(payment, function(key,value) {	
+				if(value.PaymentType == 0){
+					$('.BillSPPaymentType').append('<tr ">
+						<td colspan="4">Cash</td>
+						<td >'+money(value.amount)+'</td></tr>');
+				}
+				if(value.PaymentType == 1){
+					$('.BillSPPaymentType').append('<tr >
+						<td>Check</td>
+						<td>'+value.BankName+'</td>
+						<td >'+value.CheckNo+'</td>
+						<td >'+value.CheckDueDate+'</td>
+						<td >'+money(value.amount)+'</td>
+						</tr>');
+				}
+				total +=  parseFloat(value.amount);
+				$('#pTTotal').text(money(total));
+			});	
+		}	
+	});
 }
 // Adding Payment  Type to list
 

@@ -20,7 +20,7 @@ class CreateStockTransfersTable extends Migration {
 			$table->timestamp('TransferDate')->nullable();
 			$table -> string('PreparedBy',250)->nullable();
 			$table -> string('ApprovedBy',250)->nullable();
-			$table -> boolean('IsCancelled')->default(0);
+			$table -> string('IsCancelled',1)->default('N');
 			$table -> string('CancelledBy',250)->nullable();
 			$table -> timestamps();
 		});

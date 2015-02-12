@@ -111,7 +111,7 @@ class CustomersController extends \BaseController {
 	}
 	public function toEditCustomer(){
 		if(Request::ajax()){
-  			$customer = DB::select('select * from customers where id = '.Input::get('id').'');
+  			$customer = Customer::find(Input::get('id'));
 			return Response::json($customer);
   		}
 	}

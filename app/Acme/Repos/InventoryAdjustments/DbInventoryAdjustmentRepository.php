@@ -19,7 +19,7 @@ class DbInventoryAdjustmentRepository extends DbRepository implements InventoryA
 	// public function getAllApprovedIA(){
 	// 	return InventoryAdjustment::selectRaw('Inventoryadjustments.*,pc.BranchName')->join('Branches AS pc', 'pc.id', '=', 'Inventoryadjustment.BranchNo')
 	// 	->leftJoin('Bills AS b', 'b.PurchaseOrderNo', '=', 'Purchaseorders.id')
-	// 	->whereNotIn('Purchaseorders.ApprovedBy', array(''))->where('Purchaseorders.IsCancelled', '=', 0)
+	// 	->whereNotIn('Purchaseorders.ApprovedBy', array(''))->where('Purchaseorders.IsCancelled', '=', 'N')
 	// 	->whereNull('b.PurchaseOrderNo')
 	// 	->get();
 	// }

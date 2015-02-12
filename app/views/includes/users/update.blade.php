@@ -10,7 +10,7 @@
         	<div class="col-md-8 col-md-offset-2">
 			<div class="well customerForm">
 			<div>
-			{{ Form::open(['url' => '/user/'.Auth::user()->id.'/storeuser']) }}
+			{{ Form::open(['url' => '/user/'.Auth::user()->id.'/updateuser']) }}
 			<div class="form-group">
 				<label>Username</label>
 				<input class="form-control username" type="text" name="username" id="username" placeholder="Username" value="{{Auth::user()->username}}" required>
@@ -24,7 +24,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label>Password</label>
+				<label>New Password</label>
 				<input type="password" class="form-control password" name="password" id="password" placeholder="Password" required></textarea>
 			</div>
 			<div class="form-group">
@@ -49,6 +49,7 @@
 			</div>
 			<center><button class="btn btn-success" type="submit">Update</button></center>
 			</div>
+			 {{ Form::close() }}
 		</div>
 	</div>
 </div>
