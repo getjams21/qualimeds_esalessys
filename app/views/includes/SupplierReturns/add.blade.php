@@ -50,9 +50,10 @@
                   @foreach($supplierBills as $sb)
                     <tr id="rowProd{{$sb->id}}">
                       <td id="sb{{$sb->id}}">{{$sb->id}}</td>
-                      <td id="invoice{{$sb->id}}">{{$sb->SalesbnvoiceRefDocNo}}</td>
-                      <td id="SO{{$sb->id}}">{{$sb->SalesOrderNo}}</td>
-                      <td id="invoiceDate{{$sb->id}}">{{$sb->InvoiceDate}}</td>
+                      <td id="PO{{$sb->id}}">{{$sb->PurchaseOrderNo}}</td>
+                      <td id="BillDate{{$sb->id}}">{{$sb->BillDate}}</td>
+                      <td id="invoiceNo{{$sb->id}}">{{$sb->SalesInvoiceNo}}</td>
+                      <td id="invoiceDate{{$sb->id}}">{{$sb->SalesInvoiceDate}}</td>
                       <?php 
                         if ($sb->Terms == 0) {
                           $terms = "Cash";
@@ -63,7 +64,7 @@
                       <td id="terms{{$sb->id}}">{{$terms}}</td>
                       <td id="prepared{{$sb->id}}">{{$sb->PreparedBy}}</td>
                       <td id="approved{{$sb->id}}">{{$sb->ApprovedBy}}</td>
-                      <td><button class="btn btn-success btn-xs square" onclick="addCR({{$sb->id}})" ><i class="fa fa-check-circle"></i> Add</button>
+                      <td><button class="btn btn-success btn-xs square" onclick="addSR({{$sb->id}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
                   @endforeach

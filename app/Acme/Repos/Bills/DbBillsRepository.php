@@ -25,4 +25,16 @@ class DbBillsRepository extends DbRepository implements BillsRepository{
 			->whereNull('b.BillNo')
 			->get();
 	}
+	public function getAllBySupplier($id){
+		return Bill::selectRaw('Bills.*')
+			->join('suppliers as s', 'Bills.SupplierNo', '=', 's.id')
+			->where('s.id','=',$id)
+			->whereNotExists(function($query)
+	            {
+	                $query->selectRaw('BillPaymentNo')
+	                      ->from('billpaymentdetails')
+	                      ->whereRaw('Bills.id = billpaymentdetails.BillNo');
+	            })
+			->get();
+	}
 }

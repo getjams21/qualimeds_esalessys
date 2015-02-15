@@ -122,13 +122,13 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/fetchSI', 'CRController@fetchSI');
 
  	#Return to Supplier (Supplier Returns)
- 		Route::resource('/customer-return', 'SRController');
+ 		Route::resource('/supplier-return', 'SRController');
  		Route::post('/saveSR', 'SRController@saveSR');
  		Route::post('/viewSR', 'SRController@viewSR');
  		Route::post('/viewSRDetails', 'SRController@viewSRDetails');
  		Route::post('/saveEditedSR', 'SRController@saveEditedSR');
- 		Route::post('/fetchCustomerSI', 'SRController@fetchCustomerSI');
- 		Route::post('/fetchSIItems', 'SRController@fetchSIItems');
+ 		Route::post('/fetchSupplierBills', 'SRController@fetchSupplierBills');
+ 		Route::post('/fetchBillItems', 'SRController@fetchBillItems');
  		Route::post('/fetchSI', 'SRController@fetchSI');
 
 

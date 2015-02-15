@@ -2,11 +2,11 @@ var reroute='/user/'+$('meta[name="_token"]').attr('content');
 var sample = 'sample';
 var itemno = 1;
 var counter = 1;
-function addCR(id){
+function addSR(id){
 	var table = $('.product').DataTable();
 	var index=table.row('#rowProd'+id).index();
 	$('#SalesInvoiceNo').val(id);
-	$.post(reroute+'/fetchSIItems',{id:id},function(data){
+	$.post(reroute+'/fetchBillItems',{id:id},function(data){
 		if(data){
 			$('.CRTable').find('tr').remove().end();
 			var Qty;
@@ -22,7 +22,7 @@ function addCR(id){
 						<td id="expDate'+id+'">'+value.ExpiryDate+'</td>
 						<td id="unit'+id+'">'+value.Unit+'</td>
 						<td class="light-green editable" id="prodQtySO'+value.id+'" value="'+value.Qty+'">'+value.Qty+'</td>
-						<td id="prodUntSO'+value.id+'">'+money(value.UnitPrice)+'</td>
+						<td id="prodUntSO'+value.id+'">'+money(value.CostPerQty)+'</td>
 						<td class="cost" id="prodCostSO'+value.id+'">0.00</td>
 						<td id="freebiesQty'+value.id+'">'+parseInt(value.FreebiesQty)+'</td>
 						<td id="freebiesQty'+value.id+'">'+value.FreebiesUnit+'</td>
@@ -62,7 +62,7 @@ function addVwCR(id){
 	var table = $('.vwproduct').DataTable();
 	var index=table.row('#rowProd'+id).index();
 	$('#SalesInvoiceNo').val(id);
-	$.post(reroute+'/fetchSIItems',{id:id},function(data){
+	$.post(reroute+'/fetchBillItems',{id:id},function(data){
 		if(data){
 			$('.vwCRTable').find('tr').remove().end();
 			var Qty;
@@ -488,7 +488,7 @@ $(document).ready(function() {
 	                      <td id="terms'+value.id+'">'+terms+'</td>
 	                      <td id="prepared'+value.id+'">'+value.PreparedBy+'</td>
 	                      <td id="approved'+value.id+'">'+value.ApprovedBy+'</td>
-	                      <td><button class="btn btn-success btn-xs square" onclick="addCR('+value.id+')" ><i class="fa fa-check-circle"></i> Add</button>
+	                      <td><button class="btn btn-success btn-xs square" onclick="addSR('+value.id+')" ><i class="fa fa-check-circle"></i> Add</button>
 	                      </td>
 	                    </tr>
 					');
@@ -502,24 +502,24 @@ $(document).ready(function() {
 	//SAVE SO
 	$('#saveSO').click(function(){
 		var TableData;
-		var SalesinvoiceNo = $('#SalesInvoiceNo').val();
-		var CustomerNo = $('#customer').val();
+		var BillNo = $('#SalesInvoiceNo').val();
+		var SupplierNo = $('#supplier').val();
 		var Remarks = $('#remarks').val();
 		TableData = storeTblValues();
 		TableData = $.toJSON(TableData);
-		// alert(TableData);
-		// return false;
+		//alert(TableData);
+		//return false;
 		var PreparedBy= $('#preparedBy').text();
 			if($('#approved').is(':checked')){
 			var approvedBy=PreparedBy;
 		} else{
 			var approvedBy='';
 		}
-		$.post(reroute+'/saveCR',{TD:TableData,CustomerNo:CustomerNo,SalesinvoiceNo:SalesinvoiceNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
+		$.post(reroute+'/saveSR',{TD:TableData,SupplierNo:SupplierNo,BillNo:BillNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();
-					 $(location).attr('href','/customer-return#showCRList');
+					 $(location).attr('href','/supplier-return#showSRList');
 					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -538,7 +538,7 @@ $(document).ready(function() {
 			        , "ExpiryDate" : $(tr).find('td:eq(5)').text()
 			        , "Unit" : $(tr).find('td:eq(6)').text()
 			        , "Qty" : $(tr).find('td:eq(7)').text()
-			        , "UnitPrice" : $(tr).find('td:eq(8)').text()
+			        , "CostPerQty" : $(tr).find('td:eq(8)').text()
 			        , "FreebiesQty" : $(tr).find('td:eq(10)').text()
 			        , "FreebiesUnit" : $(tr).find('td:eq(11)').text()
 			    }

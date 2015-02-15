@@ -3,5 +3,5 @@
 interface SRDRepository{
 	public function getAll();
 	public function getByid($id);
-	public function getAllByCR($id);
+	public function getAllBySR($id);
 }
