@@ -36,7 +36,7 @@
           </div><br>
           <div class="alert alert-warning">
               <center>Type the desired product on the Search Bar and click Add button to add the product to PO List.</center>
-            </div>
+          </div>
         </div>
           <!-- /input-group -->
           <!--  <div class="input-group">

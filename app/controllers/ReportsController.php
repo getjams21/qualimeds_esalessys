@@ -21,7 +21,8 @@ class ReportsController extends \BaseController {
 	public function index()
 	{
 		$products= $this->productRepo->getAllWithCat();
-		return View::make('dashboard.Reports.reports',compact('products'));
+		$summary= $this->vwInventorySource->productInventorySummary();
+		return View::make('dashboard.Reports.reports',compact('products','summary'));
 	}
 
 	/**

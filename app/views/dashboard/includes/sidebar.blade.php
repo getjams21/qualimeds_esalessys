@@ -75,7 +75,7 @@
                             <a href="/customer-return" id="SBCustomerReturn">Return Good Stocks</a>
                         </li>
                         <li>
-                            <a href="/supplier-return" id="SBSupplierReturn">Return Good Stocks</a>
+                            <a href="/supplier-return" id="SBSupplierReturn">Return To Supplier</a>
                         </li>
                     </ul>
                 </li>
