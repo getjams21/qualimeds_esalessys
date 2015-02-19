@@ -16,6 +16,7 @@ display: none;
 <div clas="row" >
 <div id="wrapper">
 @include('dashboard.includes.sidebar')
+@include('includes.SupplierReturns.addProduct')
      <!-- Page Content -->
 <div id="page-content-wrapper">
 <div class="container-fluid">

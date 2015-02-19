@@ -1,10 +1,10 @@
 <!-- VIEW PO MODAL -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editCRModal">
+<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="editSRModal">
   <div class="modal-dialog modal-lg modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-title">Customer Return no. <i id="edCRId"></i> Details
+        <h4 class="modal-title" id="modal-title">Supplier Return no. <i id="edCRId"></i> Details
           <b  class="pull-right" >Date: <i id="edCRDate"></i></b>
         </h4>
       </div>
@@ -15,8 +15,8 @@
           <div class="panel-heading head">
           <div class="row">
             <div class="col-md-4">
-              <input type="hidden" class="form-control" id="vwCustomer" value="" name="customer">
-              <input type="hidden" name="SalesInvoiceNo" id="vwSalesInvoiceNo">
+              <input type="hidden" class="form-control" id="vwSupplier" value="" name="supplier">
+              <input type="hidden" name="BillNo" id="vwBillNo">
             <div class="input-group">
                  <label>Remarks:</label>
                  {{ Form::textarea('remarks', null, ['class'=>'form-control square','size' => '50x5','id'=>'remarks', 'required']) }}
@@ -41,9 +41,10 @@
                 <table class="table table-striped table-bordered table-hover vwproduct">
                   <thead>
                     <tr>
-                      <th>Sales Invoice No.</th>
+                      <th>Bill No.</th>
+                      <th>PO No.</th>
+                      <th>Bill Date</th>
                       <th>Invoice No.</th>
-                      <th>SO No.</th>
                       <th>Invoice Date</th>
                       <th>Terms</th>
                       <th>Prepared By</th>
@@ -73,7 +74,7 @@
                     <th>ExpiryDate</th>
                     <th>Unit</th>
                     <th>Qty</th>
-                    <th>Unit Price</th>
+                    <th>Cost Per Qty</th>
                     <th>Item Cost</th>
                     <th>Freebies Qty</th>
                     <th>Freebies Unit</th>

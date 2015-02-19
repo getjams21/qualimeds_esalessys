@@ -53,10 +53,10 @@ class SRController extends \BaseController {
 		}
 	}
 
-	public function fetchSI(){
+	public function fetchBills(){
 		if(Request::ajax()){
-			$SI = $this->salesInvoiceRepo->getByid(Input::get('SIno'));
-			return Response::json($SI);
+			$bill = $this->billsRepo->getByid(Input::get('SIno'));
+			return Response::json($bill);
 		}
 	}
 
@@ -96,62 +96,63 @@ class SRController extends \BaseController {
   		}
 	}
 
-	public function viewCR(){
+	public function viewSR(){
 		if(Request::ajax()){
 			// dd(Input::get('id'));
   			$input = Input::all();
   			$id= $input['id'];
-  			$CR= $this->customerReturnRepo->getByid($id);
-		return Response::json($CR);
+  			$SR= $this->supplierReturnRepo->getByid($id);
+		return Response::json($SR);
   		}
 	}
 
-	public function viewCRDetails()
+	public function viewSRDetails()
 	{
 		if(Request::ajax()){
   			$input = Input::all();
   			$id= $input['id'];
-  			$CRdetails = $this->customerReturnDetailsRepo->getAllByCR($id);
-		return Response::json($CRdetails);
+  			$SRdetails = $this->supplierReturnDetailsRepo->getAllBySR($id);
+		return Response::json($SRdetails);
   		}
 	}
 
-	public function saveEditedCR()
+	public function saveEditedSR()
 	{
 		if(Request::ajax()){
   			$input = Input::all();
   			$id= $input['id'];
   			$TableData = stripslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
-  			$CR=$this->customerReturnRepo->getByIdWithBranch($id);
-  			$CRdetails = $this->customerReturnDetailsRepo->getAllByCR($id);
-  			foreach($CRdetails as $d){
+  			$SR=$this->supplierReturnRepo->getByIdWithBranch($id);
+  			$SRdetails = $this->supplierReturnDetailsRepo->getAllBySR($id);
+  			foreach($SRdetails as $d){
   					$d->delete();
   				}
-  			if(!$TableData || (!isAdmin() && ($CR[0]->ApprovedBy!=''))){
+  			if(!$TableData || (!isAdmin() && ($SR[0]->ApprovedBy!=''))){
   				$result = 0;
   			}else{
-  				$CR[0]->SalesInvoiceNo=$input['SalesinvoiceNo'];
-  				$CR[0]->BranchNo = Auth::user()->BranchNo;
-  				$CR[0]->Remarks=$input['Remarks'];
-  				$CR[0]->CustomerReturnDate= Carbon::now();
-  				$CR[0]->PreparedBy= fullname(Auth::user());
-  				$CR[0]->save();
-  				foreach($TableData as $td){
-  					// dd($td['Unit']);
-  					$CRdetail= new CustomerReturnDetail;
-  					$CRdetail->CustomerReturnNo=$CR[0]->id;
-  					$CRdetail->ProductNo=$td['ProdNo'];
-  					$CRdetail->Unit=$td['Unit'];
-  					$CRdetail->LotNo=$td['LotNo'];
-  					$CRdetail->ExpiryDate=$td['ExpiryDate'];
-  					$CRdetail->Qty=$td['Qty'];
-  					$CRdetail->UnitPrice=$td['UnitPrice'];
-  					$CRdetail->FreebiesQty=$td['FreebiesQty'];
-  					$CRdetail->FreebiesUnit=$td['FreebiesUnit'];
-  					$CRdetail->save();
-  				}
+  				$SR[0]->BillNo=$input['BillNo'];
+  				$SR[0]->BranchNo = Auth::user()->BranchNo;
+  				$SR[0]->ReturnDate= Carbon::now();
+  				$SR[0]->Remarks=$input['Remarks'];
+  				$SR[0]->PreparedBy= $input['PreparedBy'];
+  				$SR[0]->ApprovedBy= $input['approvedBy'];
+  				$SR[0]->save();
   				$result =1;
+  				foreach($TableData as $td){
+  					// dd($td['Qty']);
+  					$SRdetail= new SupplierReturnDetails;
+  					$SRdetail->SupplierReturnNo=$SR[0]->id;
+  					$SRdetail->ProductNo=$td['ProdNo'];
+  					$SRdetail->Unit=$td['Unit'];
+  					$SRdetail->LotNo=$td['LotNo'];
+  					$SRdetail->ExpiryDate=$td['ExpiryDate'];
+  					$SRdetail->Qty=$td['Qty'];
+  					$SRdetail->CostPerQty=$td['CostPerQty'];
+  					$SRdetail->FreebiesQty=$td['FreebiesQty'];
+  					$SRdetail->FreebiesUnit=$td['FreebiesUnit'];
+  					$SRdetail->save();
+  				}
   			}
   			return Response::json($result);
   		}

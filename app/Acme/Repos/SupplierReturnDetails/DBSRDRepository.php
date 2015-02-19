@@ -9,6 +9,6 @@ class DBSRDRepository extends DbRepository implements SRDRepository{
 	}
 	public function getAllBySR($id){
 		return SupplierReturnDetails::selectRaw('Supplierreturndetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'Supplierreturndetails.ProductNo')
-		->where('Supplierreturndetails.CustomerReturnNo', '=', $id)->get();
+		->where('Supplierreturndetails.SupplierReturnNo', '=', $id)->get();
 	}
 }

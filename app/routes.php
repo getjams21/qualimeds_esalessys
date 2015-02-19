@@ -128,7 +128,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/saveEditedSR', 'SRController@saveEditedSR');
  		Route::post('/fetchSupplierBills', 'SRController@fetchSupplierBills');
  		Route::post('/fetchBillItems', 'SRController@fetchBillItems');
- 		Route::post('/fetchSI', 'SRController@fetchSI');
+ 		Route::post('/fetchBills', 'SRController@fetchBills');
 
 
 		Route::post('/updateuser', 'UsersController@updateuser');

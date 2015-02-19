@@ -14,6 +14,6 @@ class DBSRRepository extends DbRepository implements SRRepository{
 		return SupplierReturn::selectRaw('SupplierReturns.*,b.BranchName')->join('Branches AS b', 'b.id', '=', 'SupplierReturns.BranchNo')->get();
 	}
 	public function getByIdWithBranch($id){
-		return SupplierReturn::selectRaw('SupplierReturns.*,b.BranchName')->join('Branches AS b', 'b.id', '=', 'SupplierReturns.BranchNo')->where('Customerreturns.id', '=', $id)->get();
+		return SupplierReturn::selectRaw('SupplierReturns.*,b.BranchName')->join('Branches AS b', 'b.id', '=', 'SupplierReturns.BranchNo')->where('SupplierReturns.id', '=', $id)->get();
 	}
 }
