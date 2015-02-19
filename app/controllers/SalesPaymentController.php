@@ -49,8 +49,14 @@ class SalesPaymentController extends \BaseController {
 		}
 		$salesPayments = $this->salesPayment->getAll();
 		foreach($salesPayments as $SP){
+			$max = SalesPayment::where('customerNo','=',$SP->customerNo)->max('id');
 			$amount = DB::table('paymentinvoices')->select(DB::raw('sum(amount) as total'))->where('paymentNo','=',$SP->id)->groupBy('paymentNo')->get();
   			$SP['amount']=$amount[0]->total ;
+  			if($SP->id == $max){
+  				$SP['maxed']=1;
+  			}else{
+  				$SP['maxed']=0;
+  			}
   			$cash = SalesPaymentDetail::where('PaymentNo','=',$SP->id)->where('PaymentType','=',0)->get();
   			if(count($cash) > 0){$SP['cash']=1; }else{$SP['cash']=0;}
   			$check = SalesPaymentDetail::where('PaymentNo','=',$SP->id)->where('PaymentType','=',1)->get();
@@ -120,6 +126,7 @@ class SalesPaymentController extends \BaseController {
   				$id= $input['id'];
   				$SP = $this->salesPayment->getByid($id);
   				$SP->BranchNo= Auth::user()->BranchNo;
+  				$SP->customerNo=$input['customerNo'];
 	  			$SP->PaymentDate=Carbon::now();
 	  			$SP->PreparedBy=fullname(Auth::user());
 	  			$SP->ApprovedBy=$approve;
@@ -139,6 +146,7 @@ class SalesPaymentController extends \BaseController {
 	  			$SP = new SalesPayment;
 	  			$SP->BranchNo= Auth::user()->BranchNo;
 	  			$SP->PaymentDate=Carbon::now();
+  				$SP->customerNo=$input['customerNo'];
 	  			$SP->PreparedBy=fullname(Auth::user());
 	  			$SP->ApprovedBy=$approve;
 	  			$SP->save();
@@ -194,7 +202,7 @@ class SalesPaymentController extends \BaseController {
   						->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
   						->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
   						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
-  						->where('salesinvoices.CustomerNo','=',$input['customer_id'])
+  						->where('payments.customerNo','=',$input['customer_id'])
   						->sum('paymentdetails.amount');
   			$invoices = DB::table('paymentinvoices')
   						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
@@ -224,6 +232,29 @@ class SalesPaymentController extends \BaseController {
 		}
 	}
 	
-
+	public function getBal()
+	{ 
+		if(Request::ajax()){
+			$input = Input::all();
+  			// $advance= AdvancePayment::where('chargedPaymentNo','=',$input['id'])
+  			// 							->where('isCharged','=',1)->get();
+  			$SP = SalesPayment::find($input['id']);
+  			$payments=DB::table('paymentdetails')
+  						->join('payments', 'payments.id', '=', 'paymentdetails.PaymentNo')
+  						->join('paymentinvoices', 'paymentinvoices.paymentNo', '=', 'payments.id')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$SP->customerNo)
+  						->where('payments.id','<',$input['id'])
+  						->sum('paymentdetails.amount');
+  			$invoices = DB::table('paymentinvoices')
+  						->join('salesinvoices', 'salesinvoices.id', '=', 'paymentinvoices.invoiceNo')
+  						->where('salesinvoices.CustomerNo','=',$SP->customerNo)
+  						->where('paymentinvoices.paymentNo','<',$input['id'])
+  						->sum('paymentinvoices.amount');
+  			
+			return Response::json($payments-$invoices);
+		}
+	}
+			
 
 }

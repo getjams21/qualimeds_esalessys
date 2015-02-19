@@ -1475,7 +1475,7 @@ $('#saveSP').click(function(){
 	// if($('#BillPaymentTotalCost').text() < $('#paymentTypeTotal').text()){
 	// 	advance = $('#paymentTypeTotal').text() - $('#BillPaymentTotalCost').text();
 	// }	
-	$.post(reroute+'/salesPay',{id:id,TD:TableData,PT:PaymentTypes,advance:advance,customer_id:customer_id,approved:approved},function(data){
+	$.post(reroute+'/salesPay',{id:id,customerNo:customer_id,TD:TableData,PT:PaymentTypes,advance:advance,customer_id:customer_id,approved:approved},function(data){
 		location.reload();
 			$(location).attr('href','/SalesPayment#SalesPaymentList');
 	});
@@ -1521,6 +1521,7 @@ $('.editSP').click(function(){
 	$('#cashCheckTable > tbody > tr').remove();
 	PTcalcCost();
 	$('.BillPaymentTable >tbody > tr').remove();
+	$('#invoicesTfoot').remove();
 	$.post(reroute+'/getSP',{id:id},function(bills){
 		$('.billPaymentEditId').text(bills['id']);
 		if(bills['ApprovedBy']){
@@ -1550,6 +1551,7 @@ $('.editSP').click(function(){
 			}
 		});
 	});
+
 	$.post(reroute+'/getSPInvoices',{id:id},function(SPI){
 		$.each(SPI, function(key,value) {
 			$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
@@ -1561,6 +1563,16 @@ $('.editSP').click(function(){
 			customer_id = value.CustomerNo;
 			$('#customer_id').val(value.CustomerNo);
 		});
+
+		$.post(reroute+'/getBal',{id:id},function(bal){
+				if(bal < 0){
+					$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(bal*(-1))+'</td><td>Balance</td></tr></tfoot>');
+				}else if(bal > 0){
+					$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(bal*(-1))+'</td><td>Advanced Payment</td></tr></tfoot>');
+				}
+				calcBillPaymentTotal();	
+		});
+
 		customer_id = $('#customer_id').val();
 		$.post(reroute+'/checkPayments',{customer_id:customer_id},function(data){
 		if(data > 0){
@@ -1570,9 +1582,9 @@ $('.editSP').click(function(){
 			$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5">Advanced Payment</td><td class="dp Balcost">'+money(data)+'</td><td></td></tr></tfoot>');
 			calcBillPaymentTotal();
 		}
-	});	
+		});	
 	});
-	
+
 	$.post(reroute+'/getPaymentTypes',{id:id},function(payment){
 		if(payment.length){
 			var paymentItem=1;
@@ -1666,18 +1678,28 @@ function addSItoSP(id){
 						$('#cashCheckTable > tbody').remove();
 						PTcalcCost();
 						$("#customer_id").val(data['CustomerNo']);
-						var customer_id = $("#customer_id").val();
 						var branch = data['BranchNo'];
-						$.post(reroute+'/checkPayments',{customer_id:customer_id,branch:branch},function(data){
-							if(data > 0){
-								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Balance</td></tr></tfoot>');
-								calcBillPaymentTotal();
-							}else if(data < 0){
-								$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Advanced Payment</td></tr></tfoot>');
-								calcBillPaymentTotal();
-							}
-							PTcalcCost();
-						});	
+						if(( $('#SPediting').val() ) && ($('#customer_id').val() == data['CustomerNo'])){
+							$.post(reroute+'/getBal',{id:$('#SPediting').val()},function(bal){
+									if(bal < 0){
+										$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(bal*(-1))+'</td><td>Advanced Payment</td></tr></tfoot>');
+									}else if(bal > 0){
+										$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(bal*(-1))+'</td><td>Balance</td></tr></tfoot>');
+									}
+									calcBillPaymentTotal();	
+							});
+						}else{
+							$.post(reroute+'/checkPayments',{customer_id:data['CustomerNo'],branch:branch},function(data){
+								if(data > 0){
+									$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Balance</td></tr></tfoot>');
+									calcBillPaymentTotal();
+								}else if(data < 0){
+									$('.BillPaymentTable').append('<tfoot id="invoicesTfoot"><tr><td colspan="5"></td><td class="dp Balcost">'+money(data)+'</td><td>Advanced Payment</td></tr></tfoot>');
+									calcBillPaymentTotal();
+								}
+								PTcalcCost();
+							});	
+						}
 					}
 						$('.BillPaymentTable').append('<tr id="bill'+itemno+'"><td id="billitemno'+itemno+'">'+itemno+'</td><td id="billId'+id+'">'+id+'</td>
 							<td class="customer'+data['CustomerNo']+'">'+data['CustomerName']+'</td><td class="medrep'+data['UserNo']+'">'+data['Lastname']+', '+data['Firstname']+' '+data['MI']+'.<td class="dp">'+data['SalesInvoiceRefDocNo']+'</td><td class="dp Billcost">'+money(data['amount'])+'</td>
@@ -1704,15 +1726,16 @@ function viewSP(id){
 	var itemno=1;
 	var total = 0;
 	$('.BillSPTable > tbody').remove();
+	$('#balTFoot').remove();
 	$.post(reroute+'/getSPInvoices',{id:id},function(SPI){
 		$.each(SPI, function(key,value) {
-			$('.BillSPTable').append('<tr "><td>'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
-				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp ">'+money(value.amount)+'</td>
+			$('.BillSPTable').append('<tr ><td>'+itemno+'</td><td id="billId'+value.invoiceNo+'">'+value.invoiceNo+'</td>
+				<td class="customer'+value.CustomerNo+'">'+value.CustomerName+'</td><td class="medrep'+value.UserNo+'">'+value.Lastname+', '+value.Firstname+' '+value.MI+'.<td class="dp">'+value.SalesInvoiceRefDocNo+'</td><td class="dp vwBillcost">'+money(value.amount)+'</td>
 				</tr>');
 			itemno += 1;	
-			total += value.amount;
+			// total += value.amount;
 			$('#billSPCustomers').val( value.CustomerNo);
-			$('#vwBillSPTotalCost').text( money(total));
+			vwBillcalcCost();
 		});
 	});
 	$('.BillSPPaymentType > tbody').remove();
@@ -1721,7 +1744,7 @@ function viewSP(id){
 			var total=0;
 			$.each(payment, function(key,value) {	
 				if(value.PaymentType == 0){
-					$('.BillSPPaymentType').append('<tr ">
+					$('.BillSPPaymentType').append('<tr >
 						<td colspan="4">Cash</td>
 						<td >'+money(value.amount)+'</td></tr>');
 				}
@@ -1738,6 +1761,15 @@ function viewSP(id){
 				$('#pTTotal').text(money(total));
 			});	
 		}	
+	});
+	$.post(reroute+'/getBal',{id:id},function(bal){
+		// $.each(bal, function(key,value) {
+			if(bal < 0){
+				$('.BillSPTable').append('<tfoot id="balTFoot"><tr><td colspan="5" class="dp">Balance</td><td class="dp vwBillcost">'+money(bal*(-1))+'</td></tr></tfoot>');
+			}else if(bal > 0){
+				$('.BillSPTable').append('<tfoot id="balTFoot"><tr><td colspan="5" class="dp">Advance</td><td class="dp vwBillcost">'+money(bal*(-1))+'</td></tr></tfoot>');
+			}
+			vwBillcalcCost();
 	});
 }
 // Adding Payment  Type to list
@@ -1814,6 +1846,13 @@ function PTcalcCost(){
 		});
 		$('#paymentTypeTotal').text(Number(total).toFixed(2));
 	}
+function vwBillcalcCost(){
+	var total=0;
+	$('.vwBillcost').each(function(){
+		total += parseFloat($(this).text()); 
+	});
+	$('#vwBillSPTotalCost').text(Number(total).toFixed(2));
+}
 function editCategory(id){
 	$('#modalCatError').addClass('hidden');
 	var table = $('.category').DataTable();

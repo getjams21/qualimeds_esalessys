@@ -32,4 +32,16 @@ class DbVwInventorySource extends DbRepository implements VwInventorySourceRepos
 				->groupBy('ProductNo', 'ProductName', 'BrandName', 'WholeSaleUnit', 'LotNo', 'ExpiryDate', 'CostPerQty')
 				->get();
 	}
+	public function productInventorySummary(){
+		return VwInventorySource::selectRaw('BranchNo, BranchName, ProductNo, ProductName,BrandName, WholeSaleUnit,  RetailUnit, 
+       Sum(WholeSaleQty) WholeSaleQty, Sum(RetailSaleQty) RetailSaleQty')
+				->groupBy('BranchNo', 'BranchName', 'ProductNo', 'ProductName', 'BrandName', 'WholeSaleUnit', 'RetailUnit')
+				->get();
+	}
+	public function productInventoryByLotNo(){
+		return VwInventorySource::selectRaw('BranchNo, BranchName, ProductNo, ProductName,BrandName, LotNo, ExpiryDate, WholeSaleUnit,  RetailUnit, 
+       Sum(WholeSaleQty) WholeSaleQty, Sum(RetailSaleQty) RetailSaleQty')
+				->groupBy('BranchNo', 'BranchName', 'ProductNo', 'ProductName', 'BrandName', 'LotNo, ', 'ExpiryDate','WholeSaleUnit','RetailUnit')
+				->get();
+	}
 }

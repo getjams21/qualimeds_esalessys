@@ -1,6 +1,11 @@
 @extends('layouts.master')
 @section('meta-title','Reports')
 @section('metatags')
+<style type="text/css">
+.dataTables_filter {
+display: none; 
+}
+</style>
 @stop
 <!-- navbar -->
 @section('header')
@@ -15,9 +20,18 @@
 <div class="container-fluid">
     <div class="row">
        	<div class="col-md-12 shadowed"><br>
-       		<div class="col-md-12 ">
-               Under Construction...!
-            </div>  
+       		 <div class="col-md-12 shadowed"><br>
+          <!-- Nav tabs -->
+            <ul class="nav nav-pills " role="tablist">
+              <li class="active"><a href="#showPOEntry" role="tab" data-toggle="tab"><h5><b><i>Reports</i></b></h5></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="showPOEntry">
+                 @include('includes.Reports.Reportlist')
+              </div>
+            </div>
+          </div> 
 
         </div>
     </div>
@@ -52,6 +66,7 @@
        $('#myInputTextField').keyup(function(){
          p.fnFilter( $(this).val() );
         });
+       p.fnSetColumnVis( 4, false );
     });
 </script>
 @stop 
