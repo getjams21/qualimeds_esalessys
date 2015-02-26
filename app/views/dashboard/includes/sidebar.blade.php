@@ -77,6 +77,9 @@
                         <li>
                             <a href="/supplier-return" id="SBSupplierReturn">Return To Supplier</a>
                         </li>
+                        <li>
+                            <a href="/damages" id="SBDamages">Damages</a>
+                        </li>
                     </ul>
                 </li>
                  @if(Auth::user()->UserType == 1 || Auth::user()->UserType == 11)

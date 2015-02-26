@@ -47,6 +47,8 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::get('/SalesPayment', 'SalesPaymentController@index');
  		#IA
  		Route::get('/inventory-adjustment', 'IAController@index');
+ 		#Damages
+ 		Route::get('/damages', 'DamagesController@index');
 		#ST
  		Route::get('/stocks-transfer', 'STController@index');
 });
@@ -110,6 +112,12 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/viewIA', 'IAController@viewIA');
  		Route::post('/viewIADetails', 'IAController@viewIADetails');
  		Route::post('/saveEditedIA', 'IAController@saveEditedIA');
+
+ 	#INVENTORY ADJUSTMENT ROUTES
+ 		Route::post('/saveD', 'DamagesController@saveD');
+ 		Route::post('/viewD', 'DamagesController@viewD');
+ 		Route::post('/viewDDetails', 'DamagesController@viewDDetails');
+ 		Route::post('/saveEditedD', 'DamagesController@saveEditedIA');
 
  	#Return Good Stocks (Customer Returns)
  		Route::resource('/customer-return', 'CRController');
