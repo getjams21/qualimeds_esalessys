@@ -8,7 +8,7 @@ class DbDamagesDetailsRepository extends DbRepository implements DamagesDetailsR
 		$this->model = $model;
 	}
 	public function getAllByIA($id){
-		return DamagesDetails::selectRaw('inventorydamagesdetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'inventorydamagesdetails.ProductNo')
-		->where('inventorydamagesdetails.InvAdjustmentNo', '=', $id)->get();
+		return DamagesDetails::selectRaw('inventorydamagedetails.*,pc.ProductName,pc.BrandName,pc.RetailUnit,pc.WholeSaleUnit')->join('products AS pc', 'pc.id', '=', 'inventorydamagedetails.ProductNo')
+		->where('inventorydamagedetails.InvDamagesNo', '=', $id)->get();
 	}
 }

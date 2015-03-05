@@ -98,7 +98,7 @@ function addIA(id){
 			         calcCostSO(rowID);
 					}
 				});
-		$('#saveSO').removeClass('hidden');
+		// $('#saveSO').removeClass('hidden');
 }
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
@@ -112,8 +112,10 @@ function totalCostSO(){
 		total += parseFloat($(this).text()); 
 	});
 	$('#SOTotalCost').text(total.toFixed(2));
-	if(total = 0){
+	if(total == 0){
 		$('#saveSO').addClass('hidden');
+	}else{
+		$('#saveSO').removeClass('hidden');
 	}
 }
 function removeIA(id,prodId,index){
@@ -174,9 +176,9 @@ function viewPO(id){
 	      });
 }
 function editIA(id){
-	$('#vwSaveBtn').addClass('hidden');
+	$('#vwSaveSOBtn').addClass('hidden');
 	$('#editIAModal').modal('show');
-	 $.post(reroute+'/viewIA',{id:id},function(data){
+	 $.post(reroute+'/viewD',{id:id},function(data){
 	 	$('#edIAId').text(data[0]['id']);
 	 	$('#edIADate').text(data[0]['AdjustmentDate']);
 	 	$('select#branch option[value="'+data[0]['BranchNo']+'"]').attr('selected',true);
@@ -188,7 +190,7 @@ function editIA(id){
 	 		$('#edApprovedBy').val(data[0]['ApprovedBy']);
 	 	}
 	      });
-	 $.post(reroute+'/viewIADetails',{id:id},function(data){
+	 $.post(reroute+'/viewDDetails',{id:id},function(data){
 	  			$(".edSOTable > tbody").html("");
 	  			counter=1;
 	  			var total=0;
@@ -467,7 +469,7 @@ $(document).ready(function() {
 				if(data==1){
 					// alert(data);
 					location.reload();
-					 $(location).attr('href','/inventory-adjustment#showIAList');
+					 $(location).attr('href','/damages#showDList');
 					 // $('.SOsaved').show().fadeOut(5000);
 				}else if(data==0){
 					$('#savePOError').fadeIn("fast", function(){        
@@ -507,7 +509,7 @@ $(document).ready(function() {
 		} else{
 			var approvedBy='';
 		}
-		$.post(reroute+'/saveEditedIA',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
+		$.post(reroute+'/saveEditedD',{TD:TableData,BranchNo:BranchNo,Remarks:Remarks,PreparedBy:PreparedBy,approvedBy:approvedBy,id:id},function(data){
 				if(data==1){
 					// alert(data);
 					location.reload();

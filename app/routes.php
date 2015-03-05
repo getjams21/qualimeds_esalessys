@@ -117,7 +117,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/saveD', 'DamagesController@saveD');
  		Route::post('/viewD', 'DamagesController@viewD');
  		Route::post('/viewDDetails', 'DamagesController@viewDDetails');
- 		Route::post('/saveEditedD', 'DamagesController@saveEditedIA');
+ 		Route::post('/saveEditedD', 'DamagesController@saveEditedD');
 
  	#Return Good Stocks (Customer Returns)
  		Route::resource('/customer-return', 'CRController');

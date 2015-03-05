@@ -67,7 +67,7 @@ class DamagesController extends \BaseController {
   		}
 	}
 
-	public function viewIA()
+	public function viewD()
 	{
 		if(Request::ajax()){
 			// dd(Input::get('id'));
@@ -79,7 +79,7 @@ class DamagesController extends \BaseController {
   		}
 	}
 
-	public function viewIADetails()
+	public function viewDDetails()
 	{
 		if(Request::ajax()){
   			$input = Input::all();
@@ -90,37 +90,37 @@ class DamagesController extends \BaseController {
   		}
 	}
 
-	public function saveEditedIA()
+	public function saveEditedD()
 	{
 		if(Request::ajax()){
   			$input = Input::all();
   			$id= $input['id'];
   			$TableData = stripslashes($input['TD']);
   			$TableData = json_decode($TableData,TRUE);
-  			$IA=$this->DamagesRepo->getByIdWithBranch($id);
-  			$IAdetails = $this->DamageDetailsRepo->getAllByIA($id);
-  			foreach($IAdetails as $d){
+  			$Damages=$this->DamagesRepo->getByIdWithBranch($id);
+  			$Damagesdetails = $this->DamageDetailsRepo->getAllByIA($id);
+  			foreach($Damagesdetails as $d){
   					$d->delete();
   				}
-  			if(!$TableData || (!isAdmin() && ($IA[0]->ApprovedBy!=''))){
+  			if(!$TableData || (!isAdmin() && ($Damages[0]->ApprovedBy!=''))){
   				$result = 0;
   			}else{
-  				$IA[0]->BranchNo=$input['BranchNo'];
-  				$IA[0]->Remarks=$input['Remarks'];
-  				$IA[0]->AdjustmentDate= Carbon::now();
-  				$IA[0]->PreparedBy= fullname(Auth::user());
-  				$IA[0]->save();
+  				$Damages[0]->BranchNo=$input['BranchNo'];
+  				$Damages[0]->Remarks=$input['Remarks'];
+  				$Damages[0]->InvDamageDate= Carbon::now();
+  				$Damages[0]->PreparedBy= fullname(Auth::user());
+  				$Damages[0]->save();
   				foreach($TableData as $td){
   					// dd($td['Unit']);
-  					$IAdetail= new DamageDetails;
-  					$IAdetail->InvAdjustmentNo=$id;
-  					$IAdetail->ProductNo=$td['ProdNo'];
-  					$IAdetail->Unit=$td['Unit'];
-  					$IAdetail->LotNo=$td['LotNo'];
-  					$IAdetail->ExpiryDate=$td['ExpiryDate'];
-  					$IAdetail->Qty=$td['Qty'];
-  					$IAdetail->CostPerQty=$td['CostPerQty'];
-  					$IAdetail->save();
+  					$Damagesdetail= new DamagesDetails;
+  					$Damagesdetail->InvDamagesNo=$id;
+  					$Damagesdetail->ProductNo=$td['ProdNo'];
+  					$Damagesdetail->Unit=$td['Unit'];
+  					$Damagesdetail->LotNo=$td['LotNo'];
+  					$Damagesdetail->ExpiryDate=$td['ExpiryDate'];
+  					$Damagesdetail->Qty=$td['Qty'];
+  					$Damagesdetail->CostPerQty=$td['CostPerQty'];
+  					$Damagesdetail->save();
   				}
   				$result =1;
   			}

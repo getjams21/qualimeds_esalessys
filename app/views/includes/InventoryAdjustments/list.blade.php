@@ -2,7 +2,7 @@
 	<div class="panel-heading head">
 		<div class="row">
             <div class="col-md-9">
-              <h4><b>Sales Order List</b></h4>
+              <h4><b>Adjustment List</b></h4>
            </div>
            <div class="col-md-3">
            </div>
