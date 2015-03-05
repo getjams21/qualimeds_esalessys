@@ -180,7 +180,7 @@ function editIA(id){
 	$('#editIAModal').modal('show');
 	 $.post(reroute+'/viewD',{id:id},function(data){
 	 	$('#edIAId').text(data[0]['id']);
-	 	$('#edIADate').text(data[0]['AdjustmentDate']);
+	 	$('#edIADate').text(data[0]['InvDamageDate']);
 	 	$('select#branch option[value="'+data[0]['BranchNo']+'"]').attr('selected',true);
 	 	$('#remarks').text(data[0]['Remarks']);
 	 	$('#edPreparedBy').val(data[0]['PreparedBy']);
