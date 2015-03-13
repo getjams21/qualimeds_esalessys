@@ -3,16 +3,19 @@ use Acme\Repos\Damages\DamagesRepository;
 use Carbon\Carbon;
 use Acme\Repos\DamagesDetails\DamagesDetailsRepository;
 use Acme\Repos\Product\ProductRepository;
+use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
 
 class DamagesController extends \BaseController {
 	private $DamagesRepo;
+	private $vwInventorySource;
 
 	function __construct(DamagesRepository $DamagesRepo,ProductRepository $productRepo,
-		DamagesDetailsRepository $DamageDetailsRepo)
+		DamagesDetailsRepository $DamageDetailsRepo,VwInventorySourceRepository $vwInventorySource)
 		{
 			$this->DamagesRepo = $DamagesRepo;
 			$this->productRepo = $productRepo;
 			$this->DamageDetailsRepo = $DamageDetailsRepo;
+			$this->vwInventorySource = $vwInventorySource;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -24,7 +27,7 @@ class DamagesController extends \BaseController {
 	{
 		$max = $this->DamagesRepo->getMaxId();
 		$branches = Branch::lists('BranchName','id');
-		$products = $this->productRepo->getAll();
+		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);
 		$damages= $this->DamagesRepo->getAllWithBranch();
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));

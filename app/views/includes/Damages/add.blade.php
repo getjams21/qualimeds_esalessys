@@ -45,23 +45,33 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>Brand</th>
-                    <th>Wholesale Unit</th>
-                    <th>Retail Unit</th>
+                    <th>Lot No</th>
+                    <th>Expiry Date</th>
+                    <th>Unit</th>
+                    <th>Qty</th>
+                    <th>Price</th>
                     <th>Add</th>
                   </tr>
                  </thead> 
                  <tbody>
+                  <?php $ctr=1 ?>
                   @foreach($products as $product)
-                    <tr id="rowProd{{$product->id}}">
-                      <td id="prodId{{$product->id}}">{{$product->id}}</td>
-                      <td id="name{{$product->id}}">{{$product->ProductName}}</td>
-                      <td id="brand{{$product->id}}">{{$product->BrandName}}</td>
-                      <td id="wholesale{{$product->id}}">{{$product->WholeSaleUnit}}</td>
-                      <td id="retail{{$product->id}}">{{$product->RetailUnit}}</td>
-                      <td><button class="btn btn-success btn-xs square" onclick="addIA({{$product->id}})" ><i class="fa fa-check-circle"></i> Add</button>
+                    <tr id="rowProd{{$ctr}}">
+                      <td id="prodId{{$ctr}}">{{$product->ProductNo}}</td>
+                      <td id="name{{$ctr}}">{{$product->ProductName}}</td>
+                      <td id="brand{{$ctr}}">{{$product->BrandName}}</td>
+                      <td id="lotNo{{$ctr}}">{{$product->LotNo}}</td>
+                      <td id="expiryDate{{$ctr}}">{{$product->ExpiryDate}}</td>
+                      <td id="unit{{$ctr}}">{{$product->Unit}}</td>
+                      <td id="unitQty{{$ctr}}">{{number_format((float)$product->Qty,0,'.','')}}</td>
+                      <td id="unitPrice{{$ctr}}">{{number_format((float)$product->UnitPrice,2,'.','')}}</td>
+                      <input type="hidden" name="unitQtyR" id="unitQtyR{{$ctr}}" value="{{$product->RQty}}">
+                      <input type="hidden" name="ExpDate" id="ExpDate{{$ctr}}" value="{{$product->ExpiryDate}}">
+                      <td><button class="btn btn-success btn-xs square" onclick="addIA({{$ctr}})" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>
                     </tr>
                   @endforeach
+                  <?php $ctr++ ?>
                  </tbody>
               </table>
             </div>
