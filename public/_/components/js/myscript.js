@@ -1656,6 +1656,49 @@ $('.editSP').click(function(){
 	 $('#myTab a[href="#SalesPaymentEntry"]').tab('show');
 });
 // END OF EDIT BILL PAYMENT
+// REPORTS SCRIPT
+$('#report_type').change(function(){
+	var value = $(this).val();
+	$('.reportProducList').hide();
+	if(value == 1){
+		$.post(reroute+'/fetchInventorySummary',{},function(data){
+			$('#reportsTable > thead').remove();
+			$('#reportsTable ').append('<thead><tr><th>Product No</th><th>Prod. Description</th><th>Brand</th><th>Rtl Unit</th><th>Rtl Sale Qty</th><th>WhlSale Unit</th><th>WhlSale Sale Qty</th></tr></thead>');
+			$('#reportsTable > tbody').remove();
+			$.each(data, function(key,value) {
+				$('#reportsTable').append('<tr ><td>'+value.ProductNo+'</td><td >'+value.ProductName+'</td>
+					<td>'+value.BrandName+'</td><td>'+value.RetailUnit+'<td >'+Number(value.RetailSaleQty).toFixed(0)+'</td><td >'+value.WholeSaleUnit+'</td><td >'+Number(value.WholeSaleQty).toFixed(0)+'</td>
+					</tr>');
+			});
+		});
+	}else if(value == 2){
+		$.post(reroute+'/fetchInventoryByLotNo',{},function(data){
+			$('#reportsTable > thead').remove();
+			$('#reportsTable ').append('<thead><tr><th>Product No</th><th>Prod. Description</th><th>Brand</th><th>Rtl Unit</th><th>Rtl Sale Qty</th><th>WhlSale Unit</th><th>WhlSale Sale Qty</th><th>Lot Number</th><th>Expiry Date</th></tr></thead>');
+			$('#reportsTable > tbody').remove();
+			$.each(data, function(key,value) {
+				var chDate = new Date(value.ExpiryDate);
+				$('#reportsTable').append('<tr ><td>'+value.ProductNo+'</td><td >'+value.ProductName+'</td>
+					<td>'+value.BrandName+'</td><td>'+value.RetailUnit+'<td >'+Number(value.RetailSaleQty).toFixed(0)+'</td><td >'+value.WholeSaleUnit+'</td><td >'+Number(value.WholeSaleQty).toFixed(0)+'</td>
+					<td >'+value.LotNo+'</td><td >'+(chDate.getMonth() + 1) + '/' + chDate.getDate() + '/' +  chDate.getFullYear()+'</td></tr>');
+			});
+		});
+	}else if(value == 3){
+		$('.reportProducList').show();
+		$.post(reroute+'/fetchInventoryByStockCard',{},function(data){
+			$('#reportsTable > thead').remove();
+			$('#reportsTable ').append('<thead><tr><th>Trans Date</th><th>Trans Type</th><th>Ref Document</th><th>In Qty</th><th>Out Qty</th><th>Running Balance</th></tr></thead>');
+			$('#reportsTable > tbody').remove();
+			var bal = 0;
+			$.each(data, function(key,value) {
+				var TranDate = new Date(value.TranDate);
+				bal = Number(Number(bal)+Number(value.InStock)+Number(value.OutStock)).toFixed(2);
+				$('#reportsTable').append('<tr class="dp"><td>'+value.TranDate+'</td><td >'+value.SourceName+'</td><td >'+value.RefDoc+'</td>
+					<td class="dp">'+Number(value.InStock).toFixed(2)+'</td><td class="dp">'+Number(value.OutStock).toFixed(2)+'<td class="dp">'+bal+'</td></tr>');
+			});
+		});
+	}
+});
 });//end of ready function
  //SALES PAYMENTS
  
