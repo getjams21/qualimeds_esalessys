@@ -197,6 +197,10 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 
 	#Reports
 	Route::resource('/reports', 'ReportsController');
+	Route::post('/fetchInventorySummary','ReportsController@fetchInventorySummary');
+	Route::post('/fetchInventoryByLotNo','ReportsController@fetchInventoryByLotNo');
+	Route::post('/fetchInventoryByStockCard','ReportsController@fetchInventoryByStockCard');
+	
 });
 
 

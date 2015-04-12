@@ -13,6 +13,7 @@
                 Report Type: 
                </span>
                <select id="report_type" class="form-control square">
+                  <option >--Please Select--</option>
                		<option value="1">Product Inventory Summary</option>
                		<option value="2">Product Inventory By Lot Number</option>
                		<option value="3">Inventory Movement By Product / Stock Card</option>
@@ -20,17 +21,17 @@
           </div><br>
           </div>
     </div>
-    <div class="row" id="reportProducList">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="col-md-6">
+    <div class="row reportProducList " hidden>
+      <div class="col-md-6"  >
+       <div class="col-md-12">
+          <div class=" responsive well " >
+
            <div class="form-group" style="width:80%;">
               <div class="input-group">
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
           </div>
-        </div><div class="col-md-6">
-          <div class=" responsive well" >
             <table class="table table-striped table-bordered table-hover product">
               <thead>
                 <tr>
@@ -47,35 +48,38 @@
           </div>
         </div>
       </div>
-    </div>
+      <div class="col-md-6"  >
+        <div class=" responsive well " >
+        <div class="row">
+            <div class="col-md-6">
+            <b>Product No:</b>
+            </div> 
+            <div class="col-md-6">
+            <b>Unit Measurement:</b>
+            </div> 
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+            <b>Product Description:</b>
+            </div> 
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+            <b>Brand:</b>
+            </div> 
+            <div class="col-md-6">
+            <b>Remaining Qty:</b>
+            </div> 
+        </div>
+        </div>
+      </div>
+  </div>
   </div>
     <div class="panel-body">
     <div class="table-responsive responsive" >
-      <table class="table  table-bordered table-hover reportTable">
-        <thead>
-          <tr>
-            <th>Branch</th>
-            <th>Product Name</th>
-            <th>Brand</th>
-            <th>Wholesale Unit</th>
-            <th>Retail Unit</th>
-            <th>Wholesale Qty</th>
-            <th>Retail SaleQty</th>
-          </tr>
-         </thead> 
-         <tbody>
-            @foreach($summary as $report)
-              <tr>
-                <td>{{$report->BranchName}}</td>
-                <td>{{$report->ProductName}}</td>
-                <td>{{$report->BrandName}}</td>
-                <td>{{$report->WholeSaleUnit}}</td>
-                <td>{{$report->RetailUnit}}</td>
-                <td class="dp">{{$report->WholeSaleQty}}</td>
-                <td class="dp">{{$report->RetailSaleQty}}</td>
-              </tr>
-            @endforeach
-         </tbody>
+      <table class="table  table-bordered table-hover reportTable" id="reportsTable">
       </table>
     </div><hr class="style-fade">
     <hr >

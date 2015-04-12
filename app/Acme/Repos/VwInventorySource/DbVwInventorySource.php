@@ -2,6 +2,7 @@
 
 use Acme\Repos\DbRepository;
 use VwInventorySource;
+use vwinventorybystockcard;
 class DbVwInventorySource extends DbRepository implements VwInventorySourceRepository{
 	protected $model;
 	public function __construct(VwInventorySource $model){
@@ -41,7 +42,33 @@ class DbVwInventorySource extends DbRepository implements VwInventorySourceRepos
 	public function productInventoryByLotNo(){
 		return VwInventorySource::selectRaw('BranchNo, BranchName, ProductNo, ProductName,BrandName, LotNo, ExpiryDate, WholeSaleUnit,  RetailUnit, 
        Sum(WholeSaleQty) WholeSaleQty, Sum(RetailSaleQty) RetailSaleQty')
-				->groupBy('BranchNo', 'BranchName', 'ProductNo', 'ProductName', 'BrandName', 'LotNo, ', 'ExpiryDate','WholeSaleUnit','RetailUnit')
+				->groupBy('BranchNo', 'BranchName', 'ProductNo', 'ProductName', 'BrandName', 'LotNo', 'ExpiryDate','WholeSaleUnit','RetailUnit')
 				->get();
 	}
+	public function productInventoryStockCard(){
+		return VwInventorySource::selectRaw("Select SourceName, TranDate, BranchNo, BranchName, 
+				       ProductNo, ProductName,BrandName, 
+				       LotNo, ExpiryDate, WholeSaleUnit, 
+				       Case When LTrim(RTrim(SourceName))='Bills' OR  LTrim(RTrim(SourceName))='CustomerReturns' 
+				            OR  LTrim(RTrim(SourceName))='StockTransferIn' Then
+				              WholeSaleQty
+				           Else
+				              0.00
+				       End InStock,
+				       Case When LTrim(RTrim(SourceName))='SI' OR LTrim(RTrim(SourceName))='SupplierReturns' 
+				                 OR LTrim(RTrim(SourceName))='InvDamages' OR LTrim(RTrim(SourceName))='StockTransferOut' Then
+				              WholeSaleQty
+				           Else
+				              0.00
+				       End OutStock,  
+				       Case When SourceName='InvAdjustment' Then
+				             WholeSaleQty   
+				          Else
+				             0.00
+				       End StockAdjustment            
+				From vwinventorysource
+				Order BY TranDate");
+
+	}
+
 }

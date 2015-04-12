@@ -6,4 +6,5 @@ interface VwInventorySourceRepository{
 	public function getInventorySourceForST($branchNo);
 	public function productInventorySummary();
 	public function productInventoryByLotNo();
+	public function productInventoryStockCard();
 }

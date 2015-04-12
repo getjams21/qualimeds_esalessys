@@ -26,6 +26,36 @@ class ReportsController extends \BaseController {
 	}
 
 	/**
+	 * Display the specified resource.
+	 * GET /reports/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function fetchInventorySummary()
+	{
+		if(Request::ajax()){
+			$summary= $this->vwInventorySource->productInventorySummary();
+			return Response::json($summary);
+		}
+	}
+	
+	public function fetchInventoryByLotNo()
+	{
+		if(Request::ajax()){
+			$summary= $this->vwInventorySource->productInventoryByLotNo();
+			return Response::json($summary);
+		}
+	}
+	public function fetchInventoryByStockCard()
+	{
+		if(Request::ajax()){
+			 $summary= VwInventoryByStockCard::all();
+			 return Response::json($summary);
+		}
+	}
+
+	/**
 	 * Show the form for creating a new resource.
 	 * GET /reports/create
 	 *
