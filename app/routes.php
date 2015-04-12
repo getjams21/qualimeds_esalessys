@@ -168,6 +168,12 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::post('/storebank', 'BanksController@store');
  	Route::post('/toEditBank','BanksController@toEditBank');
  	Route::get('delete-bank/{id}', 'BanksController@destroy');
+ 	#CreditMemo
+	// Route::get('/banks', 'BanksController@index');
+	Route::resource('/creditmemo', 'CreditMemoController');
+	Route::post('/storeCM', 'CreditMemoController@store');
+ 	Route::post('/toEditCM','CreditMemoController@toEditCM');
+ 	Route::get('delete-cm/{id}', 'CreditMemoController@destroy');
 	#Branches
 	// Route::get('/branches', 'BranchesController@index');
 	Route::resource('/branches', 'BranchesController');

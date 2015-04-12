@@ -31,6 +31,9 @@
                             <li>
                                 <a href="/banks" id="SBBanks">Banks</a>
                             </li>
+                            <li>
+                                <a href="/creditmemo" id="SBCredit-Memo">Credit Memo</a>
+                            </li>
                         </ul>
                     </li>
                 @endif

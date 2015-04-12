@@ -580,6 +580,21 @@ function triggerEdit(id){
   	});
 $('#bank-library').modal('show');
 }
+//edit-delete credit memo
+function triggerEditCM(id){
+	$.post(reroute+'/toEditCM',{id:id},function(data){
+  		if(data){
+  			$('.alert').remove();
+	  		$('#library-action').val(data['id']);
+	      	$('#customers').val(data['customerno']);
+	      	$('#remarks').val(data['remarks']);
+	      	$('#amount').val(data['amount']);
+	      	$('.deactivate').attr('href', '/delete-cm/'+id+'');
+  			$('.delete').show();
+  		}
+  	});
+$('#cm-library').modal('show');
+}
 //edit-delete branch
 function triggerEditBranch(id){
 	$.post(reroute+'/toEditBranch',{id:id},function(data){
@@ -860,6 +875,11 @@ $.fn.editable.defaults.mode = 'inline';
   			$('.address').val('');
   			$('.telephone').val('');
   			$('.delete').hide();
+		});
+	$('.add-cm').click(function(event) {
+			$('#library-action').val('');
+			$('#remarks').val('');
+  			$('#amount').val('');
 		});
 		
 //sidebar collapse
