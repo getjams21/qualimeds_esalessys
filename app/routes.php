@@ -32,6 +32,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 		Route::get('update-account', 'UsersController@editAccount');
 	#Transactions
 		#PO
+
 		Route::get('/PurchaseOrders', 'POController@index');
 		Route::get('/productDtAjax', array('as' => 'productDtAjax', 'uses' => 'POController@productDtAjax')); 
 		#BILLS
@@ -194,6 +195,10 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::post('/fetchInventorySummary','ReportsController@fetchInventorySummary');
 	Route::post('/fetchInventoryByLotNo','ReportsController@fetchInventoryByLotNo');
 	Route::post('/fetchInventoryByStockCard','ReportsController@fetchInventoryByStockCard');
+	Route::get('/reportProductDtAjax', array('as' => 'reportProductDtAjax', 'uses' => 'ReportsController@reportProductDtAjax')); 
+	Route::post('/fetchInventoryByStockCardId','ReportsController@fetchInventoryByStockCardId');
+	Route::post('/fetchInventoryGainLoss','ReportsController@fetchInventoryGainLoss');
+	
 	
 });
 

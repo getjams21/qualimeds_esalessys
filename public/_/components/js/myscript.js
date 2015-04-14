@@ -342,11 +342,61 @@ function billSO(id){
 		  			total+=value.UnitPrice*value.Qty;
 	  				editableNumber(value.ProductNo);
 	  				editableSelect(value.ProductNo,value.RetailUnit,value.WholeSaleUnit);
+	  				var exp = new Date(value.ExpiryDate);
+	  				var expDate = ((exp.getMonth() + 1) + '/' + exp.getDate() + '/' +  exp.getFullYear());
+	  				var num=(value.UnitPrice*value.Qty);
+					var str=num.toString();
+					var numarray=str.split('.');
+					if(!numarray[1]){
+						numarray[1] = '00';
+					}
+	  				$('#printSITable >tbody').append('<tr style="height:27px;"><td >'+Number(value.Qty).toFixed(0)+'</td><td>'+value.Unit+'</td>
+	  					<td>'+value.ProductName+'</td>
+	  					<td>'+expDate+'</td><td class="dp">'+Number(value.UnitPrice).toFixed(2)+'</td><td class="dp" style="width: 90px;">'+numberWithCommas((num).toFixed(2))+'</td></tr>');
+		  			
 		  			counter+=1;
 	  				});
-	  				$('#billSOTotalCost').text(Number(total).toFixed(2));
+
+		  			var rows = document.getElementById('printSITable').getElementsByTagName("tr").length;
+	  				while(rows <= 16){
+	  					$('#printSITable >tbody').append('<tr style="height:27px;"><td ></td><td></td>
+	  					<td></td>
+	  					<td></td><td class="dp"></td><td class="dp"></td><td ></td></tr>');
+		  				rows ++;
+	  				}
+					// var total = Number(total).toFixed(2);
+					var prep = $("[name='billSOmedReps'] option:selected").text();
+					var cust = $("[name='billSOCustomers'] option:selected").text();
+	  				$('#billSOTotalCost').text(total);
+	  				var vatsales = total/1.12;
+	  				var vat = vatsales *.12;
+	  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
+	  				$('#vat').text(numberWithCommas(vat.toFixed(2)));
+	  				$('#printSITotal').text(numberWithCommas(total.toFixed(2)));
+	  				$('#printPrepBy').text(prep);
+	  				$('#printSIName').text(cust);
+	  				var today = new Date();
+	  				var dd = today.getDate();
+					var mm = today.getMonth()+1; //January is 0!
+					var yyyy = today.getFullYear();
+	  				if(dd<10) {
+					    dd='0'+dd
+					} 
+
+					if(mm<10) {
+					    mm='0'+mm
+					} 
+					$('#printSIDate').text(mm+'-'+dd+'-'+yyyy);
+	  				
 	      });
 }
+
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+
 // END OF SO BILLING FUNCTION
 // SI EDITING FUNCTIONS
 function editSI(id){
@@ -1160,6 +1210,20 @@ $('#vwSaveBillBtn').click(function(){
 // END OF SAVE BILL
 // SAVE SI
 $('#saveBillSOBtn').click(function(){
+	// $('#printSI').modal('show');
+	// $("#SIPrintable").printThis({
+	//      debug: false,             
+	//      importCSS: true,           
+	//      printContainer: true,       
+	//      pageTitle: "Sales Invoice",              
+	//      removeInline: false,        
+	//      printDelay: 333,           
+	//      header: null,              
+	//      formValues: true,
+	//      page:'A3',
+	//      margins:'none'           
+	//   });
+	// return;
 	var TableData;
 	var id = $('#billSOId').text();
 	var term = $('#billTerm').val();
@@ -1660,6 +1724,8 @@ $('.editSP').click(function(){
 $('#report_type').change(function(){
 	var value = $(this).val();
 	$('.reportProducList').hide();
+	$('.productDetailDiv').hide();
+	$('.gainLossDiv').hide();
 	if(value == 1){
 		$.post(reroute+'/fetchInventorySummary',{},function(data){
 			$('#reportsTable > thead').remove();
@@ -1693,15 +1759,66 @@ $('#report_type').change(function(){
 			$.each(data, function(key,value) {
 				var TranDate = new Date(value.TranDate);
 				bal = Number(Number(bal)+Number(value.InStock)+Number(value.OutStock)).toFixed(2);
-				$('#reportsTable').append('<tr class="dp"><td>'+value.TranDate+'</td><td >'+value.SourceName+'</td><td >'+value.RefDoc+'</td>
+				$('#reportsTable').append('<tr ><td>'+value.TranDate+'</td><td >'+value.SourceName+'</td><td >'+value.RefDoc+'</td>
 					<td class="dp">'+Number(value.InStock).toFixed(2)+'</td><td class="dp">'+Number(value.OutStock).toFixed(2)+'<td class="dp">'+bal+'</td></tr>');
 			});
+		});	
+	}else if(value == 4){
+		$('.gainLossDiv').show();
+		var fromdate =$( '#min' ).datepicker( "getDate" );
+		var todate =$( '#max' ).datepicker( "getDate" );
+		var medrep = $('#medReps').val();
+		var from = fromdate.getFullYear() + '-' + (fromdate.getMonth()+1) + '-' + fromdate.getDate();
+		var to = todate.getFullYear() + '-' + (todate.getMonth()+1) + '-' + todate.getDate();
+		gainlossReport(medrep,from,to);
+		function gainlossReport(medrep,from,to){
+			$.post(reroute+'/fetchInventoryGainLoss',{medrep:medrep,from:from,to:to},function(data){
+				$('#reportsTable > thead').remove();
+				$('#reportsTable ').append('<thead><tr><th>Source Doc</th><th>Date</th><th>ProductNo</th><th>Product Desc</th><th>Qty</th><th>Unit Cost</th><th>Item Cost</th><th>Unit Price</th><th>Item Price</th></tr></thead>');
+				$('#reportsTable > tbody').remove();
+				var bal = 0;
+				$.each(data, function(key,value) {
+					var TranDate = new Date(value.TranDate);
+					$('#reportsTable').append('<tr><td>'+value.SourceDoc+'</td><td>'+value.TransDate+'</td><td>'+value.ProductNo+'</td><td>'+value.ProductName+'</td><td>'+value.Qty+'</td><td>'+value.unitcost+'</td>
+						<td>'+value.itemcost+'</td><td>'+value.UnitPrice+'</td><td>'+value.itemprice+'</td></tr>');
+				
+				});
+			});	
+		}
+		$('#medReps,#min,#max').change(function(){
+			var fromdate =$( '#min' ).datepicker( "getDate" );
+			var todate =$( '#max' ).datepicker( "getDate" );
+			var medrep = $('#medReps').val();
+			var from = fromdate.getFullYear() + '-' + (fromdate.getMonth()+1) + '-' + fromdate.getDate();
+			var to = todate.getFullYear() + '-' + (fromdate.getMonth()+1) + '-' + todate.getDate();
+			gainlossReport(medrep,from,to);
 		});
 	}
 });
 });//end of ready function
  //SALES PAYMENTS
- 
+ function prodReport(id){
+			$.post(reroute+'/fetchInventoryByStockCardId',{id:id},function(data){
+			$('#reportsTable > thead').remove();
+			$('#reportsTable ').append('<thead><tr><th>Trans Date</th><th>Trans Type</th><th>Ref Document</th><th>In Qty</th><th>Out Qty</th><th>Running Balance</th></tr></thead>');
+			$('#reportsTable > tbody').remove();
+			var bal = 0;
+				$.each(data, function(key,value) {
+					var TranDate = new Date(value.TranDate);
+					bal = Number(Number(bal)+Number(value.InStock)+Number(value.OutStock)).toFixed(2);
+					$('#reportsTable').append('<tr ><td>'+value.TranDate+'</td><td >'+value.SourceName+'</td><td >'+value.RefDoc+'</td>
+						<td class="dp">'+Number(value.InStock).toFixed(2)+'</td><td class="dp">'+Number(value.OutStock).toFixed(2)+'<td class="dp">'+bal+'</td></tr>');
+				});
+				$('#reportsTable').append('<tr ><td colspan="5" class="dp"><b>Remaining Qty:</b></td><td class="dp">'+bal+'</td></tr>');
+				
+				$('.productDetailDiv').show();
+				$('#reportProdNo').text(data[0]['ProductNo']);
+				$('#reportUnit').text(data[0]['WholeSaleUnit']);
+				$('#reportProdDesc').text(data[0]['ProductName']);
+				$('#reportProdBrand').text(data[0]['BranchName']);
+				$('#reportProdQty').text(bal);
+			});
+ }
 function addSItoSP(id){
 	$.post(reroute+'/addInvoiceToSalesPayment',{id:id},function(data){
 				if($('#billId'+id).length){

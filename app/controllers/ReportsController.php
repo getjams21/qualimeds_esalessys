@@ -1,4 +1,5 @@
 <?php
+use Carbon\Carbon;
 use Acme\Repos\Product\ProductRepository;
 use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
 
@@ -22,7 +23,10 @@ class ReportsController extends \BaseController {
 	{
 		$products= $this->productRepo->getAllWithCat();
 		$summary= $this->vwInventorySource->productInventorySummary();
-		return View::make('dashboard.Reports.reports',compact('products','summary'));
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
+		return View::make('dashboard.Reports.reports',compact('products','summary','medReps','lastweek','now'));
 	}
 
 	/**
@@ -51,6 +55,38 @@ class ReportsController extends \BaseController {
 	{
 		if(Request::ajax()){
 			 $summary= VwInventoryByStockCard::all();
+			 return Response::json($summary);
+		}
+	}
+	public function fetchInventoryByStockCardId()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+			 $summary= VwInventoryByStockCard::where('ProductNo','=',$input['id'])->get();
+			 return Response::json($summary);
+		}
+	}
+	public function reportProductDtAjax()
+	{	
+		$result = DB::table('products')
+		->select('id as id', 'ProductName as ProductName', 'BrandName', 'WholeSaleUnit');
+ 
+	return Datatables::of($result)
+			
+			->add_column('add','<td><button class="btn btn-primary btn-xs square " onclick="prodReport({{$id}})"> View</button>
+                      </td>')	
+			->make();
+	}
+	public function fetchInventoryGainLoss()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+			$from = date("Y-m-d",strtotime($input['from']));
+			$to =   date("Y-m-d",strtotime($input['to'])); 
+
+			 $summary= GainLoss::whereBetween('TransDate',array($from, $to))
+			 	->where('id','=',$input['medrep'])
+			 					->get();
 			 return Response::json($summary);
 		}
 	}

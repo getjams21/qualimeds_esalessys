@@ -45,10 +45,11 @@ class POController extends \BaseController {
  
 	return Datatables::of($result)
 			
-			->add_column('add','<td><button class="btn btn-success btn-xs square" onclick="addPO({{$id}})" ><i class="fa fa-check-circle"></i> Add</button>
+			->add_column('add','<td><button class="btn btn-success btn-xs square " value="{{$id}}" onclick="addPO({{$id}});" ><i class="fa fa-check-circle"></i> Add</button>
                       </td>')	
 			->make();
 	}
+
 	public function savePO()
 	{
 		if(Request::ajax()){

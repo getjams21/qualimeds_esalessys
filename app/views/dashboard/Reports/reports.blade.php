@@ -46,18 +46,17 @@ display: none;
 @stop
 @section('script')
 <script language="javascript" type="text/javascript">
-   $(document).ready(function() {
-     //    var oTable= $('.product').dataTable( {
-     //    	"order": [[ 0, "desc" ]],
-     //    	"columnDefs": [
-			  //   { "width": "8%", "targets": 6 }
-			  // ]
-    	// });
-    	//  oTable.fnSetColumnVis( 0, false );
+$(document).ready(function() {
+    $(function() {
+          $( "#min" ).datepicker();
+      });
+      $(function() {
+          $( "#max" ).datepicker('setEndDate', $( "#max" ).val());
+      });
     var p= $('.product').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": reroute+"/productDtAjax",
+        "sAjaxSource": reroute+"/reportProductDtAjax",
            "iDisplayLength": 3,
            "aLengthMenu": 1,
           "bLengthChange": false,
@@ -66,7 +65,7 @@ display: none;
        $('#myInputTextField').keyup(function(){
          p.fnFilter( $(this).val() );
         });
-       p.fnSetColumnVis( 4, false );
+       // p.fnSetColumnVis( 4, false );
     });
 </script>
 @stop 

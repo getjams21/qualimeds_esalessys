@@ -12,22 +12,9 @@ body{
 	margin-bottom: 20px;
 }
 @media print {
-   @page 
-   {size: landscape}
-   body{
-   	margin-top:0px;
-   	width:100%;
-   }
-  .invoice-panel{
-  	width:25%;
-  	float:left;
-  }
-  .invoice-lg-panel{
-  	width:75%;
-  	float:left;
-  }
-  -webkit-print-color-adjust: exact; 
+	p.bodyText {font-family:georgia, times, serif;}
 }
+p.bodyText {font-size:10pt}
 .blue{
 	background-color:#82CAFF;
 	color:white;
@@ -43,6 +30,10 @@ body{
 	.modal-xl
 	{
 	    width: 98%;
+	}
+	.modal-md
+	{
+	    width: 750px;
 	}
 .light-red{
 	background-color: #f2dede;
@@ -87,6 +78,7 @@ border-radius:5px;
 	font-size: 11px;
 	color:blue;
 }
+
 .tab-content{
 	border-radius:0;
 }
@@ -101,6 +93,12 @@ text-align:center;}
 	background-image: url('../fonts/logo_64.png');
 	width:190px;
 	height: 64px;
+}
+.center{
+	text-align: center;
+}
+.printheight{
+	height:27px;
 }
 .nav-bg{
 	background-color: #7bd454;
