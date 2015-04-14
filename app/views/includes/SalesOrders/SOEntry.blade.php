@@ -50,21 +50,12 @@
               <center>Type the desired product on the Search Bar and click Add button to add the product to SO List.</center>
             </div>
         </div>
-          <!-- /input-group -->
-          <!--  <div class="input-group">
-              <button type="button" class="btn btn-success  square" style="white-space: normal;" id="addProductPO" ><i class="fa fa-plus-square" ></i> <b> Add Products for PO</b></button>
-          </div> --><!-- /input-group -->
-                 </div>
+       </div>
        <div class="col-md-1">
        </div>
        <div class="col-md-7">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
-                <!-- <span class="input-group-addon">SO Type: </span>
-                <select class='form-control square' name='unit' id='unit'>
-                  <option value='1'>Wholesale</option>
-                  <option value='2'>Retail</option>
-                </select> -->
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
@@ -132,7 +123,7 @@
             <th>Qty</th>
             <th>Unit Price</th>
             <th>Item Cost</th>
-            <th>Remove</th>
+            <th>Action</th>
           </tr>
          </thead> 
          <tbody>

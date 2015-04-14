@@ -40,4 +40,13 @@ class DbSIRepository extends DbRepository implements SIRepository{
 	            })
 			->get();
 	}
+	public function getAllByCustomerWithProduct($customerNo,$productNo){
+		return SalesInvoice::selectRaw('salesinvoices.id,salesinvoices.created_at as date,sid.UnitPrice,p.ProductName')
+			->join('salesinvoicedetails as sid','sid.SalesInvoiceNo','=','salesinvoices.id')
+			->join('products as p','p.id','=','sid.ProductNo')
+			->where('sid.ProductNo','=',$productNo)
+			->where('salesinvoices.CustomerNo','=',$customerNo)
+			->orderBy('salesinvoices.created_at','desc')
+			->get();	
+	}
 }

@@ -5,18 +5,23 @@ use Acme\Repos\Product\ProductRepository;
 use Carbon\Carbon;
 use Acme\Repos\SalesOrderDetails\SalesOrderDetailsRepository;
 use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
+use Acme\Repos\SalesInvoices\SIRepository;
 
 class SOController extends \BaseController {
 	protected $SOEntryForm;
 	private $salesOrderRepo;
 	private $vwInventorySource;
+  private $salesInvoiceRepo;
+
 	function __construct(SalesOrderRepository $salesOrderRepo,ProductRepository $productRepo,
-		SalesOrderDetailsRepository $salesOrderDetailsRepo,VwInventorySourceRepository $vwInventorySource)
+		SalesOrderDetailsRepository $salesOrderDetailsRepo,VwInventorySourceRepository $vwInventorySource,
+    SIRepository $salesInvoiceRepo)
 		{
 			$this->salesOrderRepo = $salesOrderRepo;
 			$this->productRepo = $productRepo;
 			$this->salesOrderDetailsRepo = $salesOrderDetailsRepo;
 			$this->vwInventorySource = $vwInventorySource;
+      $this->salesInvoiceRepo = $salesInvoiceRepo;
 		}
 	/**
 	 * Display a listing of the resource.
@@ -95,6 +100,16 @@ class SOController extends \BaseController {
 		return Response::json($SOdetails);
   		}
 	}
+  //View Price List
+  public function vwPriceList(){
+    if(Request::ajax()){
+        $customerNo = Input::get('custNo');
+        $productNo = Input::get('prodNo');
+        //Get Sales Invoice history
+        $priceList = $this->salesInvoiceRepo->getAllByCustomerWithProduct($customerNo,$productNo);
+        return Response::json($priceList);
+    }
+  }
 	public function saveEditedSO()
 	{
 		if(Request::ajax()){
