@@ -587,6 +587,7 @@ function triggerEditCM(id){
   			$('.alert').remove();
 	  		$('#library-action').val(data['id']);
 	      	$('#customers').val(data['customerno']);
+	      	$('#medReps').val(data['userno']);
 	      	$('#remarks').val(data['remarks']);
 	      	$('#amount').val(data['amount']);
 	      	$('.deactivate').attr('href', '/delete-cm/'+id+'');

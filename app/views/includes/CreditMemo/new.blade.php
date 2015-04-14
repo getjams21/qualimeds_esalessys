@@ -16,6 +16,10 @@
 				<label>Customer</label>
 				{{Form::select('customers', $customers, 'key', array('class' => 'form-control square','id'=>'customers'));}}
 			</div>
+      <div class="form-group">
+        <label>Med Rep</label>
+        {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
+      </div>
 			<div class="form-group">
 				<label>Remarks</label>
 				<textarea class="form-control" rows="3" type="textarea" name="remarks" id="remarks" placeholder="Remarks" required></textarea>

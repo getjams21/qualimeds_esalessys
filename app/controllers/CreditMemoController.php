@@ -18,11 +18,12 @@ class CreditMemoController extends \BaseController {
 	public function index()
 	{
 		$customers = Customer::lists('CustomerName','id');
+		$medReps = $medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$creditmemos = CreditMemo::selectRaw('creditmemo.*,u.firstname,u.lastname,c.CustomerName')
 					->join('users as u','u.id','=','creditmemo.userno')
 					->join('customers as c','c.id','=','creditmemo.customerno')
 					->get();
-		return View::make('dashboard.CreditMemo.index', compact('customers','creditmemos'));
+		return View::make('dashboard.CreditMemo.index', compact('customers','creditmemos','medReps'));
 	}
 
 	//to edit CM
@@ -58,11 +59,12 @@ class CreditMemoController extends \BaseController {
 		if($input['id'] == ''){
 			$creditmemo = new CreditMemo;
 			$creditmemo->customerno = $input['customers'];
+			$creditmemo->userno = $input['UserNo'];
+			// dd($creditmemo->userno);
 			$creditmemo->creditmemodate = Carbon::now();
 			$creditmemo->remarks = $input['remarks'];
 			$creditmemo->amount = $input['amount'];
 			$creditmemo->branchno = Auth::user()->BranchNo;
-			$creditmemo->userno = Auth::user()->id;
 			$creditmemo->save();
 			return Redirect::back()
 				->withFlashMessage('
@@ -73,6 +75,7 @@ class CreditMemoController extends \BaseController {
 		}else{
 			$creditmemo = CreditMemo::find($input['id']);
 			$creditmemo->customerno = $input['customers'];
+			$creditmemo->userno = $input['UserNo'];
 			$creditmemo->remarks = $input['remarks'];
 			$creditmemo->amount = $input['amount'];
 			$creditmemo->save();
