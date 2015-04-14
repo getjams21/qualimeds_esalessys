@@ -8,4 +8,5 @@ interface SIRepository{
 	public function getAllWithCusAndRep();
 	public function getByidWithMedRep($id);
 	public function getAllByCustomer($id);
+	public function getAllByCustomerWithProduct($customerNo,$productNo);
 }

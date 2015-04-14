@@ -1,3 +1,37 @@
+<!-- price list Modal -->
+<div class="modal fade" id="priceListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Pricing History</h4>
+      </div>
+      <div class="modal-body">
+        <div class=" responsive" >
+              <table class="table table-striped table-bordered table-hover pricelist">
+                <thead>
+                  <tr>
+                    <th>SalesInvoice No.</th>
+                    <th>Product Name</th>
+                    <th>Date</th>
+                    <th>Unit Price</th>
+                    <th>Add</th>
+                  </tr>
+                 </thead> 
+                 <tbody>
+                  <!-- History content -->
+                 </tbody>
+              </table>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of pricelistmodal -->
 <br>
 <div class="panel panel-success">
   <div class="panel-heading head">
@@ -50,21 +84,12 @@
               <center>Type the desired product on the Search Bar and click Add button to add the product to SO List.</center>
             </div>
         </div>
-          <!-- /input-group -->
-          <!--  <div class="input-group">
-              <button type="button" class="btn btn-success  square" style="white-space: normal;" id="addProductPO" ><i class="fa fa-plus-square" ></i> <b> Add Products for PO</b></button>
-          </div> --><!-- /input-group -->
-                 </div>
+       </div>
        <div class="col-md-1">
        </div>
        <div class="col-md-7">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
-                <!-- <span class="input-group-addon">SO Type: </span>
-                <select class='form-control square' name='unit' id='unit'>
-                  <option value='1'>Wholesale</option>
-                  <option value='2'>Retail</option>
-                </select> -->
                 <span class="input-group-addon">Search Product: </span>
                 <input type="text" id="myInputTextField" class="form-control"  >
               </div>
@@ -132,7 +157,7 @@
             <th>Qty</th>
             <th>Unit Price</th>
             <th>Item Cost</th>
-            <th>Remove</th>
+            <th>Action</th>
           </tr>
          </thead> 
          <tbody>

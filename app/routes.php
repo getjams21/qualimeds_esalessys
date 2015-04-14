@@ -39,6 +39,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
 		#SO
  		Route::get('/SalesOrders', 'SOController@index');
  		Route::get('/changeSOType', 'SOController@changeSOType');
+ 		Route::post('/view-price-list', 'SOController@vwPriceList');
  		#BILLPAYMENTS
  		Route::get('/BillPayments', 'BillPaymentsController@index');
  		#SI

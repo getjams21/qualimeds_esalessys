@@ -5,6 +5,7 @@ var counter = 1;
 function addSO(id){
 	// alert('check');
 	var prodNum = $('#prodId'+id).text();
+	var custNo = $('#customer').val();
 	var name= $('#name'+id).text();
 	var brand= $('#brand'+id).text();
 	var unit= $('#unit'+id).text();
@@ -31,8 +32,10 @@ function addSO(id){
 		<td class="light-green editable" id="prodQtySO'+itemno+'" value="'+itemno+'">'+1+'</td>
 		<td class="light-red ed" id="prodUntSO'+itemno+'" value="'+unitPrice+'">'+unitPrice+'</td>
 		<td class="cost" id="prodCostSO'+itemno+'">0.00</td>
-		<td><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
-		<i class="fa fa-times"></i> Remove</button></td></tr>');
+		<td>
+		<center><button class="btn btn-danger btn-xs square" id="removeSO'+itemno+'" onclick="removeSO('+itemno+','+id+','+index+')">
+		<i class="fa fa-times"></i> Remove</button>&nbsp;<button class="btn btn-primary btn-xs square" id="vwPriceList'+itemno+'" onclick="vwPriceList('+itemno+','+custNo+','+prodNum+')">
+		<i class="fa fa-eye"></i> Price List</button></center></td></tr>');
 		var unitAvailable = $('#unitAv'+id).val();
 		$('select[id=unit'+itemno+']').on('change', function() {
 			// alert($('select[id=unit'+id+']').val());
@@ -97,6 +100,14 @@ function addSO(id){
 					}
 				});
 		$('#saveSO').removeClass('hidden');
+		//Add Price from price list
+		function addPrice(itemno,price){
+		// alert($('#prodUntSO'+itemno).text());
+		// return false;
+		$('#prodUntSO'+itemno).val(price);
+		$('#prodUntSO'+itemno).text(price);
+		$('#priceListModal').modal('hide');
+	}
 }
 function calcCostSO(id){
 	var qty = parseInt($('#prodQtySO'+id).text());
@@ -137,6 +148,34 @@ function removeSO(id,prodId,index){
 	}
 	itemno -=1;
 	totalCost();
+}
+//View price list
+function vwPriceList(itemno,custNo,prodNo){
+	$.post(reroute+'/view-price-list',{custNo:custNo,prodNo:prodNo},function(data){
+		if(data){
+			$.each(data, function(key,value) {
+				$('.pricelist >tbody').find('tr').remove().end();
+  				$('.pricelist >tbody').append('<tr>
+  					<td>'+value.id+'</td>
+  					<td>'+value.ProductName+'</td>
+  					<td>'+value.date+'</td>
+  					<td>'+value.UnitPrice+'</td>
+  					<td>
+  					<button class="btn btn-primary btn-xs square" 
+  					onclick="addPrice('+itemno+','+value.UnitPrice+')">
+					<i class="fa fa-plus"></i>Add</button></td>
+  				</tr>');
+			});
+			$('#priceListModal').modal('show');
+		}
+	});
+}
+//Add Price from price list
+function addPrice(itemno,price){
+	$('#prodUntSO'+itemno).val(price);
+	$('#prodUntSO'+itemno).text(price);
+	calcCostSO(itemno);
+	$('#priceListModal').modal('hide');
 }
 function viewPO(id){
 	alert(reroute);
