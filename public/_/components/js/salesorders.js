@@ -177,6 +177,7 @@ function addPrice(itemno,price){
 	calcCostSO(itemno);
 	$('#priceListModal').modal('hide');
 }
+
 function viewPO(id){
 	alert(reroute);
 	$('#viewPOModal').modal('show');
@@ -214,8 +215,12 @@ function viewPO(id){
 function editSO(id){
 	$('#vwSaveBtn').addClass('hidden');
 	$('#editSOModal').modal('show');
+	var custNo = 0;
 	 $.post(reroute+'/viewSO',{id:id},function(data){
 	 	// alert(data[0]['id']);
+	 	custNo = data[0]['CustomerNo'];
+	 	// alert(custNo);
+	 	// return false;
 	 	$('#edSOId').text(data[0]['id']);
 	 	$('#edSODate').text(data[0]['SalesOrderDate']);
 	 	$('[name="vwCustomer"]').val(data[0]['CustomerNo']);
@@ -250,6 +255,9 @@ function editSO(id){
 			  		}else if (value.Unit == 'pcs' || value.Unit == 'Pcs'){
 			  			var nxtUnit = 'Box';
 			  		}
+			  		var prodNum = value.ProductNo;
+			  		// alert(custNo);
+			  		// return false;
 	  				$('.edSOTable >tbody').append('<tr id="vwPO'+counter+'"><td id="vwItemno'+counter+'">'+counter+'</td><td id="vwProd'+value.ProductNo+'">'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
 	  					<td>'+value.BrandName+'</td>
@@ -263,7 +271,8 @@ function editSO(id){
 	  					<td class="vwEd" id="edUnt'+counter+'">'+money(value.UnitPrice)+'</td>
 	  					<td class="ecost"id="edCost'+counter+'">'+(money(value.UnitPrice*value.Qty))+'</td><td><button class="btn btn-danger 
 	  					btn-xs square dis" id="vwRemovePO'+counter+'" onclick="vwRemovePO('+counter+')" >
-						<i class="fa fa-times" ></i> Remove</button></td></tr>');
+						<i class="fa fa-times" ></i> Remove</button>&nbsp;<button class="btn btn-primary btn-xs square" id="vwPriceList'+counter+'" onclick="vwEdPriceList('+counter+','+custNo+','+prodNum+')">
+		<i class="fa fa-eye"></i> Price List</button></td></tr>');
 		  			total+=value.UnitPrice*value.Qty;
 		  	// 		var unitAvailable = $('#unitAv'+counter).val();
 					// $('select[id=unit'+counter+']').on('change', function() {
@@ -341,6 +350,53 @@ function editSO(id){
 				}
 	      });
 }
+//Edit SO
+//View price list
+function vwEdPriceList(itemno,custNo,prodNo){
+	$.post(reroute+'/view-price-list',{custNo:custNo,prodNo:prodNo},function(data){
+		if(data){
+			$.each(data, function(key,value) {
+				$('.pricelist >tbody').find('tr').remove().end();
+  				$('.pricelist >tbody').append('<tr>
+  					<td>'+value.id+'</td>
+  					<td>'+value.ProductName+'</td>
+  					<td>'+value.date+'</td>
+  					<td>'+value.UnitPrice+'</td>
+  					<td>
+  					<button class="btn btn-primary btn-xs square" 
+  					onclick="addEdPrice('+itemno+','+value.UnitPrice+')">
+					<i class="fa fa-plus"></i>Add</button></td>
+  				</tr>');
+			});
+			$('#priceListModal').modal('show');
+		}
+	});
+}
+//Add Price from price list
+function addEdPrice(itemno,price){
+	// alert(price);
+	$('#edUnt'+itemno).val(price);
+	$('#edUnt'+itemno).text(price);
+	var qty = $('#edQty'+itemno).text();
+	var unit = $('#edUnt'+itemno).text();
+	$('#edCost'+itemno).text(parseFloat(qty*unit));
+	edtotalCostSO();
+	$('#priceListModal').modal('hide');
+}
+
+function edtotalCostSO(){
+	var total=0;
+	$('.ecost').each(function(){
+		total += parseFloat($(this).text()); 
+	});
+	$('#edSOTotalCost').text(money(total));
+	if(total == 0){
+		$('#vwSaveSOBtn').addClass('hidden');
+	}else{
+		$('#vwSaveSOBtn').removeClass('hidden');
+	}
+}
+//
 function vwaddSO(id){
 	var prodNum = $('#prodId'+id).text();
 	var name= $('#name'+id).text();
