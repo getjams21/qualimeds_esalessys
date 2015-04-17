@@ -317,17 +317,21 @@ function billSO(id){
 	 	$('#billSOId').text(data[0]['id']);
 	 	$('[name="billSOCustomers"]').val(data[0]['CustomerNo']);
 	 	$('[name="billSOmedReps"]').val(data[0]['UserNo']);
+	 	$('#printSICusAddress').text(data[0]['Address']);
 	 	if(data[0]['Terms'] == '0'){
 	 		$('#billTerm').val(0);
 	 		$('#billTerm1').addClass('active');
 	 		$('#billTerm2').removeClass('active');
 	 		$('#billTermBox').addClass('hidden');
+	 		$('#printSITerm').text('Cash');
+	 		
 		}else{
 		 	$('#billTerm').val(data[0]['Terms']);
 		 	$('#billTerm1').removeClass('active');
 		 	$('#billTerm2').addClass('active');
 		 	$('#billTerm2').prop("disabled", false)
 		 	$('#billTermBox').removeClass('hidden');
+		 	$('#printSITerm').text(data[0]['Terms']);
 		}
 	      });
 	 $.post(reroute+'/viewSODetails',{id:id},function(data){
@@ -342,8 +346,13 @@ function billSO(id){
 		  			total+=value.UnitPrice*value.Qty;
 	  				editableNumber(value.ProductNo);
 	  				editableSelect(value.ProductNo,value.RetailUnit,value.WholeSaleUnit);
-	  				var exp = new Date(value.ExpiryDate);
-	  				var expDate = ((exp.getMonth() + 1) + '/' + exp.getDate() + '/' +  exp.getFullYear());
+	  				// var exp = new Date(value.ExpiryDate);
+	  				// var expDate = (exp.getMonth() + 1) + '-' + exp.getDate() + '-' +  exp.getFullYear();
+	  				// alert( value.ExpiryDate);
+	  				var str = value.ExpiryDate;
+	  				str = str.replace(/-/g,"/");
+					var dateObject = new Date(str);
+					var expDate = (dateObject.getMonth() + 1) + '-' + dateObject.getDate() + '-' +  dateObject.getFullYear();
 	  				var num=(value.UnitPrice*value.Qty);
 					var str=num.toString();
 					var numarray=str.split('.');
@@ -351,17 +360,17 @@ function billSO(id){
 						numarray[1] = '00';
 					}
 	  				$('#printSITable >tbody').append('<tr style="height:27px;"><td >'+Number(value.Qty).toFixed(0)+'</td><td>'+value.Unit+'</td>
-	  					<td>'+value.ProductName+'</td>
+	  					<td style="max-width:385px;overflow:hidden; text-overflow: ellipsis;white-space: nowrap;">'+value.ProductName+'</td>
 	  					<td>'+expDate+'</td><td class="dp">'+Number(value.UnitPrice).toFixed(2)+'</td><td class="dp" style="width: 90px;">'+numberWithCommas((num).toFixed(2))+'</td></tr>');
 		  			
 		  			counter+=1;
 	  				});
 
 		  			var rows = document.getElementById('printSITable').getElementsByTagName("tr").length;
-	  				while(rows <= 16){
+	  				while(rows <= 15){
 	  					$('#printSITable >tbody').append('<tr style="height:27px;"><td ></td><td></td>
 	  					<td></td>
-	  					<td></td><td class="dp"></td><td class="dp"></td><td ></td></tr>');
+	  					<td></td><td class="dp"></td><td></td><td ></td></tr>');
 		  				rows ++;
 	  				}
 					// var total = Number(total).toFixed(2);
@@ -373,7 +382,7 @@ function billSO(id){
 	  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
 	  				$('#vat').text(numberWithCommas(vat.toFixed(2)));
 	  				$('#printSITotal').text(numberWithCommas(total.toFixed(2)));
-	  				$('#printPrepBy').text(prep);
+	  				// $('#printPrepBy').text(prep);
 	  				$('#printSIName').text(cust);
 	  				var today = new Date();
 	  				var dd = today.getDate();
@@ -390,7 +399,101 @@ function billSO(id){
 	  				
 	      });
 }
+// print SI function
+function printSI(id){
 
+		$('#printSITable tbody tr').remove();
+		$.post(reroute+'/viewSO',{id:id},function(data){
+	 	$('#printSICusAddress').text(data[0]['Address']);
+	 	if(data[0]['Terms'] == '0'){
+	 		$('#printSITerm').text('Cash');
+	 		
+		}else{
+		 	$('#printSITerm').text(data[0]['Terms']);
+		}
+	      });
+	 $.post(reroute+'/viewSODetails',{id:id},function(data){
+	  			counter=1;
+	  			var total=0;
+			  		$.each(data, function(key,value) {
+	  				total+=value.UnitPrice*value.Qty;
+	  				var str = value.ExpiryDate;
+	  				str = str.replace(/-/g,"/");
+					var dateObject = new Date(str);
+					var expDate = (dateObject.getMonth() + 1) + '-' + dateObject.getDate() + '-' +  dateObject.getFullYear();
+	  				var num=(value.UnitPrice*value.Qty);
+					var str=num.toString();
+					var numarray=str.split('.');
+					if(!numarray[1]){
+						numarray[1] = '00';
+					}
+	  				$('#printSITable >tbody').append('<tr style="height:27px;"><td >'+Number(value.Qty).toFixed(0)+'</td><td>'+value.Unit+'</td>
+	  					<td style="max-width:385px;overflow:hidden; text-overflow: ellipsis;white-space: nowrap;">'+value.ProductName+'</td>
+	  					<td>'+expDate+'</td><td class="dp">'+Number(value.UnitPrice).toFixed(2)+'</td><td class="dp" style="width: 90px;">'+numberWithCommas((num).toFixed(2))+'</td></tr>');
+		  			
+		  			counter+=1;
+	  				});
+
+		  			var rows = document.getElementById('printSITable').getElementsByTagName("tr").length;
+	  				while(rows <= 15){
+	  					$('#printSITable >tbody').append('<tr style="height:27px;"><td ></td><td></td>
+	  					<td></td>
+	  					<td></td><td class="dp"></td><td></td><td ></td></tr>');
+		  				rows ++;
+	  				}
+					// var total = Number(total).toFixed(2);
+					var prep = $("[name='billSOmedReps'] option:selected").text();
+					var cust = $("[name='billSOCustomers'] option:selected").text();
+	  				$('#billSOTotalCost').text(total);
+	  				var vatsales = total/1.12;
+	  				var vat = vatsales *.12;
+	  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
+	  				$('#vat').text(numberWithCommas(vat.toFixed(2)));
+	  				$('#printSITotal').text(numberWithCommas(total.toFixed(2)));
+	  				// $('#printPrepBy').text(prep);
+	  				$('#printSIName').text(cust);
+	  				var today = new Date();
+	  				var dd = today.getDate();
+					var mm = today.getMonth()+1; //January is 0!
+					var yyyy = today.getFullYear();
+	  				if(dd<10) {
+					    dd='0'+dd
+					} 
+
+					if(mm<10) {
+					    mm='0'+mm
+					} 
+					$('#printSIDate').text(mm+'-'+dd+'-'+yyyy);
+	  				
+	      });
+			$("#SIPrintable").printThis({
+					     debug: false,             
+					     importCSS: false,           
+					     printContainer: true,       
+					     pageTitle: "Sales Invoice",              
+					     removeInline: false,        
+					     printDelay: 333,           
+					     header: null,              
+					     formValues: true,
+					     page:'A3',
+					     margins:'none'           
+					  });
+			return;
+}
+function displayDate(date){
+	var today = new Date();
+	  				var dd = today.getDate();
+					var mm = today.getMonth()+1; //January is 0!
+					var yyyy = today.getFullYear();
+	  				if(dd<10) {
+					    dd='0'+dd
+					} 
+
+					if(mm<10) {
+					    mm='0'+mm
+					} 
+    return mm+'-'+dd+'-'+yyyy;		
+}
 function numberWithCommas(x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1232,19 +1335,7 @@ $('#vwSaveBillBtn').click(function(){
 // SAVE SI
 $('#saveBillSOBtn').click(function(){
 	// $('#printSI').modal('show');
-	// $("#SIPrintable").printThis({
-	//      debug: false,             
-	//      importCSS: true,           
-	//      printContainer: true,       
-	//      pageTitle: "Sales Invoice",              
-	//      removeInline: false,        
-	//      printDelay: 333,           
-	//      header: null,              
-	//      formValues: true,
-	//      page:'A3',
-	//      margins:'none'           
-	//   });
-	// return;
+
 	var TableData;
 	var id = $('#billSOId').text();
 	var term = $('#billTerm').val();
@@ -1259,6 +1350,20 @@ $('#saveBillSOBtn').click(function(){
 	TableData = $.toJSON(TableData);
 	$.post(reroute+'/saveSOBill',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
 			if(data==1){
+				if($('#billApprove').length){
+					$("#SIPrintable").printThis({
+					     debug: false,             
+					     importCSS: false,           
+					     printContainer: true,       
+					     pageTitle: "Sales Invoice",              
+					     removeInline: false,        
+					     printDelay: 333,           
+					     header: null,              
+					     formValues: true,
+					     page:'A3',
+					     margins:'none'           
+					  });
+				}
 				location.reload();
 				if(document.title == 'Invoice'){
 					$(location).attr('href','/SalesInvoice#showSIList');
