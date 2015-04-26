@@ -111,11 +111,12 @@
         <div class="well hidden cashChecque">
           <div class="row">
             <div class="col-md-2">
+              <b>Select Payment Method:</b><br>
              CASH&nbsp;&nbsp;<input type="radio" checked id="billCash" name="paymentType" style="width:15px; height:15px;"/><br>
              CHEQUE&nbsp;&nbsp;<input type="radio" id="billCheque" name="paymentType" style="width:15px; height:15px;"/>
             </div>
             <div class="col-md-10">
-            	<div class="cashDiv container-fluid col-md-5 " >
+            	<!-- <div class="cashDiv container-fluid col-md-5 " >
             		<h4>Cash Details: </h4>
             		<div class="row">
 	                    <div class="col-md-6 ">
@@ -124,7 +125,7 @@
 		              	</div>
 		              	</div>
 		            </div>
-            	</div>
+            	</div> -->
             	<div class="chequeDiv container-fluid col-md-12 hidden" >
               <div class="col-md-6">
             		<h4>Cheque Details: </h4>
@@ -151,13 +152,13 @@
                       <span class="input-group-addon calendar-icon"><i class="glyphicon glyphicon-calendar"></i></span>
                     </div><br>
 		            <div class="error" id="chequeError" hidden>Please provide Pay To, Check No or Check Due Date.</div>
-                    <div class="row">
-	                    <div class="col-md-6 col-md-offset-6">
+                    <!-- <div class="row">
+	                   <div class="col-md-6 col-md-offset-6">
 	                    <div class="input-group">
 			                <input type="button" id="chequeVoucher" class="form-control btn btn-primary"  value="Cheque Voucher">
+		              	  </div>
 		              	</div>
-		              	</div>
-		            </div>
+		              </div> -->
             	</div>
              </div>
              </div>

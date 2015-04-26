@@ -400,86 +400,108 @@ function billSO(id){
 	      });
 }
 // print SI function
-function printSI(id){
-
-		$('#printSITable tbody tr').remove();
-		$.post(reroute+'/viewSO',{id:id},function(data){
-	 	$('#printSICusAddress').text(data[0]['Address']);
-	 	if(data[0]['Terms'] == '0'){
+function printSI(id,prep,app){
+	
+	$('#printPrepBy').text(prep);
+	$('#printApprovedBy').text(app);
+	$('#printSITable tbody tr').remove();
+	$.post(reroute+'/viewSO',{id:id}).done(function(d){
+	 	$('#printSICusAddress').text(d[0]['Address']);
+	 	if(d[0]['Terms'] == '0'){
 	 		$('#printSITerm').text('Cash');
 	 		
 		}else{
-		 	$('#printSITerm').text(data[0]['Terms']);
+		 	$('#printSITerm').text(d[0]['Terms']);
 		}
-	      });
-	 $.post(reroute+'/viewSODetails',{id:id},function(data){
-	  			counter=1;
-	  			var total=0;
-			  		$.each(data, function(key,value) {
-	  				total+=value.UnitPrice*value.Qty;
-	  				var str = value.ExpiryDate;
-	  				str = str.replace(/-/g,"/");
-					var dateObject = new Date(str);
-					var expDate = (dateObject.getMonth() + 1) + '-' + dateObject.getDate() + '-' +  dateObject.getFullYear();
-	  				var num=(value.UnitPrice*value.Qty);
-					var str=num.toString();
-					var numarray=str.split('.');
-					if(!numarray[1]){
-						numarray[1] = '00';
-					}
-	  				$('#printSITable >tbody').append('<tr style="height:27px;"><td >'+Number(value.Qty).toFixed(0)+'</td><td>'+value.Unit+'</td>
-	  					<td style="max-width:385px;overflow:hidden; text-overflow: ellipsis;white-space: nowrap;">'+value.ProductName+'</td>
-	  					<td>'+expDate+'</td><td class="dp">'+Number(value.UnitPrice).toFixed(2)+'</td><td class="dp" style="width: 90px;">'+numberWithCommas((num).toFixed(2))+'</td></tr>');
-		  			
-		  			counter+=1;
-	  				});
+			 $.post(reroute+'/viewSODetails',{id:id}).done(function(data){
+			  			counter=1;
+			  			var total=0;
+					  		$.each(data, function(key,value) {
+			  				total+=value.UnitPrice*value.Qty;
+			  				var str = value.ExpiryDate;
+			  				str = str.replace(/-/g,"/");
+							var dateObject = new Date(str);
+							var expDate = (dateObject.getMonth() + 1) + '-' + dateObject.getDate() + '-' +  dateObject.getFullYear();
+			  				var num=(value.UnitPrice*value.Qty);
+							var str=num.toString();
+							var numarray=str.split('.');
+							if(!numarray[1]){
+								numarray[1] = '00';
+							}
+			  				$('#printSITable >tbody').append('<tr style="height:27px;"><td >'+Number(value.Qty).toFixed(0)+'</td><td>'+value.Unit+'</td>
+			  					<td style="max-width:385px;overflow:hidden; text-overflow: ellipsis;white-space: nowrap;">'+value.ProductName+'</td>
+			  					<td>'+expDate+'</td><td class="dp">'+Number(value.UnitPrice).toFixed(2)+'</td><td class="dp" style="width: 90px;">'+numberWithCommas((num).toFixed(2))+'</td></tr>');
+				  			
+				  			counter+=1;
+			  				});
 
-		  			var rows = document.getElementById('printSITable').getElementsByTagName("tr").length;
-	  				while(rows <= 15){
-	  					$('#printSITable >tbody').append('<tr style="height:27px;"><td ></td><td></td>
-	  					<td></td>
-	  					<td></td><td class="dp"></td><td></td><td ></td></tr>');
-		  				rows ++;
-	  				}
-					// var total = Number(total).toFixed(2);
-					var prep = $("[name='billSOmedReps'] option:selected").text();
-					var cust = $("[name='billSOCustomers'] option:selected").text();
-	  				$('#billSOTotalCost').text(total);
-	  				var vatsales = total/1.12;
-	  				var vat = vatsales *.12;
-	  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
-	  				$('#vat').text(numberWithCommas(vat.toFixed(2)));
-	  				$('#printSITotal').text(numberWithCommas(total.toFixed(2)));
-	  				// $('#printPrepBy').text(prep);
-	  				$('#printSIName').text(cust);
-	  				var today = new Date();
-	  				var dd = today.getDate();
-					var mm = today.getMonth()+1; //January is 0!
-					var yyyy = today.getFullYear();
-	  				if(dd<10) {
-					    dd='0'+dd
-					} 
+				  			var rows = document.getElementById('printSITable').getElementsByTagName("tr").length;
+			  				while(rows <= 15){
+			  					$('#printSITable >tbody').append('<tr style="height:27px;"><td ></td><td></td>
+			  					<td></td>
+			  					<td></td><td class="dp"></td><td></td><td ></td></tr>');
+				  				rows ++;
+			  				}
+							// var total = Number(total).toFixed(2);
+							var prep = $("[name='billSOmedReps'] option:selected").text();
+							var cust = $("[name='billSOCustomers'] option:selected").text();
+			  				$('#billSOTotalCost').text(total);
+			  				var vatsales = total/1.12;
+			  				var vat = vatsales *.12;
+			  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
+			  				$('#vat').text(numberWithCommas(vat.toFixed(2)));
+			  				$('#printSITotal').text(numberWithCommas(total.toFixed(2)));
+			  				// $('#printPrepBy').text(prep);
+			  				$('#printSIName').text(cust);
+			  				var today = new Date();
+			  				var dd = today.getDate();
+							var mm = today.getMonth()+1; //January is 0!
+							var yyyy = today.getFullYear();
+			  				if(dd<10) {
+							    dd='0'+dd
+							} 
 
-					if(mm<10) {
-					    mm='0'+mm
-					} 
-					$('#printSIDate').text(mm+'-'+dd+'-'+yyyy);
-	  				
+							if(mm<10) {
+							    mm='0'+mm
+							} 
+							$('#printSIDate').text(mm+'-'+dd+'-'+yyyy);
+			  			var printable = $("#SIPrintable").html();
+						$(printable).printThis({
+								     debug: false,             
+								     importCSS: false,           
+								     printContainer: true,       
+								     pageTitle: "Sales Invoice",              
+								     removeInline: false,        
+								     printDelay: 333,           
+								     header: null,              
+								     formValues: true,
+								     page:'A3',
+								     margins:'none'           
+								  });
+						return;		
+
+			});
+					  
 	      });
-			$("#SIPrintable").printThis({
-					     debug: false,             
-					     importCSS: false,           
-					     printContainer: true,       
-					     pageTitle: "Sales Invoice",              
-					     removeInline: false,        
-					     printDelay: 333,           
-					     header: null,              
-					     formValues: true,
-					     page:'A3',
-					     margins:'none'           
-					  });
-			return;
+			
+			
+			
 }
+// function printNow(){
+
+// 				$("#SIPrintable").printThis({
+// 					     debug: false,             
+// 					     importCSS: false,           
+// 					     printContainer: true,       
+// 					     pageTitle: "Sales Invoice",              
+// 					     removeInline: false,        
+// 					     printDelay: 333,           
+// 					     header: null,              
+// 					     formValues: true,
+// 					     page:'A3',
+// 					     margins:'none'           
+// 					  });
+// }
 function displayDate(date){
 	var today = new Date();
 	  				var dd = today.getDate();
@@ -1348,10 +1370,11 @@ $('#saveBillSOBtn').click(function(){
 		}
 	TableData = storeTblValuesSI()
 	TableData = $.toJSON(TableData);
-	$.post(reroute+'/saveSOBill',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy},function(data){
+	$.post(reroute+'/saveSOBill',{TD:TableData,term:term,id:id,RefDocNo:RefDocNo,SalesInvoiceDate:SalesInvoiceDate,ApprovedBy:approvedBy}).done(function(data){
 			if(data==1){
 				if($('#billApprove').length){
-					$("#SIPrintable").printThis({
+					if(approvedBy == 1){
+						$("#SIPrintable").printThis({
 					     debug: false,             
 					     importCSS: false,           
 					     printContainer: true,       
@@ -1363,8 +1386,13 @@ $('#saveBillSOBtn').click(function(){
 					     page:'A3',
 					     margins:'none'           
 					  });
+					}else{
+
+						alert('been here');
+					}
 				}
-				location.reload();
+				return;
+				// location.reload();
 				if(document.title == 'Invoice'){
 					$(location).attr('href','/SalesInvoice#showSIList');
 				}
@@ -1452,33 +1480,33 @@ $('#billCash').click(function(){
 			$('.chequeDiv').addClass('hidden');
 
 });
-$('#cashVoucher').click(function(){
-	var itemno = 1;
-	var supplier;
-	$('#cashVoucherTable > tbody > tr').remove();
-	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
-		supplier = $(tr).find('td:eq(2)').text();
-		$('#cashVoucherTable').append('<tr>
-							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
-							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
-							</tr>');
-	});
-	$('.cashVoucherTotal').text($('#BillPaymentTotalCost').text());
-	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
-	$('#cvReceivedFrom').text(supplier);
-	$('#wordVoucherTotal').text(words);
-	$('#cashVoucherModal').modal('show');
-	$("#cashVoucherPrintable").printThis({
-	     debug: false,             
-	     importCSS: true,           
-	     printContainer: true,       
-	     pageTitle: "Cash Voucher",              
-	     removeInline: false,        
-	     printDelay: 333,           
-	     header: null,              
-	     formValues: true            
-	  });
-});
+// $('#cashVoucher').click(function(){
+// 	var itemno = 1;
+// 	var supplier;
+// 	$('#cashVoucherTable > tbody > tr').remove();
+// 	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+// 		supplier = $(tr).find('td:eq(2)').text();
+// 		$('#cashVoucherTable').append('<tr>
+// 							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
+// 							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
+// 							</tr>');
+// 	});
+// 	$('.cashVoucherTotal').text($('#BillPaymentTotalCost').text());
+// 	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+// 	$('#cvReceivedFrom').text(supplier);
+// 	$('#wordVoucherTotal').text(words);
+// 	$('#cashVoucherModal').modal('show');
+// 	$("#cashVoucherPrintable").printThis({
+// 	     debug: false,             
+// 	     importCSS: true,           
+// 	     printContainer: true,       
+// 	     pageTitle: "Cash Voucher",              
+// 	     removeInline: false,        
+// 	     printDelay: 333,           
+// 	     header: null,              
+// 	     formValues: true            
+// 	  });
+// });
 
 // $('#chequeVoucher').click(function(){
 // 	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
@@ -1497,31 +1525,9 @@ $('#cashVoucher').click(function(){
 // 	 $('#chequeVoucherDueDate').text($('#chequeDueDate').val());
 // 	 $('#chequeModal').modal('show');
 // });
-$('#chequeVoucher').click(function(){
-	if(!$('#chequeNo').val().length || !$('#chequeDueDate').val().length || !$('#payTo').val().length){
-		$('#chequeError').fadeIn("fast", function(){ 
-	        $("#chequeError").fadeOut(4000);
-	    });
-	    return;
-	}
-	$('#checkVoucherCheckNo').text($('#chequeNo').val())
-	$('#checkVoucherBank').text($('#bankNo').find("option:selected").text())
-	$('#checkVoucherDueDate').text($('#chequeDueDate').val())
-	$('#checkVoucherPayTo').text($('#payTo').val())
-
-	// Check voucher payment details table
-	$('#checkVoucherTable > tbody > tr').remove();
-	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
-		$('#checkVoucherTable').append('<tr>
-							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
-							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
-							</tr>');
-	});
-	$('.checkVoucherTotal').text($('#BillPaymentTotalCost').text());
-	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
-	// end of check voucher payment details table
-	$('#checkVoucherModal').modal('show');
-});
+// $('#chequeVoucher').click(function(){
+	
+// });
 
 
 $('#saveBill').click(function(){
@@ -1553,9 +1559,13 @@ $('#saveBill').click(function(){
 		var approved =0;		
 	}
 	$.post(reroute+'/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
-	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved,PayTo:PayTo},function(data){
-		location.reload();
-			$(location).attr('href','/BillPayments#BillPaymentList');
+	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved,PayTo:PayTo}).done(function(data){
+		if(paymentType==0){
+			printCashVoucher();
+		}else{
+			printCheckVoucher();
+		}
+		$(location).attr('href','/BillPayments#BillPaymentList');
 	});
 	function storeBillValues(){
 		var TableData = new Array();
@@ -1922,6 +1932,64 @@ $('#report_type').change(function(){
 	}
 });
 });//end of ready function
+// Bill Payment
+function printCashVoucher(){
+	var itemno = 1;
+	var supplier;
+	$('#cashVoucherTable > tbody > tr').remove();
+	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+		supplier = $(tr).find('td:eq(2)').text();
+		$('#cashVoucherTable').append('<tr>
+							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
+							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
+							</tr>');
+	});
+	$('.cashVoucherTotal').text($('#BillPaymentTotalCost').text());
+	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+	$('#cvReceivedFrom').text(supplier);
+	$('#wordVoucherTotal').text(words);
+	// $('#cashVoucherModal').modal('show');
+	$("#cashVoucherPrintable").printThis({
+	     debug: false,             
+	     importCSS: true,           
+	     printContainer: true,       
+	     pageTitle: "Cash Voucher",              
+	     removeInline: false,        
+	     printDelay: 333,           
+	     header: null,              
+	     formValues: true            
+	  });
+}
+function printCheckVoucher(){
+	$('#checkVoucherCheckNo').text($('#chequeNo').val())
+	$('#checkVoucherBank').text($('#bankNo').find("option:selected").text())
+	$('#checkVoucherDueDate').text($('#chequeDueDate').val())
+	$('#checkVoucherPayTo').text($('#payTo').val())
+
+	// Check voucher payment details table
+	$('#checkVoucherTable > tbody > tr').remove();
+	$('.BillPaymentTable > tbody > tr').each(function(row, tr){
+		$('#checkVoucherTable').append('<tr>
+							<td colspan="7">Bill No '+$(tr).find('td:eq(1)').text()+'</td>
+							<td class="dp"><i style="padding-right:8%;">'+$(tr).find('td:eq(4)').text()+'</i></td>
+							</tr>');
+	});
+	$('.checkVoucherTotal').text($('#BillPaymentTotalCost').text());
+	var words =  toWords(Number($('#BillPaymentTotalCost').text()).toFixed(0));
+	// end of check voucher payment details table
+	// $('#checkVoucherModal').modal('show');
+	$("#checkVoucherPrintable").printThis({
+	     debug: false,             
+	     importCSS: true,           
+	     printContainer: true,       
+	     pageTitle: "Cash Voucher",              
+	     removeInline: false,        
+	     printDelay: 333,           
+	     header: null,              
+	     formValues: true            
+	  });
+}
+	
  //SALES PAYMENTS
  function prodReport(id){
 			$.post(reroute+'/fetchInventoryByStockCardId',{id:id},function(data){

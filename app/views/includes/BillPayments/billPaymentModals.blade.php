@@ -1,4 +1,4 @@
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="cashVoucherModal">
+<!-- <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="cashVoucherModal">
   <div class="modal-dialog modal-lg ">
     <div class="modal-content">
       <div class="modal-header">
@@ -7,8 +7,8 @@
           <b  class="pull-right" >Date:&nbsp;&nbsp;{{date('F d, Y')}}</b>
         </h4>
       </div>
-      <div class="modal-body">
-      <div class="well">
+      <div class="modal-body"> -->
+      <div hidden>
       <div id="cashVoucherPrintable">
         <div class="panel panel-success" STYLE="margin-bottom:0px;" >
           <div class="panel-heading"><b>CASH VOUCHER</b></div>
@@ -76,7 +76,7 @@
         </div><!-- panel success-->
       </div><!--printable-->
       </div><!--well -->
-      </div><!--modal body -->
+     <!--  </div>
       <div class="modal-footer">
         
         <button type="button" class="btn btn-success " id="printCashVoucher">Print</button>  
@@ -84,9 +84,9 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- CHEQUE VOUCHER -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="checkVoucherModal">
+<!-- <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="checkVoucherModal">
   <div class="modal-dialog modal-lg ">
     <div class="modal-content">
       <div class="modal-header">
@@ -95,9 +95,9 @@
           <b  class="pull-right" >Date:&nbsp;&nbsp;{{date('F d, Y')}}</b>
         </h4>
       </div>
-      <div class="modal-body">
-      <div class="well">
-      <div id="cashVoucherPrintable">
+      <div class="modal-body"> -->
+      <div hidden>
+      <div id="checkVoucherPrintable">
         <div class="panel panel-success" STYLE="margin-bottom:0px;" >
           <div class="panel-heading"><b>CHECK VOUCHER</b></div>
           <div class="panel-body" STYLE="margin-bottom:0px;padding-bottom:4px;">
@@ -137,15 +137,15 @@
           </div><!-- panel body-->
         </div><!-- panel success-->
       </div><!--printable-->
-      </div><!--well -->
-      </div><!--modal body -->
+      </div>
+      <!-- </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success " id="printCashVoucher">Print</button>  
         <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- END OF CHEQUE VOUCHER -->
 <!-- CHEQUE -->
 <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="chequeModal">

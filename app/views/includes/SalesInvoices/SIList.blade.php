@@ -1,74 +1,4 @@
-<div hidden>
-    <div  id="SIPrintable" style="margin-bottom:90px;background-color:white;margin-left:150px;" >
-      <div  >
-       
-      </div>
-      <div  >
-         
-            <b>
-          <table style="margin-top:22px;">
-            <tr><td colspan="2" style="width:130px;"></td>
-                <td style="width:320px;" id="printSIName"></td>
-                <td style="width:74px;"></td>
-                <td style="width:115px;"></td>
-                <td style="width:150px;float:right;"  id="printSIDate"></td>
-            </tr>
-            <tr><td colspan="2" style="width:82px;"></td>
-                <td style="width:305px;">Address Address Address</td>
-                <td style="width:74px;"></td>
-                <td style="width:115px;"></td>
-                <td style="width:150px;" >12345<span style="float:right;">term</span></td>
-            </tr>
 
-          </table>
-        <table  id="printSITable" >
-          <thead>
-            <tr class="printable" style="height:25px;"> 
-              <th style="width:42px;" ></th>
-              <th style="width:48px;"></th>
-              <th style="width:400px;"></th>
-              <TH style="width:74px;"></TH>
-              <th style="width:74px;"></th>
-              <th style="width:150px;" ></th>
-           </tr>
-          </thead>
-          <tbody>
-          </tbody>
-          <tfoot>
-              <tr rowspan="3"></td>
-                <td colspan="5" class="printheight"></td>
-                <td class="dp" id="vatSales"></td>
-                <td class="center" id="vatSalesDec"></td>
-              </tr>
-              <tr>
-                <td colspan="5" class="printheight"></td>
-                <td class="dp " id="vat"></td>
-                <td class="center" id="vatDec"></td>
-              </tr>
-              <tr>
-                <td colspan="5" class="printheight"></td>
-                <td class="dp" id="printSITotal"></td>
-                <td class="center" id="printSITotalDec"></td>
-              </tr>
-          </tfoot>
-          </table>
-           <table style="width:665px;padding-top:0;margin-top:0;" >
-            <tr><td colspan="2" style="width:82px;"></td>
-                <td style="width:583;" ><span id="printPrepBy"></span></td>
-            </tr>
-            <tr><td colspan="2" style="width:82px;"></td>
-                <td style="width:583;" ><span id="">test</span></td>
-            </tr>
-            <tr><td colspan="2" style="width:82px;"></td>
-                <td style="width:583px;"><span id="">test</span></td>
-            </tr>
-
-          </table>
-         </b>
-        </div><!--modal body -->
-        
-      </div>
-  </div>
 <div class="panel panel-success">
 	<div class="panel-heading head">
 		<div class="row">
@@ -163,7 +93,7 @@
 		              @endif
 
 		              @if(($bill->ApprovedBy != '' || isAdmin())  && ($bill->CancelledBy == '') && !$bill->paid)
-		              <button class="btn btn-warning btn-xs "  onclick="printSI({{$bill->id}})"> Print</button>
+		              <button class="btn btn-warning btn-xs "  onclick="printSI({{$bill->SalesOrderNo}})"> Print</button>
 		              @endif
 		            </td>
 		         </tr> 
@@ -175,3 +105,74 @@
 		
 	</div>
 </div>
+<div hidden>
+    <div  id="SIPrintable" style="margin-bottom:90px;background-color:white;margin-left:150px;" >
+      <div  >
+       
+      </div>
+      <div  >
+         
+            <b>
+          <table style="margin-top:22px;">
+            <tr><td colspan="2" style="width:130px;"></td>
+                <td style="width:320px;" id="printSIName"></td>
+                <td style="width:74px;"></td>
+                <td style="width:115px;"></td>
+                <td style="width:150px;float:right;"  id="printSIDate"></td>
+            </tr>
+            <tr><td colspan="2" style="width:82px;"></td>
+                <td style="width:305px;">Address Address Address</td>
+                <td style="width:74px;"></td>
+                <td style="width:115px;"></td>
+                <td style="width:150px;" >12345<span style="float:right;">term</span></td>
+            </tr>
+
+          </table>
+        <table  id="printSITable" >
+          <thead>
+            <tr class="printable" style="height:25px;"> 
+              <th style="width:42px;" ></th>
+              <th style="width:48px;"></th>
+              <th style="width:400px;"></th>
+              <TH style="width:74px;"></TH>
+              <th style="width:74px;"></th>
+              <th style="width:150px;" ></th>
+           </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+              <tr rowspan="3"></td>
+                <td colspan="5" class="printheight"></td>
+                <td class="dp" id="vatSales"></td>
+                <td class="center" id="vatSalesDec"></td>
+              </tr>
+              <tr>
+                <td colspan="5" class="printheight"></td>
+                <td class="dp " id="vat"></td>
+                <td class="center" id="vatDec"></td>
+              </tr>
+              <tr>
+                <td colspan="5" class="printheight"></td>
+                <td class="dp" id="printSITotal"></td>
+                <td class="center" id="printSITotalDec"></td>
+              </tr>
+          </tfoot>
+          </table>
+           <table style="width:665px;padding-top:0;margin-top:0;" >
+            <tr><td colspan="2" style="width:82px;"></td>
+                <td style="width:583;" ><span id="printPrepBy"></span></td>
+            </tr>
+            <tr><td colspan="2" style="width:82px;"></td>
+                <td style="width:583;" ><span id=""></span></td>
+            </tr>
+            <tr><td colspan="2" style="width:82px;"></td>
+                <td style="width:583px;"><span id="printApprovedBy"></span></td>
+            </tr>
+
+          </table>
+         </b>
+        </div><!--modal body -->
+        
+      </div>
+  </div>
