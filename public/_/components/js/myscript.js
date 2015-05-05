@@ -341,8 +341,8 @@ function billSO(id){
 			  		$.each(data, function(key,value) {
 	  				$('.BillSOTable >tbody').append('<tr id="billSO'+counter+'" class="billRow"><td >'+counter+'</td><td>'+value.ProductNo+'</td>
 	  					<td>'+value.ProductName+'</td>
-	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td >'+value.LotNo+'</td><td >'+value.ExpiryDate+'-01-01</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+Number(value.UnitPrice).toFixed(2)+'</td>
-	  					<td class="dp success">'+Number(value.UnitPrice*value.Qty).toFixed(2)+'</td><td class="numberEditable dp danger">0</td><td class="danger selectEditable dp"></td></tr>');
+	  					<td>'+value.BrandName+'</td><td>'+value.Unit+'</td><td >'+value.LotNo+'</td><td >'+value.ExpiryDate+'-01-01</td><td class="dp" >'+value.Qty+'</td><td class="dp" >'+cmoney(value.UnitPrice)+'</td>
+	  					<td class="dp success">'+cmoney(value.UnitPrice*value.Qty)+'</td><td class="numberEditable dp danger">0</td><td class="danger selectEditable dp"></td></tr>');
 		  			total+=value.UnitPrice*value.Qty;
 	  				editableNumber(value.ProductNo);
 	  				editableSelect(value.ProductNo,value.RetailUnit,value.WholeSaleUnit);
@@ -376,7 +376,7 @@ function billSO(id){
 					// var total = Number(total).toFixed(2);
 					var prep = $("[name='billSOmedReps'] option:selected").text();
 					var cust = $("[name='billSOCustomers'] option:selected").text();
-	  				$('#billSOTotalCost').text(total);
+	  				$('#billSOTotalCost').text(numberWithCommas(total.toFixed(2)));
 	  				var vatsales = total/1.12;
 	  				var vat = vatsales *.12;
 	  				$('#vatSales').text(numberWithCommas(vatsales.toFixed(2)));
@@ -828,6 +828,10 @@ $('#user-library').modal('show');
 }
 function money(x){
 	return Number(x).toFixed(2);
+}
+function cmoney(x){
+
+	return parseInt(x).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 function numberWithCommas(x) {
     var parts = x.toString().split(".");

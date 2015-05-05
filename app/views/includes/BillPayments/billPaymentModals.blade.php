@@ -69,7 +69,25 @@
         </div><!-- panel success-->
       </div><!--printable-->
       </div><!--well -->
-    
+      
+      <!-- cash voucher -->
+      <!-- <div hidden>
+      <div id="">
+        <table>
+          <tr>
+            <td>{{date('F d, Y')}}</td>
+            <td><i id="cashVoucherNo">{{$maxCashVoucher+1}}</i></td>
+          </tr>
+          <tr>
+            <td colspan="2"><i id="cvReceivedFrom" ></i></td>
+          </tr>
+          <tr>
+            <td colspan="2">Davao City</td>
+          </tr>
+        </table>
+      </div>
+      </div> -->
+      <!-- end cash voucher -->
       <div hidden>
       <div id="checkVoucherPrintable">
         <div class="panel panel-success" STYLE="margin-bottom:0px;" >
