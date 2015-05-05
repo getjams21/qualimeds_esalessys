@@ -36,10 +36,14 @@ private $billDetailsRepo;
 		$bills= $this->billsRepo->getAllWithSup();
     $unpaid =$this->billsRepo->getAllWithSupUnpaid();
     foreach($bills as $a){
-      if(in_array($a->id, $unpaid->lists('id'), true)){
+      if($a->ApprovedBy == ''){
         $a->paid = 0;
       }else{
-        $a->paid = 1;
+          if(in_array($a->id, $unpaid->lists('id'), true)){
+          $a->paid = 0;
+        }else{
+          $a->paid = 1;
+        }
       }
     }
 		$now =date("m/d/Y");

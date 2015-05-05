@@ -9,13 +9,13 @@ $(function() {
 });
 
 // to DISABLE inspect element (COMMENT OUT BEFORE INSPECT VIEWING)
-// window.oncontextmenu = function () {
-//    return false;
-// }
-// document.onkeydown = function (e) { 
-//     if (window.event.keyCode == 123 ||  e.button==2)    
-//     return false;
-// }
+window.oncontextmenu = function () {
+   return false;
+}
+document.onkeydown = function (e) { 
+    if (window.event.keyCode == 123 ||  e.button==2)    
+    return false;
+}
 
 var reroute='/user/'+$('meta[name="_token"]').attr('content');
 //PO FUNCTIONS
@@ -1388,7 +1388,7 @@ $('#saveBillSOBtn').click(function(){
 					  });
 					}else{
 
-						alert('been here');
+						$(location).attr('href','/SalesInvoice#showSIList');
 					}
 				}
 				return;
@@ -1560,10 +1560,12 @@ $('#saveBill').click(function(){
 	}
 	$.post(reroute+'/billPayment',{id:id,TD:TableData,amount:amount,type:paymentType,cashVoucherNo:cashVoucherNo,checkNo:checkNo,
 	checkVoucherNo:checkVoucherNo,checkDueDate:checkDueDate,BankNo:BankNo,approved:approved,PayTo:PayTo}).done(function(data){
-		if(paymentType==0){
-			printCashVoucher();
-		}else{
-			printCheckVoucher();
+		if(approved == 1){
+			if(paymentType==0){
+				printCashVoucher();
+			}else{
+				printCheckVoucher();
+			}
 		}
 		$(location).attr('href','/BillPayments#BillPaymentList');
 	});
