@@ -8,7 +8,7 @@
     <hr class="style-fade">
     <div class="row">
         <div class="col-md-6"><br>
-          <div class="input-group">
+          <div class="input-group printExclude">
                <span class="input-group-addon panel-head square">
                 Report Type: 
                </span>
@@ -54,9 +54,9 @@
       <table class="table  table-bordered table-hover reportTable" id="reportsTable">
         <!-- Ajax Values for Reports -->
       </table>
-      <center><button class="btn btn-primary" id="reportPrint">Print</button></center>
     </div><hr class="style-fade">
     </div>
    </div>
 </div>
+<center><button class="btn btn-primary" id="reportPrint">Print</button></center>
 </div>

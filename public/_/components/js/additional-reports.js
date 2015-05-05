@@ -36,7 +36,7 @@ function showMonthlySalesReport(medRep){
 				');
 		    });
 		    
-		    $('#add_report_type').val(1);
+		    // $('#add_report_type').val(1);
 		   
 		}
 		
@@ -80,7 +80,7 @@ function showMonthlyCollectionReport(medRep){
 				');
 		    });
 		    
-		    $('#add_report_type').val(1);
+		    // $('#add_report_type').val(1);
 		   
 		}else{
 			return false;
