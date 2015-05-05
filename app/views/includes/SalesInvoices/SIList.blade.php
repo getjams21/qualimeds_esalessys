@@ -58,7 +58,7 @@
 		     <tbody>
 		         @foreach($SIs as $bill)
 		          <tr class="
-		         <?php if($bill->IsCancelled == 1){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($bill->IsCancelled == 'Y'){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$bill->id}}</td>
 		            <td>{{$bill->SalesOrderNo}}</td>
@@ -121,10 +121,10 @@
                 <td style="width:150px;float:right;"  id="printSIDate"></td>
             </tr>
             <tr><td colspan="2" style="width:82px;"></td>
-                <td style="width:305px;">Address Address Address</td>
+                <td style="width:305px;" id="printSICusAddress"></td>
                 <td style="width:74px;"></td>
                 <td style="width:115px;"></td>
-                <td style="width:150px;" >12345<span style="float:right;">term</span></td>
+                <td style="width:150px;" ><span style="float:right;" id="printSITerm">term</span></td>
             </tr>
 
           </table>
