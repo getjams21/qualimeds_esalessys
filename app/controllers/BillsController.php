@@ -34,6 +34,14 @@ private $billDetailsRepo;
 		$products = $this->productRepo->getAll();
 		$POs= $this->purchaseOrderRepo->getAllApprovedPO();
 		$bills= $this->billsRepo->getAllWithSup();
+    $unpaid =$this->billsRepo->getAllWithSupUnpaid();
+    foreach($bills as $a){
+      if(in_array($a->id, $unpaid->lists('id'), true)){
+        $a->paid = 0;
+      }else{
+        $a->paid = 1;
+      }
+    }
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		return View::make('dashboard.Bills.list',compact('POs','supplier','products','max','now','lastweek','bills'));

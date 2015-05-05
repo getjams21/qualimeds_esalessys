@@ -58,7 +58,7 @@
 		     <tbody>
 		         @foreach($bills as $bill)
 		          <tr class="
-		         <?php if($bill->IsCancelled == 1){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($bill->IsCancelled == 'Y'){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$bill->id}}</td>
 		            <td>{{$bill->PurchaseOrderNo}}</td>
@@ -87,7 +87,7 @@
 		            	@endif
 		            </td>
 		            <td>
-		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == ''))
+		             @if(($bill->ApprovedBy == '' || isAdmin()) && ($bill->CancelledBy == '') && $bill->paid == 0)
 		              <button class="btn btn-primary btn-xs "  onclick="editBill({{$bill->id}})"><i class="fa fa-gear"></i>Edit</button>
 		              @else
 		             <button class="btn btn-success btn-xs "  onclick="viewBill({{$bill->id}})"> View</button>

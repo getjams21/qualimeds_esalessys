@@ -50,7 +50,7 @@
                  <tbody>
                   @foreach($bills as $bill)
                     <tr class="
-		         <?php if($bill->IsCancelled == 1){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($bill->IsCancelled == 'Y'){ echo "danger";}elseif($bill->ApprovedBy != ''){echo "success";}elseif($bill->IsCancelled == 0 && $bill->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$bill->id}}</td>
 		            <td>{{$bill->PurchaseOrderNo}}</td>
