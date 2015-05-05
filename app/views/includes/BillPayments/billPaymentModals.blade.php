@@ -1,14 +1,5 @@
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="cashVoucherModal">
-  <div class="modal-dialog modal-lg ">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-title"><i id="">Cash Voucher</i> Details
-          <b  class="pull-right" >Date:&nbsp;&nbsp;{{date('F d, Y')}}</b>
-        </h4>
-      </div>
-      <div class="modal-body">
-      <div class="well">
+
+      <div hidden>
       <div id="cashVoucherPrintable">
         <div class="panel panel-success" STYLE="margin-bottom:0px;" >
           <div class="panel-heading"><b>CASH VOUCHER</b></div>
@@ -45,17 +36,19 @@
           </tfoot>
           </table>
         </div> 
-          <div class="panel panel-success">
-            <div class="panel-body"  style="padding:0;">
-              <div class="col-md-3 invoice-panel"  style="padding:0;" >
-                <div class="panel panel-success" style="margin:0;">
+          <div class=" panel panel-success">
+            <div class="panel-body"  style="padding-top:0;padding-right:0;padding-left:0;">
+              <div class="col-md-3 col-sm-3 "  style="padding-top:0;padding-left:0;padding-right:0;margin-left:0;width:25%;float:left;" >
+                <div class="panel panel-success" style="padding-left:0;border-bottom:none;margin-bottom:0;">
                   <div class="panel-heading"><b>CHARGE TO ACCOUNT:</b><BR></div>
                    <i id="cashVoucherCharge">&nbsp;</i><br><br>
                   <div class="panel-heading"><b>APPROVED BY:</b><BR></div>
-                  <i id="cashVoucherApproved">&nbsp;</i><br><br><br>
+                  <i id="cashVoucherApproved">&nbsp;@if(isAdmin(Auth::user()))
+                    {{fullname(Auth::user())}}
+                    @endif</i><br><br>
                 </div>
               </div>
-              <div class="col-md-9 invoice-lg-panel" style="padding-right:0px;width:75%;">
+              <div class="col-md-9 col-sm-9 " style="width:75%;padding-left:0;float:left;">
                   <table class="table ">
                     <tr >
                       <td colspan="3"><b>RECEIVED from:</b> &nbsp;
@@ -76,28 +69,27 @@
         </div><!-- panel success-->
       </div><!--printable-->
       </div><!--well -->
-      </div><!--modal body -->
-      <div class="modal-footer">
-        
-        <button type="button" class="btn btn-success " id="printCashVoucher">Print</button>  
-        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+      
+      <!-- cash voucher -->
+      <!-- <div hidden>
+      <div id="">
+        <table>
+          <tr>
+            <td>{{date('F d, Y')}}</td>
+            <td><i id="cashVoucherNo">{{$maxCashVoucher+1}}</i></td>
+          </tr>
+          <tr>
+            <td colspan="2"><i id="cvReceivedFrom" ></i></td>
+          </tr>
+          <tr>
+            <td colspan="2">Davao City</td>
+          </tr>
+        </table>
       </div>
-    </div>
-  </div>
-</div>
-<!-- CHEQUE VOUCHER -->
-<div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="checkVoucherModal">
-  <div class="modal-dialog modal-lg ">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="checkmodal-title"><i id="">Check Voucher</i> Details
-          <b  class="pull-right" >Date:&nbsp;&nbsp;{{date('F d, Y')}}</b>
-        </h4>
-      </div>
-      <div class="modal-body">
-      <div class="well">
-      <div id="cashVoucherPrintable">
+      </div> -->
+      <!-- end cash voucher -->
+      <div hidden>
+      <div id="checkVoucherPrintable">
         <div class="panel panel-success" STYLE="margin-bottom:0px;" >
           <div class="panel-heading"><b>CHECK VOUCHER</b></div>
           <div class="panel-body" STYLE="margin-bottom:0px;padding-bottom:4px;">
@@ -137,15 +129,15 @@
           </div><!-- panel body-->
         </div><!-- panel success-->
       </div><!--printable-->
-      </div><!--well -->
-      </div><!--modal body -->
+      </div>
+      <!-- </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success " id="printCashVoucher">Print</button>  
         <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- END OF CHEQUE VOUCHER -->
 <!-- CHEQUE -->
 <div class="modal fade bs-example-modal-lg " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="chequeModal">

@@ -58,7 +58,7 @@
 		     <tbody>
 		         @foreach($POs as $PO)
 		          <tr class="
-		         <?php if($PO->IsCancelled == 1){ echo "danger";}elseif($PO->ApprovedBy != '' ){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
+		         <?php if($PO->IsCancelled == 'Y'){ echo "danger";}elseif($PO->ApprovedBy != '' ){echo "success";}elseif($PO->IsCancelled == 0 && $PO->ApprovedBy == ''){echo "warning";}?>
 		          "> 
 		          	<td>{{$PO->id}}</td>
 		            <td>{{$PO->SupplierName}}</td>

@@ -141,6 +141,7 @@ return array(
     'CreateBillsTable' => $baseDir . '/app/database/migrations/2014_10_26_113535_create_Bills_table.php',
     'CreateBranchesTable' => $baseDir . '/app/database/migrations/2014_10_26_092456_create_branches_table.php',
     'CreateBrandsTable' => $baseDir . '/app/database/migrations/2014_10_30_042915_create_Brands_table.php',
+    'CreateContractRegionsTable' => $baseDir . '/app/database/migrations/2015_04_26_183807_create_contract_regions_table.php',
     'CreateCustomerReturnDetailsTable' => $baseDir . '/app/database/migrations/2014_10_26_130930_create_CustomerReturnDetails_table.php',
     'CreateCustomerReturnsTable' => $baseDir . '/app/database/migrations/2014_10_26_130309_create_CustomerReturns_table.php',
     'CreateCustomersTable' => $baseDir . '/app/database/migrations/2014_10_26_094355_create_customers_table.php',
