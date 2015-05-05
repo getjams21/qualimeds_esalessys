@@ -58,6 +58,7 @@ function addPO(id){
 					}
 			});	
 }
+
 function calcCost(id){
 	var qty = $('#prodQty'+id).text();
 	var unit = $('#prodUnit'+id).text();

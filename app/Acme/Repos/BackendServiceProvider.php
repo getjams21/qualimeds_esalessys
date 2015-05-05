@@ -86,5 +86,11 @@ class BackendServiceProvider extends ServiceProvider{
 			'Acme\Repos\DamagesDetails\DamagesDetailsRepository',
 			'Acme\Repos\DamagesDetails\DbDamagesDetailsRepository'
 			);
+
+		#Additional Reports
+		$this->app->bind(
+			'Acme\Repos\VwMonthlySalesSource\VwMonthlySalesSourceRepo',
+			'Acme\Repos\VwMonthlySalesSource\DbVwMonthlySalesSourceRepo'
+			);
 	}
 }

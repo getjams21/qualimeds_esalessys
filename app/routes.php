@@ -206,7 +206,10 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::post('/fetchInventoryByStockCardId','ReportsController@fetchInventoryByStockCardId');
 	Route::post('/fetchInventoryGainLoss','ReportsController@fetchInventoryGainLoss');
 	
-	
+	#Additional Reports
+	Route::resource('/additional-reports', 'AdditionalReportsController');
+	Route::post('/get-monthly-sales-report', 'AdditionalReportsController@getMonthlySalesReport');
+	Route::post('/get-monthly-collection-report', 'AdditionalReportsController@getMonthlyCollectionReport');
 });
 
 
