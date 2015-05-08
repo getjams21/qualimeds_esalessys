@@ -205,7 +205,8 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::get('/reportProductDtAjax', array('as' => 'reportProductDtAjax', 'uses' => 'ReportsController@reportProductDtAjax')); 
 	Route::post('/fetchInventoryByStockCardId','ReportsController@fetchInventoryByStockCardId');
 	Route::post('/fetchInventoryGainLoss','ReportsController@fetchInventoryGainLoss');
-	
+	Route::post('/fetchCustomerLedger','ReportsController@fetchCustomerLedger');
+	Route::post('/fetchCustomerInReport','ReportsController@fetchCustomerInReport');
 	#Additional Reports
 	Route::resource('/additional-reports', 'AdditionalReportsController');
 	Route::post('/get-monthly-sales-report', 'AdditionalReportsController@getMonthlySalesReport');
