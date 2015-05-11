@@ -52,9 +52,13 @@ class AdditionalReportsController extends \BaseController {
 		if(Request::ajax()){
 			$from = Input::get('from');
 			$to = Input::get('to');
+
+			$from = date("Y-m-d", strtotime($from.'-1 day'));
+			$to = date("Y-m-d", strtotime($to.'+1 days'));
+
 			$medRep = User::find(Input::get('medRep'));
-			$salesRep = $medRep->Lastname.', '.$medRep->Firstname.'  '.$medRep->MI;
-			// dd($salesRep);
+			$salesRep = $medRep->Lastname.', '.$medRep->Firstname.' '.$medRep->MI;
+			// dd($from);
 			$monthlyCollectionReport = VwMonthlyCollectionSource::where('SalesRep','=',$salesRep)->whereBetween('PaymentDate', array($from, $to))->get();
 			return Response::json($monthlyCollectionReport);
 		}
