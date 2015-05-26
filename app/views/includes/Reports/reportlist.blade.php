@@ -18,6 +18,7 @@
                		<option value="2">Product Inventory By Lot Number</option>
                		<option value="3">Inventory Movement By Product / Stock Card</option>
                   <option value="4">Net Gain/Loss Report</option>
+                  <option value="5">Customer Ledger</option>
                </select>
           </div><br>
           <div class="gainLossDiv" hidden>
@@ -27,6 +28,15 @@
                  </span>
                  {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
             </div><br>
+         </div>
+         <div class="customerLedgerDiv" hidden>
+            <div class="input-group">
+                 <span class="input-group-addon panel-head square">
+                  Customer: 
+                 </span>
+                 {{Form::select('CustomerNo', $customers, 'key', array('class' => 'form-control square','id'=>'customers'));}}
+            </div>
+            <br>
          </div>
        </div>
     <div class="row  " >
@@ -104,6 +114,17 @@
             </div>
          <hr >
         </div>
+    <div class="customerLedgerDiv" hidden>
+       <table style="width:100%;">
+        <tr><td colspan="4" ><b>Customer Name: </b><i id="cusLedCustomerName"></i> </td></tr>
+        <tr>
+          <td colspan="4" ><b>Address: </b><i id="cusLedAddress"></i></td>
+        </tr>
+        <tr>
+          <td colspan="4" ><b>Contact Person: </b><i id="cusLedContactPerson"></i></td>
+        </tr>
+       </table><br>
+    </div>
     <div class="table-responsive responsive" >
       <table class="table  table-bordered table-hover reportTable" id="reportsTable">
       </table>

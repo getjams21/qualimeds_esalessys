@@ -1868,6 +1868,7 @@ $('#report_type').change(function(){
 	var value = $(this).val();
 	$('.reportProducList').hide();
 	$('.productDetailDiv').hide();
+	$('.customerLedgerDiv').hide();
 	$('.gainLossDiv').hide();
 	if(value == 1){
 		$.post(reroute+'/fetchInventorySummary',{},function(data){
@@ -1881,7 +1882,7 @@ $('#report_type').change(function(){
 			});
 		});
 	}else if(value == 2){
-		$.post(reroute+'/fetchInventoryByLotNo',{},function(data){
+		$.post(reroute+'/fetchInventoryByLotNo',{}).done(function(data){
 			$('#reportsTable > thead').remove();
 			$('#reportsTable ').append('<thead><tr><th>Product No</th><th>Prod. Description</th><th>Brand</th><th>Rtl Unit</th><th>Rtl Sale Qty</th><th>WhlSale Unit</th><th>WhlSale Sale Qty</th><th>Lot Number</th><th>Expiry Date</th></tr></thead>');
 			$('#reportsTable > tbody').remove();
@@ -1894,7 +1895,7 @@ $('#report_type').change(function(){
 		});
 	}else if(value == 3){
 		$('.reportProducList').show();
-		$.post(reroute+'/fetchInventoryByStockCard',{},function(data){
+		$.post(reroute+'/fetchInventoryByStockCard',{}).done(function(data){
 			$('#reportsTable > thead').remove();
 			$('#reportsTable ').append('<thead><tr><th>Trans Date</th><th>Trans Type</th><th>Ref Document</th><th>In Qty</th><th>Out Qty</th><th>Running Balance</th></tr></thead>');
 			$('#reportsTable > tbody').remove();
@@ -1915,15 +1916,15 @@ $('#report_type').change(function(){
 		var to = todate.getFullYear() + '-' + (todate.getMonth()+1) + '-' + todate.getDate();
 		gainlossReport(medrep,from,to);
 		function gainlossReport(medrep,from,to){
-			$.post(reroute+'/fetchInventoryGainLoss',{medrep:medrep,from:from,to:to},function(data){
+			$.post(reroute+'/fetchInventoryGainLoss',{medrep:medrep,from:from,to:to}).done(function(data){
 				$('#reportsTable > thead').remove();
 				$('#reportsTable ').append('<thead><tr><th>Source Doc</th><th>Date</th><th>ProductNo</th><th>Product Desc</th><th>Qty</th><th>Unit Cost</th><th>Item Cost</th><th>Unit Price</th><th>Item Price</th></tr></thead>');
 				$('#reportsTable > tbody').remove();
 				var bal = 0;
 				$.each(data, function(key,value) {
 					var TranDate = new Date(value.TranDate);
-					$('#reportsTable').append('<tr><td>'+value.SourceDoc+'</td><td>'+value.TransDate+'</td><td>'+value.ProductNo+'</td><td>'+value.ProductName+'</td><td>'+value.Qty+'</td><td>'+value.unitcost+'</td>
-						<td>'+value.itemcost+'</td><td>'+value.UnitPrice+'</td><td>'+value.itemprice+'</td></tr>');
+					$('#reportsTable').append('<tr><td>'+value.SourceDoc+'</td><td>'+value.TransDate+'</td><td>'+value.ProductNo+'</td><td>'+value.ProductName+'</td><td class="dp">'+value.Qty+'</td><td class="dp">'+cmoney(value.unitcost)+'</td>
+						<td class="dp">'+cmoney(value.itemcost)+'</td><td class="dp">'+cmoney(value.UnitPrice)+'</td><td class="dp">'+cmoney(value.itemprice)+'</td></tr>');
 				
 				});
 			});	
@@ -1933,9 +1934,47 @@ $('#report_type').change(function(){
 			var todate =$( '#max' ).datepicker( "getDate" );
 			var medrep = $('#medReps').val();
 			var from = fromdate.getFullYear() + '-' + (fromdate.getMonth()+1) + '-' + fromdate.getDate();
-			var to = todate.getFullYear() + '-' + (fromdate.getMonth()+1) + '-' + todate.getDate();
+			var to = todate.getFullYear() + '-' + (todate.getMonth()+1) + '-' + todate.getDate();
 			gainlossReport(medrep,from,to);
 		});
+	}else if(value == 5){
+		$('.customerLedgerDiv').show();
+		var customer = $('#customers').val();
+		$.post(reroute+'/fetchCustomerInReport',{id:customer}).done(function(val){
+			$( '#cusLedCustomerName' ).text(val['CustomerName']);
+			$( '#cusLedAddress' ).text(val['Address']);
+			$( '#cusLedContactPerson' ).text(val['ContactPerson']);
+			$.post(reroute+'/fetchCustomerLedger',{cus:customer}).done(function(data){
+				$('#reportsTable > thead').remove();
+				$('#reportsTable ').append('<thead><tr><th>Date</th><th>Transaction</th><th>Sales</th><th>Payments</th><th>Credit Memo</th><th>Returns</th><th>Running Balance</th></tr></thead>');
+				$('#reportsTable > tbody').remove();
+				var bal = 0;
+				var invoice = 0;
+				var creditmemo = 0;
+				var returns = 0;
+				var payment = 0;
+				$.each(data, function(key,value) {
+					 invoice = 0;
+					 creditmemo = 0;
+					 returns = 0;
+					 payment = 0;
+
+					 TranDate = new Date(value.trandate);
+					if(value.trantype == 'invoice'){
+						invoice = value.amount;
+					}else if(value.trantype == 'creditmemo'){
+	 					creditmemo = value.amount;
+					}else if(value.trantype == 'returns'){
+	 					returns = value.amount;
+					}else if(value.trantype == 'payment'){
+	 					payment = value.amount;
+					}
+					bal = bal+parseInt(invoice)-parseInt(payment)+parseInt(creditmemo)+parseInt(returns);
+					$('#reportsTable').append('<tr ><td>'+value.trandate+'</td><td >'+value.trantype+'</td><td >'+cmoney(invoice)+'</td>
+						<td class="dp">'+cmoney(payment)+'</td><td class="dp">'+cmoney(creditmemo)+'<td class="dp">'+cmoney(returns)+'</td><td class="dp">'+cmoney(bal)+'</td></tr>');
+				});
+			});	
+		});	
 	}
 });
 });//end of ready function

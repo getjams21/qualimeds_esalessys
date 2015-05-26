@@ -26,7 +26,8 @@ class ReportsController extends \BaseController {
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
-		return View::make('dashboard.Reports.reports',compact('products','summary','medReps','lastweek','now'));
+		$customers = Customer::where('IsActive','=',1)->lists('CustomerName','id');
+		return View::make('dashboard.Reports.reports',compact('products','summary','medReps','lastweek','now','customers'));
 	}
 
 	/**
@@ -88,6 +89,28 @@ class ReportsController extends \BaseController {
 			 	->where('id','=',$input['medrep'])
 			 					->get();
 			 return Response::json($summary);
+		}
+	}
+	public function fetchCustomerLedger()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+			$cus = $input['cus'];
+			 $summary= CustomerLedger::selectRaw('vwcustomerledger.*,b.BranchName,c.CustomerName')
+			 			->join('branches as b','b.id','=','vwcustomerledger.BranchNo')
+			 			->join('customers as c','c.id','=','vwcustomerledger.CustomerNo')
+			 			->where('vwcustomerledger.CustomerNo','=',$cus)
+			 			->get();
+			 return Response::json($summary);
+		}
+	}
+	public function fetchCustomerInReport()
+	{
+		if(Request::ajax()){
+			$input = Input::all();
+			$cus = $input['id'];
+			$customer =Customer::find($cus);
+			 return Response::json($customer);
 		}
 	}
 
