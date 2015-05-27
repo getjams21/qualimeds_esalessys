@@ -1,3 +1,13 @@
+<div class="modal fade warning-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>Warning! Indicated product price exceeded the markup value.</p>
+        <button class="btn btn-sm btn-primary" data-dismiss="modal" style="margin-left:228px;">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
 <br>
 <div class="panel panel-success">
   <div class="panel-heading head">

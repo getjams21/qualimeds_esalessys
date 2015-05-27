@@ -83,6 +83,7 @@ Route::group(["before" => "auth", 'prefix' => 'user/{user}'], function() {
  		Route::post('/viewSO', 'SOController@viewSO');
  		Route::post('/viewSODetails', 'SOController@viewSODetails');
  		Route::post('/saveEditedSO', 'SOController@saveEditedSO');
+ 		Route::post('/get-product-markup', 'SOController@getProductMarkup');
  	#BILLPAYMENTS ROUTES
  		Route::post('/addBillToPayment', 'BillPaymentsController@addBillToPayment');
  		Route::post('/billPayment', 'BillPaymentsController@billPayment');

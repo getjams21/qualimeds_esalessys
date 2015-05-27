@@ -161,6 +161,13 @@ class SOController extends \BaseController {
 		}
 	}
 
+  public function getProductMarkup(){
+    if(Request::ajax()){
+      $id = Input::get('prodNum');
+      $product = Product::find($id)->first();
+      return Response::json($product);
+    }
+  }
 	
 
 }

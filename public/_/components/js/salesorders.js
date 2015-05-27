@@ -17,6 +17,20 @@ function addSO(id){
 	var unitPrice = $('#unitPrice'+id).text();
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
+	var markup;
+	//ajax request for markup
+	$.post(reroute+'/get-product-markup',{prodNum:prodNum},function(data){
+		if(data){
+			var activeMarkup = data['ActiveMarkup'];
+			if(activeMarkup == 1){
+				markup = data['Markup1'];
+			}else if(activeMarkup == 2){
+				markup = data['Markup2'];
+			}else if(activeMarkup == 3){
+				markup = data['Markup3'];
+			}
+		}
+	});
 	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
 		<td id="prdoNo'+itemno+'">'+prodNum+'</td>
 		<td>'+name+'</td>
@@ -96,7 +110,7 @@ function addSO(id){
 			   		$(this).text(value);
 			   		var rowID = $(this).attr('id').substring(9);
 			   		// alert(rowID);
-			         calcCostSO(rowID);
+			         calcCostSO(rowID,markup);
 					}
 				});
 		$('#saveSO').removeClass('hidden');
@@ -105,13 +119,15 @@ function addSO(id){
 		// alert($('#prodUntSO'+itemno).text());
 		// return false;
 		$('#prodUntSO'+itemno).val(price);
-		$('#prodUntSO'+itemno).text(price);
 		$('#priceListModal').modal('hide');
 	}
 }
-function calcCostSO(id){
+function calcCostSO(id,markup){
 	var qty = parseInt($('#prodQtySO'+id).text());
 	var unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
+	if(unit > parseFloat(markup) ){
+			$('.warning-modal').modal('show');
+		}
 	$('#prodCostSO'+id).text(parseFloat(qty*unit).toFixed(2));
 	totalCostSO();
 }
