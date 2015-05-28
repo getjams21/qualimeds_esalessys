@@ -17,7 +17,7 @@ class CreditMemoController extends \BaseController {
 	 */
 	public function index()
 	{
-		$customers = Customer::lists('CustomerName','id');
+		$customers = Customer::orderBy('CustomerName')->lists('CustomerName','id');
 		$medReps = $medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$creditmemos = CreditMemo::selectRaw('creditmemo.*,u.firstname,u.lastname,c.CustomerName')
 					->join('users as u','u.id','=','creditmemo.userno')

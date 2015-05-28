@@ -30,7 +30,7 @@ class CRController extends \BaseController {
 	public function index()
 	{
 		$max = $this->customerReturnRepo->getMaxId();
-		$customers = Customer::lists('CustomerName','id');
+		$customers = Customer::orderBy('CustomerName')->lists('CustomerName','id');
 		$defaultCus = Customer::firstOrFail();
 		$CRs= $this->customerReturnRepo->getAllWithBranch();
 		$now =date("m/d/Y");

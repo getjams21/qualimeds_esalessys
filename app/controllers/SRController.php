@@ -30,7 +30,7 @@ class SRController extends \BaseController {
 	public function index()
 	{
 		$max = $this->supplierReturnRepo->getMaxId();
-		$suppliers = Supplier::lists('SupplierName','id');
+		$suppliers = Supplier::orderBy('SupplierName')->lists('SupplierName','id');
 		$defaultSup = Supplier::firstOrFail();
 		$SRs= $this->supplierReturnRepo->getAllWithBranch();
 		$now =date("m/d/Y");

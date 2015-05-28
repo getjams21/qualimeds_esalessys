@@ -32,7 +32,7 @@ class SOController extends \BaseController {
 	public function index()
 	{	
 		$max = $this->salesOrderRepo->getMaxId();
-		$customers = Customer::lists('CustomerName','id');
+		$customers = Customer::orderBy('CustomerName')->lists('CustomerName','id');
 		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
 		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
 		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);

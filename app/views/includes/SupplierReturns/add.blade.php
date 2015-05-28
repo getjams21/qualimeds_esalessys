@@ -15,7 +15,7 @@
           {{ Form::open() }}
           <div class="input-group">
                <span class="input-group-addon panel-head square">
-                Customer: 
+                Supplier: 
                </span>
                {{Form::select('suppliers', $suppliers, 'key', array('class' => 'form-control square','id'=>'supplier'));}}
           </div><br>
