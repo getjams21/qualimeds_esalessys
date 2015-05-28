@@ -17,21 +17,21 @@ function addSO(id){
 	var unitPrice = $('#unitPrice'+id).text();
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
-	var markup;
+	var markup = unitPrice;
 	var isAdmin = $('#isAdmin').val();
 	//ajax request for markup
-	$.post(reroute+'/get-product-markup',{prodNum:prodNum},function(data){
-		if(data){
-			var activeMarkup = data['ActiveMarkup'];
-			if(activeMarkup == 1){
-				markup = data['Markup1'];
-			}else if(activeMarkup == 2){
-				markup = data['Markup2'];
-			}else if(activeMarkup == 3){
-				markup = data['Markup3'];
-			}
-		}
-	});
+	// $.post(reroute+'/get-product-markup',{prodNum:prodNum},function(data){
+	// 	if(data){
+	// 		var activeMarkup = data['ActiveMarkup'];
+	// 		if(activeMarkup == 1){
+	// 			markup = data['Markup1'];
+	// 		}else if(activeMarkup == 2){
+	// 			markup = data['Markup2'];
+	// 		}else if(activeMarkup == 3){
+	// 			markup = data['Markup3'];
+	// 		}
+	// 	}
+	// });
 	$('.SOtable').append('<tr id="SO'+itemno+'"><td id="itemno'+itemno+'">'+itemno+'</td>
 		<td id="prdoNo'+itemno+'">'+prodNum+'</td>
 		<td>'+name+'</td>
