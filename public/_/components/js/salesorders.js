@@ -18,6 +18,7 @@ function addSO(id){
 	var index=table.row('#rowProd'+id).index();
 	var curDate = new Date();
 	var markup;
+	var isAdmin = $('#isAdmin').val();
 	//ajax request for markup
 	$.post(reroute+'/get-product-markup',{prodNum:prodNum},function(data){
 		if(data){
@@ -110,7 +111,7 @@ function addSO(id){
 			   		$(this).text(value);
 			   		var rowID = $(this).attr('id').substring(9);
 			   		// alert(rowID);
-			         calcCostSO(rowID,markup);
+			         calcCostSO(rowID,markup,isAdmin);
 					}
 				});
 		$('#saveSO').removeClass('hidden');
@@ -118,14 +119,18 @@ function addSO(id){
 		function addPrice(itemno,price){
 		// alert($('#prodUntSO'+itemno).text());
 		// return false;
-		$('#prodUntSO'+itemno).val(price);
+		$('#prodUntSO'+itemno).val(unit);
 		$('#priceListModal').modal('hide');
 	}
 }
-function calcCostSO(id,markup){
+function calcCostSO(id,markup,isAdmin){
 	var qty = parseInt($('#prodQtySO'+id).text());
 	var unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
 	if(unit < parseFloat(markup) ){
+			if (isAdmin != 1) {
+				$('#prodUntSO'+id).text(markup);
+				unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
+			}
 			$('.warning-modal').modal('show');
 		}
 	$('#prodCostSO'+id).text(cmoney(parseFloat(qty*unit).toFixed(2)));

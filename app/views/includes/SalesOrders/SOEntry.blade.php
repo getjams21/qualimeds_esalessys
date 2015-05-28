@@ -35,6 +35,7 @@
                     Sales Rep: 
                    </span>
                    {{Form::select('UserNo', $medReps, 'key', array('class' => 'form-control square','id'=>'medReps'));}}
+                   <input type="hidden" id="isAdmin" value="1">
               </div>
            @else
               <input type="hidden" id="medReps" value="{{Auth::user()->id}}"> 
