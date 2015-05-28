@@ -26,7 +26,7 @@ class ReportsController extends \BaseController {
 		$now =date("m/d/Y");
 		$lastweek=date("m/d/Y", strtotime("- 7 day"));
 		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
-		$customers = Customer::where('IsActive','=',1)->lists('CustomerName','id');
+		$customers = Customer::where('IsActive','=',1)->orderBy('CustomerName')->lists('CustomerName','id');
 		return View::make('dashboard.Reports.reports',compact('products','summary','medReps','lastweek','now','customers'));
 	}
 
