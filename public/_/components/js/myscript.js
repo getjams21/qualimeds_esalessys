@@ -750,7 +750,7 @@ function triggerEdit(id){
 	  			$('.name').val(data['BankName']);
 	  			$('.address').val(data['BAddress']);
 	  			$('.telephone').val(data['Telephone']);
-	  			$('.deactivate').attr('href', '/delete-bank/'+id+'');
+	  			$('.deactivate').attr('href', reroute+'/delete-bank/'+id+'');
 	  			$('.delete').show();
   		}
   	});
@@ -766,7 +766,7 @@ function triggerEditCM(id){
 	      	$('#medReps').val(data['userno']);
 	      	$('#remarks').val(data['remarks']);
 	      	$('#amount').val(data['amount']);
-	      	$('.deactivate').attr('href', '/delete-cm/'+id+'');
+	      	$('.deactivate').attr('href', reroute+'/destroy-cm/'+id+'');
   			$('.delete').show();
   		}
   	});
@@ -781,7 +781,7 @@ function triggerEditBranch(id){
 	  			$('.name').val(data['BranchName']);
 	  			$('.address').val(data['BAddress']);
 	  			$('.telephone').val(data['Telephone']);
-	  			$('.deactivate').attr('href', '/delete-branch/'+id+'');
+	  			$('.deactivate').attr('href', reroute+'/delete-branch/'+id+'');
 	  			$('.delete').show();
   		}
   	});
@@ -799,7 +799,7 @@ function triggerEditCustomer(id){
 	  			$('.telephone2').val(data['Telephone2']);
 	  			$('.contact-person').val(data['ContactPerson']);
 	  			$('.credit-limit').val(data['CreditLimit']);
-	  			$('.deactivate').attr('href', '/delete-customer/'+id+'');
+	  			$('.deactivate').attr('href', reroute+'/delete-customer/'+id+'');
 	  			$('.delete').show();
   		}
   	});
@@ -819,7 +819,7 @@ function triggerEditUser(id){
 	  			$('.firstname').val(data['Firstname']);
 	  			$('.mi').val(data['MI']);
 	  			$('.usertype').val(data['UserType']);
-	  			$('.deactivate').attr('href', '/delete-user/'+id+'');
+	  			$('.deactivate').attr('href', reroute+'/delete-user/'+id+'');
 	  			$('.delete').show();
   		}
   	});

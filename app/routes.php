@@ -180,7 +180,7 @@ Route::group(["before" => "admin", 'prefix' => 'user/{user}'], function() {
 	Route::resource('/creditmemo', 'CreditMemoController');
 	Route::post('/storeCM', 'CreditMemoController@store');
  	Route::post('/toEditCM','CreditMemoController@toEditCM');
- 	Route::get('delete-cm/{id}', 'CreditMemoController@destroy');
+ 	Route::get('/destroy-cm/{id}', 'CreditMemoController@destroyCM');
 	#Branches
 	// Route::get('/branches', 'BranchesController@index');
 	Route::resource('/branches', 'BranchesController');

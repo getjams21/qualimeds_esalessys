@@ -132,9 +132,15 @@ class CreditMemoController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroyCM($code,$id)
 	{
-		//
+		CreditMemo::destroy($id);
+		return Redirect::back()
+				->withFlashMessage('
+						<div class="alert alert-danger" role="alert">
+							CreditMemo is Successfully destroyed!
+						</div>
+					');
 	}
 
 }

@@ -108,15 +108,16 @@ class BanksController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($code,$id)
 	{
 		$bank = Bank::find($id);
-		$bank->delete();
+		$bank->IsActive = 0;
+		$bank->save();
 
 		return Redirect::back()
 			->withFlashMessage('
 					<div class="alert alert-success" role="alert">
-						Bank is Successfully deleted.
+						Bank is Successfully deactivated.
 					</div>
 				');
 	}

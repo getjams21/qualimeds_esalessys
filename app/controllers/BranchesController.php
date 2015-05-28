@@ -9,7 +9,7 @@ class BranchesController extends \BaseController {
 	 */
 	public function index()
 	{
-		$Branches = Branch::all();
+		$Branches = Branch::where('IsActive','=',1)->get();
 		return View::make('dashboard.branches.branches', compact('Branches'));
 	}
 
@@ -99,11 +99,11 @@ class BranchesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($code,$id)
 	{
 		$branch = Branch::find($id);
-		$branch->delete();
-
+		$branch->IsActive = 0;
+		$branch->save();
 		return Redirect::back()
 			->withFlashMessage('
 					<div class="alert alert-success" role="alert">

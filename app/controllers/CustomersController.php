@@ -9,7 +9,7 @@ class CustomersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$Customers = Customer::all();
+		$Customers = Customer::where('IsActive','=',1)->get();
 		return View::make('dashboard.customers.customers', compact('Customers'));
 	}
 
@@ -97,10 +97,11 @@ class CustomersController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($code,$id)
 	{
 		$customer = Customer::find($id);
-		$customer->delete();
+		$customer->isActive = 0;
+		$customer->save();
 
 		return Redirect::back()
 			->withFlashMessage('

@@ -141,7 +141,7 @@ class UsersController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($code,$id)
 	{
 		$customer = User::find($id);
 		$customer->IsActive = 0;
