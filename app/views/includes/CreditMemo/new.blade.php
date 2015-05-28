@@ -78,7 +78,7 @@
                           	<td>{{$creditmemo->CustomerName}}</td>
                           	<td>{{$creditmemo->creditmemodate}}</td>
                           	<td>{{$creditmemo->remarks}}</td>
-                          	<td>{{$creditmemo->amount}}</td>
+                          	<td>{{number_format($creditmemo->amount,2)}}</td>
                           	<td>{{ucfirst($creditmemo->firstname).' '.ucfirst($creditmemo->lastname)}}</td>
                           	<td><center><button class="btn btn-success btn-sm" onclick="triggerEditCM({{$creditmemo->id}})"><span class="glyphicon glyphicon-cog"></span> Edit</button></center></td>
                    		</tr> 

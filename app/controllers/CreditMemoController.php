@@ -22,6 +22,7 @@ class CreditMemoController extends \BaseController {
 		$creditmemos = CreditMemo::selectRaw('creditmemo.*,u.firstname,u.lastname,c.CustomerName')
 					->join('users as u','u.id','=','creditmemo.userno')
 					->join('customers as c','c.id','=','creditmemo.customerno')
+					->orderBy('c.CustomerName','desc')
 					->get();
 		return View::make('dashboard.CreditMemo.index', compact('customers','creditmemos','medReps'));
 	}
