@@ -66,7 +66,7 @@
 		          "> 
 		          	<td>{{$SO->id}}</td>
 		            <td>{{$SO->CustomerName}}</td>
-		            <td>{{dateformat($SO->PODate)}}</td>
+		            <td>{{dateformat($SO->SalesOrderDate)}}</td>
 		            <td>@if($SO->Terms == 0)
 		            	Cash
 		            	@else

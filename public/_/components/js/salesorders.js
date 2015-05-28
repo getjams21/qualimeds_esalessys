@@ -125,18 +125,19 @@ function addSO(id){
 function calcCostSO(id,markup){
 	var qty = parseInt($('#prodQtySO'+id).text());
 	var unit = parseFloat($('#prodUntSO'+id).text()).toFixed(2);
-	if(unit > parseFloat(markup) ){
+	if(unit < parseFloat(markup) ){
 			$('.warning-modal').modal('show');
 		}
-	$('#prodCostSO'+id).text(parseFloat(qty*unit).toFixed(2));
+	$('#prodCostSO'+id).text(cmoney(parseFloat(qty*unit).toFixed(2)));
+	$('#prodCostSO'+id).val(parseFloat(qty*unit).toFixed(2));
 	totalCostSO();
 }
 function totalCostSO(){
 	var total=0;
 	$('.cost').each(function(){
-		total += parseFloat($(this).text()); 
+		total += parseFloat($(this).val()); 
 	});
-	$('#SOTotalCost').text(total.toFixed(2));
+	$('#SOTotalCost').text(cmoney(total));
 	if(total = 0){
 		$('#saveSO').addClass('hidden');
 	}

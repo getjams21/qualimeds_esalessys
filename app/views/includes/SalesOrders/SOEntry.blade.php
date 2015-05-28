@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-body">
-        <p>Warning! Indicated product price exceeded the markup value.</p>
+        <p><font color="red"><i>Warning! Unit Cost is less than the markup cost.</i></font></p>
         <button class="btn btn-sm btn-primary" data-dismiss="modal" style="margin-left:228px;">Ok</button>
       </div>
     </div>
@@ -61,9 +61,9 @@
             </div>
         </div>
        </div>
-       <div class="col-md-1">
-       </div>
-       <div class="col-md-7">
+       <!-- <div class="col-md-1">
+       </div> -->
+       <div class="col-md-8">
       <div class="form-group" style="width:80%;">
               <div class="input-group">
                 <span class="input-group-addon">Search Product: </span>

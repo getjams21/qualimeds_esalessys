@@ -832,7 +832,7 @@ function money(x){
 }
 function cmoney(x){
 
-	return parseInt(x).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+	return parseFloat(x).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 function numberWithCommas(x) {
     var parts = x.toString().split(".");

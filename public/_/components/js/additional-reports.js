@@ -79,14 +79,28 @@ function showMonthlyCollectionReport(medRep){
 			var total = 0;
 			$.each(data, function(key,value) {
 				total += parseFloat(value.Amount);
+				var ORnumber = value.ORnumber;
+				var checkNo = value.CheckNo;
+				var CheckDueDate = value.CheckDueDate;
+
+				if (ORnumber == null){
+					ORnumber = '';
+				}
+				if(checkNo == null){
+					checkNo = '';
+				}
+				if(CheckDueDate == null){
+					CheckDueDate = '';
+				}
+
 				$('#tableData').append('
 					<tr>
 						<td>'+value.SalesRep+'</td>
-						<td>'+value.ORnumber+'</td>
+						<td>'+ORnumber+'</td>
 						<td>'+value.CustomerName+'</td>
 						<td>'+value.PaymentDate+'</td>
-						<td>'+value.CheckNo+'</td>
-						<td>'+value.CheckDueDate+'</td>
+						<td>'+checkNo+'</td>
+						<td>'+CheckDueDate+'</td>
 						<td>'+money(value.Amount)+'</td>
 					</tr>
 				');
@@ -203,7 +217,7 @@ function showBadAccounts(medRep){
 		
 	});
 }
-//Monthly Collection Reports
+//Receivables Reports
 function showReceivables(medRep){
 	var from = $('#min').val();
 	var to = $('#max').val();
@@ -237,10 +251,10 @@ function showReceivables(medRep){
 					<tr>
 						<td>'+value.SalesRep+'</td>
 						<td>'+value.CustomerName+'</td>
-						<td>'+value.TotalSAles+'</td>
-						<td>'+value.CreditMemo+'</td>
-						<td>'+value.TotalPayment+'</td>
-						<td>'+value.Balance+'</td>
+						<td>'+cmoney(value.TotalSAles)+'</td>
+						<td>'+cmoney(value.CreditMemo)+'</td>
+						<td>'+cmoney(value.TotalPayment)+'</td>
+						<td>'+cmoney(value.Balance)+'</td>
 					</tr>
 				');
 		    });
@@ -249,16 +263,16 @@ function showReceivables(medRep){
 		    		<td></td>
 		    		<td></td>
 		    		<td>
-				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total:&nbsp;
+				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total Sales:&nbsp;
 				        <span id="total">'+cmoney(totalSales)+'</span></label>
 			        </td>
 		    		<td></td>
 		    		<td>
-				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total:&nbsp;
+				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total Payment:&nbsp;
 				        <span id="total">'+cmoney(totalPayment)+'</span></label>
 			        </td>
 			        <td>
-				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total:&nbsp;
+				        <label class="pull-left" style="margin-right:30px;" id="lblTotal">Total Balance:&nbsp;
 				        <span id="total">'+cmoney(totalBalance)+'</span></label>
 			        </td>
 		        </tr>
