@@ -20,7 +20,7 @@ class CreateSalesordersTable extends Migration {
 			$table -> integer('CustomerNo')->nullable()->unsigned();
 			$table -> integer('UserNo')->nullable()->unsigned();
 			$table -> integer('Terms')->nullable();
-			$table -> boolean('IsCancelled')->default(0);
+			$table -> string('IsCancelled',1)->default('N');
 			$table -> string('CancelledBy',250)->nullable();
 			$table -> timestamps();
 		});

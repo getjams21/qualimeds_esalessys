@@ -1,0 +1,173 @@
+<?php
+
+use Acme\Repos\SalesOrder\SalesOrderRepository;
+use Acme\Repos\Product\ProductRepository;
+use Carbon\Carbon;
+use Acme\Repos\SalesOrderDetails\SalesOrderDetailsRepository;
+use Acme\Repos\VwInventorySource\VwInventorySourceRepository;
+use Acme\Repos\SalesInvoices\SIRepository;
+
+class SOController extends \BaseController {
+	protected $SOEntryForm;
+	private $salesOrderRepo;
+	private $vwInventorySource;
+  private $salesInvoiceRepo;
+
+	function __construct(SalesOrderRepository $salesOrderRepo,ProductRepository $productRepo,
+		SalesOrderDetailsRepository $salesOrderDetailsRepo,VwInventorySourceRepository $vwInventorySource,
+    SIRepository $salesInvoiceRepo)
+		{
+			$this->salesOrderRepo = $salesOrderRepo;
+			$this->productRepo = $productRepo;
+			$this->salesOrderDetailsRepo = $salesOrderDetailsRepo;
+			$this->vwInventorySource = $vwInventorySource;
+      $this->salesInvoiceRepo = $salesInvoiceRepo;
+		}
+	/**
+	 * Display a listing of the resource.
+	 * GET /po
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{	
+		$max = $this->salesOrderRepo->getMaxId();
+		$customers = Customer::orderBy('CustomerName')->lists('CustomerName','id');
+		// $medReps = User::where('UserType','=','4')->lists('Lastname','id');
+		$medReps = User::select(DB::raw('concat (firstname," ",lastname) as full_name,id'))->whereIn('UserType', array(4, 11))->lists('full_name', 'id');
+		$products = $this->vwInventorySource->getInventorySourceWholeSale(Auth::user()->BranchNo);
+		// dd($products[0]->UnitPrice);
+		$SOs= $this->salesOrderRepo->getAllWithCus();
+		$now =date("m/d/Y");
+		$lastweek=date("m/d/Y", strtotime("- 7 day"));
+		return View::make('dashboard.SalesOrders.list',compact('SOs','customers','products','max','now','lastweek','medReps'));
+	}
+	public function saveSO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$TableData = stripcslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			if(!$TableData || !$input['CustomerNo']){
+  				$result = 0;
+  			}else{
+  				$SO= new SalesOrder;
+  				$SO->CustomerNo=$input['CustomerNo'];
+  				$SO->SalesOrderDate= Carbon::now();
+  				$SO->Terms= $input['term'];
+  				$SO->UserNo= $input['UserNo'];
+  				$SO->PreparedBy= $input['PreparedBy'];
+  				$SO->ApprovedBy= $input['approvedBy'];
+  				$SO->BranchNo= Auth::user()->BranchNo;
+  				$SO->save();
+  				$result =1;
+  				foreach($TableData as $td){
+  					// dd($td['Qty']);
+  					$SOdetail= new SalesOrderDetails;
+  					$SOdetail->SalesOrderNo=$SO->id;
+  					$SOdetail->ProductNo=$td['ProdNo'];
+  					$SOdetail->Barcode='1111';
+  					$SOdetail->LotNo=$td['LotNo'];
+  					$SOdetail->ExpiryDate=$td['ExpiryDate'];
+  					$SOdetail->Unit=$td['Unit'];
+  					$SOdetail->Qty=$td['Qty'];
+  					$SOdetail->UnitPrice=$td['UnitPrice'];
+  					$SOdetail->save();
+  				}
+  			}
+		return Response::json($result);
+  		}
+	}
+	public function viewSO()
+	{
+		if(Request::ajax()){
+			// dd(Input::get('id'));
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$SO= $this->salesOrderRepo->getByIdWithCus($id);
+  			$salesRep = $this->salesOrderRepo->getByIdWithSalesRep($id);
+  			// dd($SO);
+		return Response::json($SO);
+  		}
+	}
+	public function viewSODetails()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			// dd($id);
+  			$SOdetails = $this->salesOrderDetailsRepo->getAllBySO($id);
+		return Response::json($SOdetails);
+  		}
+	}
+  //View Price List
+  public function vwPriceList(){
+    if(Request::ajax()){
+        $customerNo = Input::get('custNo');
+        $productNo = Input::get('prodNo');
+        //Get Sales Invoice history
+        $priceList = $this->salesInvoiceRepo->getAllByCustomerWithProduct($customerNo,$productNo);
+        return Response::json($priceList);
+    }
+  }
+	public function saveEditedSO()
+	{
+		if(Request::ajax()){
+  			$input = Input::all();
+  			$id= $input['id'];
+  			$TableData = stripslashes($input['TD']);
+  			$TableData = json_decode($TableData,TRUE);
+  			$SO=$this->salesOrderRepo->getByIdWithCus($id);
+  			$SOdetails = $this->salesOrderDetailsRepo->getAllBySO($id);
+  			foreach($SOdetails as $d){
+  					$d->delete();
+  				}
+  			if(!$TableData || (!isAdmin() && ($SO[0]->ApprovedBy!=''))){
+  				$result = 0;
+  			}else{
+  				$SO[0]->CustomerNo=$input['customer'];
+  				$SO[0]->UserNo=$input['UserNo'];
+  				$SO[0]->SalesOrderDate= Carbon::now();
+  				$SO[0]->Terms= $input['term'];
+  				$SO[0]->PreparedBy= fullname(Auth::user());
+  				$SO[0]->save();
+  				foreach($TableData as $td){
+  					// dd($td['Unit']);
+  					$SOdetail= new SalesOrderDetails;
+  					$SOdetail->SalesOrderNo=$SO[0]->id;
+  					$SOdetail->ProductNo=$td['ProdNo'];
+  					$SOdetail->Barcode='1111';
+  					$SOdetail->LotNo=$td['LotNo'];
+  					$SOdetail->ExpiryDate=$td['ExpiryDate'];
+  					$SOdetail->Unit=$td['Unit'];
+  					$SOdetail->Qty=$td['Qty'];
+  					$SOdetail->UnitPrice=$td['UnitPrice'];
+  					$SOdetail->save();
+  				}
+  				$result =1;
+  			}
+  			return Response::json($result);
+  		}
+	}
+
+	public function changeSOType(){
+		if(Request::ajax()){
+			if(Input::get('selectedValue') == '2'){
+				$products = $this->vwInventorySource->getInventorySourceRetail();
+			}else if (Input::get('selectedValue') == '1'){
+				$products = $this->vwInventorySource->getInventorySourceWholeSale();
+			}
+		return Response::json($products);
+		}
+	}
+
+  public function getProductMarkup(){
+    if(Request::ajax()){
+      $id = Input::get('prodNum');
+      $product = Product::find($id)->first();
+      return Response::json($product);
+    }
+  }
+	
+
+}

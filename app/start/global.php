@@ -66,7 +66,20 @@ App::down(function()
 {
 	return Response::make("Be right back!", 503);
 });
+App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
+{	$input=Input::all();
+	$input['autoOpenModal'] = 'true';
+	return Redirect::back()->withInput($input)->withErrors($exception->getErrors())->withFlashMessage('<div class="alert alert-danger square" role="alert"><b>Input error!</b></div>');
+});
+App::error(function(Symfony \ Component \ HttpKernel \ Exception \ NotFoundHttpException $exception, $code)
+{
+	return 'Page not Found';
+});
 
+// App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
+// {
+// 	Log::error($exception);
+// });
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File

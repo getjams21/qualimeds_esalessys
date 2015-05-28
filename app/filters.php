@@ -35,7 +35,7 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::guest('login');
+	if (Auth::guest()) return Redirect::guest('login')->withFlashMessage('<center><div class="alert alert-danger square"><b>Please Login to continue</b></div></center>');
 });
 
 
@@ -44,6 +44,11 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('admin', function()
+{
+	if(Auth::user()->UserType != 1 and Auth::user()->UserType != 11)
+		return Redirect::to('/');
+});
 /*
 |--------------------------------------------------------------------------
 | Guest Filter
@@ -71,10 +76,25 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
+Route::filter('csrf', function() {
+    $token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
+    if (Session::token() != $token)
+        throw new Illuminate\Session\TokenMismatchException;
+});
+
+/*
+|--------------------------------------------------------------------------
+| Generic Reroute Filter
+|--------------------------------------------------------------------------
+|
+| The "generic reroute" filter takes generic logged in user paths and rewrites them to
+| include the user's id in the path name, as is expected.
+|
+| Must be used in conjunction (and after) the auth filter
+*/
+
+Route::filter('reroute', function ()
 {
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+	return Redirect::to('user/'. Auth::user()->id .'/'. Route::input('path'));
+
 });

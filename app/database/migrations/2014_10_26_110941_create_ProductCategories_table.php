@@ -16,6 +16,7 @@ class CreateProductCategoriesTable extends Migration {
 		{
 			$table -> increments('id');
 			$table -> string('ProdCatName',150);
+			$table -> boolean('IsActive')->default(1);
 			$table -> timestamps();
 		});
 	}

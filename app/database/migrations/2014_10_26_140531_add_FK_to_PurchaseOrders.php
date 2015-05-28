@@ -20,7 +20,6 @@ class AddFKToPurchaseOrders extends Migration {
 			->onDelete('restrict')->onUpdate('cascade');
 		});
 	} 
-
 	/**
 	 * Reverse the migrations.
 	 *

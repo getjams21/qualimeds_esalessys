@@ -17,11 +17,13 @@ class CreateUsersTable extends Migration {
 			$table -> increments('id');
 			$table -> string('username',25)->unique();
 			$table -> string('password',100);
+			$table -> string('remember_token')->nullable();
 			$table -> string('Lastname',150)->nullable();
 			$table -> string('Firstname',150)->nullable();
 			$table -> string('MI',1)->nullable();
 			$table -> integer('UserType')->nullable();
 			$table -> boolean('IsActive')->default(1);
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table -> timestamps();
 		});
 	}

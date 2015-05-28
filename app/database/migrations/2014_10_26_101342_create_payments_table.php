@@ -20,7 +20,7 @@ class CreatePaymentsTable extends Migration {
 			$table->timestamp('PaymentDate')->nullable();
 			$table -> integer('UserNo')->nullable();
 			$table -> string('EncodedBy',250)->nullable();
-			$table -> boolean('IsCancelled')->default(0);
+			$table -> string('IsCancelled',1)->default('N');
 			$table -> string('CancelledBy',250)->nullable();
 			$table -> timestamps();
 		});

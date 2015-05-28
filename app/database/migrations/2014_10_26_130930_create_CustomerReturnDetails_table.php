@@ -23,7 +23,7 @@ class CreateCustomerReturnDetailsTable extends Migration {
 			$table -> decimal('Qty', 18, 2)->nullable();
 			$table -> decimal('FreebiesQty', 18, 2)->nullable();
 			$table -> string('FreebiesUnit',25)->nullable();
-			$table -> decimal('CostPerQty', 19, 4)->nullable();
+			$table -> decimal('UnitPrice', 19, 4)->nullable();
 			$table -> timestamps();
 		});
 	}

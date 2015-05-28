@@ -17,13 +17,14 @@ class CreateBillsTable extends Migration {
 			$table -> increments('id');
 			$table -> integer('PurchaseOrderNo')->nullable()->unsigned();
 			$table -> integer('SupplierNo')->nullable()->unsigned();
+			$table -> integer('BranchNo')->nullable()->unsigned();
 			$table->timestamp('BillDate')->nullable();
 			$table -> integer('SalesInvoiceNo')->nullable();
 			$table->timestamp('SalesInvoiceDate')->nullable();
 			$table -> integer('Terms')->nullable();
 			$table -> string('PreparedBy',250)->nullable();
 			$table -> string('ApprovedBy',250)->nullable();
-			$table -> boolean('IsCancelled')->default(0);
+			$table -> string('IsCancelled',1)->default('N');
 			$table -> string('CancelledBy',250)->nullable();
 			$table -> timestamps();
 		});

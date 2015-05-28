@@ -1,1 +1,286 @@
-.container-top-margin{margin-top:20px}.breadcrumb-color-reg{background-color:#428bca;color:white}.alert-icon-padding-ok{padding-left:113px}.alert-icon-padding-remove{padding-left:94px}
+body {
+  padding-top: 60px;
+  background-color: #f5f5f5;
+}
+.dp {
+  text-align: right;
+}
+.logo {
+  background-image: url('../fonts/logo_96.png');
+  background-repeat: no-repeat;
+  width: 390px;
+  height: 100px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+@media print {
+  p.bodyText {
+    font-family: georgia, times, serif;
+  }
+  .printExclude {
+    display: none;
+  }
+}
+p.bodyText {
+  font-size: 10pt;
+}
+.blue {
+  background-color: #82CAFF;
+  color: white;
+}
+.datepicker {
+  z-index: 1151 !important;
+}
+.panel-head {
+  background-color: #dff0d8;
+  color: green;
+}
+.table-responsive {
+  overflow-x: auto;
+}
+.modal-xl {
+  width: 98%;
+}
+.modal-md {
+  width: 750px;
+}
+.light-red {
+  background-color: #f2dede;
+}
+.light-green {
+  background-color: #dff0d8;
+}
+.light-blue {
+  background-color: #D8EBF0;
+}
+.light-yellow {
+  background-color: #EEF0D8;
+}
+.light-purple {
+  background-color: #DFD8F0;
+}
+.nav > li > a {
+  padding: 10px 10px 13px ;
+}
+.divider-vertical {
+  height: 50px;
+  margin: 0 2px;
+  border-left: 1px solid #F2F2F2;
+  border-right: 1px solid #FFF;
+}
+.popover-content {
+  background-color: #7bd454;
+  color: white;
+  border-radius: 5px;
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: #7bd454;
+  font-size: 17px;
+}
+.nav-pills > li > a {
+  border-radius: 0;
+  color: #7bd454;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.table-glyphicon {
+  font-size: 11px;
+  color: blue;
+}
+.tab-content {
+  border-radius: 0;
+}
+th,
+tbody > tr > td {
+  white-space: nowrap !important;
+}
+.table > thead > tr > th {
+  vertical-align: top;
+  text-align: center;
+}
+.logo-sm {
+  background-image: url('../fonts/logo_64.png');
+  width: 190px;
+  height: 64px;
+}
+.center {
+  text-align: center;
+}
+.printheight {
+  height: 27px;
+}
+.nav-bg {
+  background-color: #7bd454;
+  font-size: 17px;
+}
+.green {
+  background-color: #7bd454;
+  color: white;
+}
+.square {
+  border-radius: 0px;
+}
+.hand {
+  cursor: pointer;
+}
+.navbar {
+  border: none;
+}
+.navbar-align {
+  padding-top: 7px;
+}
+.navbar-text {
+  color: white;
+  text-shadow: 0px 1px 2px #252525;
+}
+.navbar-success .navbar-nav > li > a {
+  color: #FAF7F7;
+  padding-top: 13px;
+}
+.top-links > li > a,
+.navbar-top-links > li > a {
+  color: #FAF7F7;
+}
+.navbar-success .navbar-nav > li > a:hover,
+.top-links > li > a:hover {
+  background-color: #099800;
+  color: white;
+}
+.top-links > li > a:focus .active {
+  background-color: #099800;
+}
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus,
+.navbar-success .navbar-nav > .open > a,
+.navbar-success .navbar-nav > .open > a:hover,
+.navbar-success .navbar-nav > .open > a:focus,
+.navbar-success .navbar-nav > .active > a {
+  background-color: #099800;
+  color: white;
+}
+.bg > img {
+  background-repeat: no-repeat;
+  overflow: auto;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  color: #848482;
+  font-family: arial;
+}
+.caption-bg {
+  /*color:#3a821b;*/
+  /*background-color: rgba(84, 184, 68, 0.5);*/
+  max-width: 100%;
+  width: 100%;
+  height: 100;
+  padding-top: 20px;
+}
+.caption {
+  color: #3a821b;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+  bottom: 18%;
+}
+.well-bg {
+  border-width: 8px;
+  border-color: #7bd454;
+  /*	background-color: rgba(0,0,0,0);*/
+}
+hr.style-fade {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+.txt-size {
+  font-size: 18px;
+  height: 45px;
+}
+.error {
+  color: red;
+}
+.success {
+  color: green;
+}
+.navbar-text {
+  color: white;
+  text-shadow: 0px 1px 2px #252525;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #FAF7F7;
+  padding-top: 19px;
+  font-size: 18px;
+}
+.side-dropdown,
+.side-dropdown li > a {
+  background-color: #7bd454;
+  border-top: 0;
+  min-width: 65px;
+  color: white;
+}
+.side-dropdown li > a:hover,
+.side-dropdown > .active > a,
+.side-dropdown > .active > a:hover {
+  background-color: #099800;
+  color: white;
+}
+.shadowed {
+  -webkit-box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+}
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+  background: 0 0;
+}
+table.dataTable thead .sorting_asc:after {
+  content: "\f0de";
+  float: right;
+  font-family: fontawesome;
+}
+table.dataTable thead .sorting_desc:after {
+  content: "\f0dd";
+  float: right;
+  font-family: fontawesome;
+}
+table.dataTable thead .sorting:after {
+  content: "\f0dc";
+  float: right;
+  font-family: fontawesome;
+  color: rgba(50, 50, 50, 0.5);
+}
+.edit,
+.delete {
+  display: none;
+}
+hr.style-fade {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+#tableData {
+  border-collapse: collapse !important;
+}
+#tableData td {
+  border: none !important;
+  outline: none !important;
+}

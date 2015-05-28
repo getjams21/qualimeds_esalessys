@@ -12,4 +12,3 @@
 // @codekit-prepend "tab.js"
 // @codekit-prepend "tooltip.js"
 // @codekit-prepend "jquery.js"
-// @codekit-prepend "ui-bootstrap-tpls-0.11.0.js"
